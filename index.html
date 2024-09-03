@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<link type="text/css" rel="stylesheet" href='css\component-chosen.css'>
+	<link type="text/css" rel="stylesheet" href='css\component-chosen.min.css'>
+	<link type="text/css" rel="stylesheet" href='css\bootstrap.min.css'>
+	<title>Mapa Congregación Sur Villa Nueva</title>
+	<link rel="canonical" href="https://getbootstrap.com/docs/5.2/examples/dashboard/">
+	<link rel="canonical" href="https://getbootstrap.com/docs/5.2/examples/modals/">
+	<link href="modals.css" rel="stylesheet">
+	<script src="geojson/casas.geojson" type="text/javascript"></script>
+	<script src="geojson/territorios.geojson" type="text/javascript"></script>
+	<!-- JS -->
+	<script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
+	integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
+	crossorigin=""></script>
+	<!-- CSS -->
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
+	integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
+	crossorigin=""/>
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css"/>
+	<!-- Repositorios en línea y locales -->
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+	<link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css"/>
+	<link rel="stylesheet" href="libs/leaflet-measure-path.css"/>
+	<link rel="stylesheet" href="./css/leaflet-sidebar.css"/>
+	<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+	<script src="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+	<script src="libs/editable.js" ></script>
+	<script src="libs/measure.js"></script>
+	<script src="./js/leaflet-sidebar.js"></script>
+	<script src="https://kit.fontawesome.com/68fa6cffda.js" crossorigin="anonymous"></script>
+	<script src="js\jquery-3.4.1.min.js" ></script>
+	<script src="js\chosen.jquery.js" type="text/javascript"></script>
+	<!-- Añado un pluging de minimapa -->
+	<script src="https://cdn.jsdelivr.net/gh/maneoverland/leaflet.WorldMiniMap@1.0.0/dist/Control.WorldMiniMap.js" integrity="sha512-PFw8St3qenU1/dmwCfiYYN/bRcqY1p3+sBATR+rZ6622eyXOk/8izVtlmm/k8qW7KbRIJsku838WCV5LMs6FCg==" crossorigin=""></script>
+	
+	<!--Clases para personalizar algunos elementos-->
+	<meta name="theme-color" content="#712cf9"></meta>
+	<style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+        html, body, #map {
+            height: 100%;
+            font: 10pt "Helvetica Neue", Arial, Helvetica, sans-serif;
+        }
+        .lorem {
+            font-style: italic;
+            color: #AAA;
+        }
+		.popups.leaflet-popup-tip,
+		.popups.leaflet-popup-content-wrapper {
+		background-color: #3182bd;
+		}
+		.popups.leaflet-popup-tip,
+		.popups.leaflet-popup-content-wrapper {
+		background-color: #3182bd;
+		}
+		a{
+		text-align: center;
+		display: inline;
+		width: 100%;
+		}
+    </style>
+	<!--Icono para la pestaña del navegador-->
+	 <link rel="shortcut icon" href="./images/Tetragramaton.ico" type="image/x-icon"/>
+</head>
+<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+	<a style="font-size:15px; color:white; display=inline-block"><strong>MAPA DE TERRITORIOS DE LA CONGREGACION SUR VILLA NUEVA (Nº 6379)</strong></a>
+	<div id="ubicacion">
+		<div id="ubicacion_texto" style="font-size:10px; text-align:right; background-color:grey; color:blue"><strong>Activar mi ubicación  	 </strong><a id="ubicacion_estado" href="javascript:activar_seguimiento(seguimiento)"><img id="gps" src="images/slide_off.jpg" width="50" height="30"></img></a></div>
+	</div>
+	<img src="images/Tetragramaton.jpg" width="60" height="60"></img>
+</header>
+<body>
+	<!--<body onload="contadordevisitas(contador_visitas)">-->
+	<div id="barralateral" class="sidebar collapsed" padding-left="22">
+        <div class="sidebar-tabs" "background-color: #3182bd">
+            <ul role="tablist">
+                <li><a href="#home" role="tab"><i class="fa fa-bars" style="color: #3f08f2;"></i></a></li>
+				<li><a href="#mapita" role="tab"><i class="fa fa-map-location-dot" style="color: #3f08f2;"></i></a></li>
+				<li><a id="casas_hnos" href="#casas" role="tab"><i class="fa-solid fa-house" style="color: #3f08f2;"></i></a></li>
+				<li><a href="#ayuda" role="tab"><i class="fa-solid fa-circle-info" style="color: #3f08f2;"></i></a></li>
+            </ul>
+            <ul role="tablist">
+				<li><a href="#logueo" role="tab"><i class="fa fa-user" style="color: #3f08f2;"></i></a></li>
+            </ul>
+        </div>
+
+        <div class="sidebar-content">
+            <div class="sidebar-pane" id="home">
+                <h1 class="sidebar-header">
+                    BARRA DE OPCIONES
+                    <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
+                </h1>
+				<br></br>
+				<p style="color:blue"><strong>¿Cómo funciona cada herramienta de esta barra?</strong></p>
+				<br></br>
+				<p class="lorem"><i class="fa fa-map-location-dot" style="color: #3f08f2;"></i>Te ayudará a encontrar un territorio</p>
+				<br></br>
+                <p class="lorem"><i class="fa-solid fa-house" style="color: #3f08f2;"></i>Te ayudará a encontrar la casa de un publicador</br>(En caso que estés registrado como usuario)</p>
+				<br></br>
+                <p class="lorem"><i class="fa-solid fa-circle-info" style="color: #3f08f2;"></i>Te dará detalles sobre cómo usar cada herramienta</p>
+				<br></br>
+				<p class="lorem"><i class="fa fa-user" style="color: #3f08f2;"></i>Sección para usuarios registrados</p>
+            </div>
+            <div class="sidebar-pane" id="mapita">
+                <h1 class="sidebar-header">Buscar el territorio...<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+				<br></br>
+				<p id="titulobuscarterritorio" class="lorem">Escribí o seleccioná el territorio...</p>
+				<select id="selector_territorios" name="CasasHnos" data-placeholder="- Seleccioná o escribí el territorio que deseás ubicar -"
+					class="form-control chosenCasas" value="<%= typeof Casas != 'undefined' ? Casas : '' %>" onchange="TerritorioAbuscar(value)">
+					<option value=""></option>
+				</select>
+				<br></br>
+				<p style="color:blue">Escribe el número del territorio que deseás ubicar o bien elegilo desde el menú desplegable y te centrará el mapa sobre él, mostrándote su información, tal como nombre de los barrios que abarca y lista de casas "NO VISITAR".</p>
+            </div>
+			<div class="sidebar-pane" id="casas">				
+				<h1 class="sidebar-header">Buscar la casa...<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+				<br></br>
+				<p id="titulobuscarflia" class="lorem">Escribí o seleccioná una familia...</p>
+				<select id="selector_casas" name="CasasHnos" data-placeholder="- Seleccioná o escribí la familia o hermano que deseás ubicar -"
+					class="form-control chosenCasas" value="<%= typeof Casas != 'undefined' ? Casas : '' %>" onchange="CasaAbuscar(value)">
+					<option value=""></option>
+				</select>
+				<br></br>
+				<p style="color:blue">Escribe algún dato que conozcas del publicador o familia que deseás ubicar (nombre y/o apellido) o bien elegilo desde el menú desplegable y te centrará el mapa sobre su casa, mostrándote información, tal como nombres de los integrantes de la familia, privilegios de servicio, dirección postal, teléfono y foto del frente de la casa para que podás identificarla al llegar.</p>
+				<br></br>
+				<p>
+					<input type="submit" style="background-color:#acf89f" value="Ver todas las familias" onclick="VerTodasFlias();"></input>
+					<input type="submit" style="background-color:#f48d8d" value="Quitar familias del mapa" onclick="QuitarTodasFlias();"></input>
+				</p>
+            </div>
+			<div class="sidebar-pane" id="logueo">
+                <div id="log_no">
+					<h1 class="sidebar-header">Por favor, ingrese sus datos...<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+					<p class="lorem">Usuario:</p>
+					<input type="text" id="username" name="username">
+					<p class="lorem">Contraseña:</p>
+					<input type="password" id="password" name="password">
+					<input type="submit" value="Mostrar/Ocultar" onclick="contrasenia();">
+					<br><br>
+					<input type="submit" style="background-color:#acf89f" value="Ingresar" onclick="loguearse();">
+				</div>
+				<div id="log_si">
+					<br></br>
+					<input type="submit" style="background-color:#f48d8d" value="Cerrar sesión" onclick="CerrarSesion();"></input>
+				</div>
+            </div>
+			<div class="sidebar-pane" id="ayuda">
+                <h1 class="sidebar-header">Sección de información de ayuda<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+				<br></br>
+				<p class="lorem"><i class="fa fa-map-location-dot" style="color: #3f08f2;"></i>Te ayudará a encontrar un territorio</p>
+				<br></br>
+				<p>Escribe el número del territorio que deseás ubicar o bien elegilo desde el menú desplegable y te centrará el mapa sobre él, mostrándote su información, tal como nombre de los barrios que abarca y lista de casas "NO VISITAR".</p>
+				<br></br>
+				<div id="ayuda_usuario">
+					<p class="lorem"><i class="fa-solid fa-house" style="color: #3f08f2;"></i>Te ayudará a encontrar la casa de un publicador</br>(En caso que estés registrado como usuario)</p>
+					<br></br>
+					<p>Escribe algún dato que conozcas del publicador o familia que deseás ubicar (nombre y/o apellido) o bien elegilo desde el menú desplegable y te centrará el mapa sobre su casa, mostrándote información, tal como nombres de los integrantes de la familia, privilegios de servicio, dirección postal, teléfono y foto del frente de la casa para que puedan identificarla al llegar.</p>
+				</div>
+				<br></br>
+                <p class="lorem"><i class="fa-solid fa-circle-info" style="color: #3f08f2;"></i>Te dará detalles sobre cómo usar cada herramienta</p>
+				<br></br>
+				<p class="lorem"><i class="fa fa-user" style="color: #3f08f2;"></i>Sección para usuarios registrados</p>
+            </div>
+        </div>
+    </div>
+	<div id="mapa" style="width:100%;height:90%;"></div>
+	</body>
+	<!--Ventana modal inicial-->
+	<dialog id="modal_inicial" style="text-align: center; background-color:yellow">
+		<div id="Apaisado">
+			<span id="titulo_modalinicial"><h4>Parece que estas usando un dispositivo movil (celular o tablet).</h4></span>
+			<br/>
+			<span id="cuerpo_modalinicial"><h4>En ese caso, te recomendamos girarlo.<br/>Al usarlo en "modo apaisado", podrás tener una mejor visión<br/>del mapa y sus herramientas sobre el margen izquierdo.-</h4></span>
+		</div>
+		<div id="Conectividad">
+			<span id="titulo_modalconectividad"><h4>Parece que no tenés conexión a Internet.</h4></span>
+			<span id="cuerpo_modalconectividad"><h2><br/>Por favor solucioná eso porque algunas herramientas no funcionarán correctamente.</h2></span>
+			</div>
+		<div style="text-align: right">
+			<button id="btn-cerrar-modal-inicial" style="height:30px; width:90px; background-color:red;border-color:white;color:white">Ok. Cerrar</button>
+		</div>
+	</dialog>
+	<script>
+		<!--Mapas o capas bases-->
+		var osm = new L.tileLayer('http://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			//attribution: '<a style="color:#287404">Cantidad de visitas: '+contador_visitas+'</a> - Teselas <a href="https://www.openstreetmap.org/" target="blanck">OSM</a> &copy',
+			attribution: 'Teselas <a href="https://www.openstreetmap.org/" target="blanck">OSM</a> &copy',
+			//minZoom: 1
+		});
+		<!--Establecer el área para el mapa y definir cuál será la capa base por defecto-->
+		var mapa = L.map('mapa', {editable:true,
+			center: ["-32.910814909848675", "-68.77197721149017"],
+			zoom: 16,
+			layers: [osm]
+		});
+		<!--Añadir el mini-mapa al lienzo-->
+		var worldMiniMap = L.control.worldMiniMap({position: 'bottomright', style: {opacity: 0.9, borderRadius: '0px', backgroundColor: 'lightblue'}}).addTo(mapa);
+		$('.chosenCasas').chosen({no_results_text: "No se encuentran familias ni publicadores de nombre...",allow_single_deselect: true});
+        $(".chosenCasas").chosen().on("chosen:showing_dropdown", function(event) {  
+			$(".chosenCasas").trigger('chosen:updated');                                                                           
+			});
+		var coordenadas="-32.910814909848675, -68.77197721149017".split(",");
+		var zum=16;
+		var selector_casas=document.createElement('option');
+		var listacasas=[];
+		var valor="";
+		var firstLatLng, secondLatLng;
+		var conexion="";
+		var circulo="";
+		var marcador="";
+		var seguimiento="si";
+
+		<!--Añadir la barra lateral-->
+		var barralateral = L.control.sidebar('barralateral').addTo(mapa);
+		
+		const iconosterritorios= L.icon({
+			iconUrl: 'images/1.jpg',
+			iconSize: [32, 37],
+			iconAnchor: [16, 37],
+			popupAnchor: [0, -28]
+		});
+		
+		function contrasenia () {
+			var estado=document.getElementById("password").type;
+			var valor=document.getElementById("password").value;
+			if (estado=="password") {document.getElementById("password").type="text";}
+			else {document.getElementById("password").type="password"};
+			document.getElementById("password").value = valor;
+		};
+		
+		function loguearse() {
+			usuario=document.getElementsByName("username")[0].value;
+			contrasena=document.getElementsByName("password")[0].value;
+			if (usuario=="SVN" && contrasena=="6379") {
+				barralateral.close();
+				document.getElementById("casas_hnos").style.display='inline';
+				document.getElementById("ayuda_usuario").style.display='inline';
+				document.getElementById("log_si").style.display='inline';
+				document.getElementById("log_no").style.display='none';}
+			else {
+				document.getElementById("titulo_modalinicial").innerHTML=("<h1>"+"DATOS INCORRECTOS...!!!"+"</h1>");
+				document.getElementById("cuerpo_modalinicial").innerHTML=("<h4>"+"El usuario y/o la contraseñas NO son las correctas...!!!"+"</h4>");
+				document.getElementById("modal_inicial").showModal()
+			};
+		};
+		
+		function CerrarSesion() {
+			document.getElementById("casas_hnos").style.display='none';
+			document.getElementById("ayuda_usuario").style.display='none';
+			document.getElementById("log_si").style.display='none';
+			document.getElementById("log_no").style.display='inline';
+			document.getElementById("username").value="";
+			document.getElementById("password").value="";
+			barralateral.close();
+		};
+		
+		<!--Función para mapear todas las familias-->
+		function VerTodasFlias() {
+			alert("Aún no se ha programado nada por aquí.-");
+		};
+		
+		<!--Función para mapear todas las familias-->
+		function QuitarTodasFlias() {
+			alert("Aún no se ha programado nada por aquí.-");
+		};
+		
+		<!--Función armado de los Popups de las casas-->
+		function popups_casas(feature, layer) { 
+			if (feature.properties && feature.properties.Flia) {
+				layer.bindPopup(feature.properties.Flia);
+				listacasas.push(feature.properties.Flia)};
+		};
+		function popups_territorios(feature, layer) {
+			if (feature.properties && feature.properties.Numero) {
+				if (feature.properties.Barrio !==null) {
+					var barrio=feature.properties.Barrio}
+				else {
+					var barrio="Sin información"
+				};
+				if (feature.properties.No_Visitar !==null) {
+					var novisitar=feature.properties.No_Visitar}
+				else {
+					var novisitar="No hay casas 'NO VISITAR' en este territorio"
+				};
+				var centroide=layer.getBounds().getCenter();
+				var coord=[];
+				var listaterritorios=[];
+				listaterritorios.push(feature.properties.Numero);
+				listaterritorios.sort();
+				coord.push(centroide.lat,centroide.lng);
+				L.marker(coord,{icon:L.icon({iconUrl: 'images/'+feature.properties.Numero+'.jpg',iconSize: [32, 37],iconAnchor: [16, 37],popupAnchor: [0, -28]}),title:""+feature.properties.Numero}).addTo(mapa)
+					.bindPopup("<strong>Territorio Nº "+feature.properties.Numero+"</strong>"+"<br>Barrio: "+barrio+"<br><br><strong>NO VISITAR:</strong><br>"+novisitar);
+				layer.bindPopup("<strong>Territorio Nº "+feature.properties.Numero+"</strong>"+"<br>Barrio: "+barrio+"<br><br><strong>NO VISITAR:</strong><br>"+novisitar);
+				armarlistaterritorios(listaterritorios);
+			};
+		};
+		var capa="territorios";
+		territorio = L.geoJson(territorios, {style:personalizarPerimetro, onEachFeature: popups_territorios}).addTo(mapa);
+		geojson = L.geoJson(casasdehnos, {onEachFeature: popups_casas}).addTo(mapa);
+		geojson.remove();
+		listacasas.sort();
+		armarlistacasas(listacasas);
+		
+		<!--Función para armar el listado de casas y asignarlo al listbox correspondiente-->
+		function armarlistacasas(listacasas) {
+			var select = document.getElementById('selector_casas');
+			var i;
+			for (i = 0; i < listacasas.length; i++) {
+				var opt = listacasas[i];
+				var el = document.createElement("option");
+				el.textContent = opt;
+				el.value = opt;
+				select.appendChild(el);
+			};
+		};
+		
+		<!--Función para armar el listado de territorios y asignarlo al listbox correspondiente-->
+		function armarlistaterritorios(listaterritorios) {
+			var select = document.getElementById('selector_territorios');
+			var i;
+			for (i = 0; i < listaterritorios.length; i++) {
+				var opt = listaterritorios[i];
+				var el = document.createElement("option");
+				el.textContent = opt;
+				el.value = opt;
+				select.appendChild(el);
+			};
+		};
+		
+		<!--Función buscar casas elegida-->
+		function CasaAbuscar(familia) {
+			valor=familia;
+			barralateral.close();
+			var casa=L.geoJSON(casasdehnos,{filter:filtrar_casas, onEachFeature}).addTo(mapa);
+		};
+		
+		<!--Función buscar territorio elegido-->
+		function TerritorioAbuscar(territorio) {
+			valor=Number(territorio);
+			barralateral.close();
+			capa_territorio=L.geoJSON(territorios,{filter:filtrar_territorios, onEachFeature});
+		};
+		
+		function filtrar_casas(feature) {
+			var cadenabusqueda=valor;
+			var criterio = new RegExp(cadenabusqueda, "gi");
+			if (valor !="") {if (feature.properties.Flia==valor) return true};
+		};
+		
+		function filtrar_territorios(feature) {
+			if (valor !="") {if (feature.properties.Numero==valor) return true};
+		};
+		
+		function ColorFondo(d) {
+			return (d == 1 || d==8 || d==15 || d==22 || d==29 || d==36 || d==43 || d==50) ? 'red':
+			(d== 2 || d==9 || d==16 || d==23 || d==30 || d==37 || d==44 || d==51) ? 'blue':
+			(d== 3 || d==10 || d==17 || d==24 || d==31 || d==38 || d==45 || d==52) ? 'yellow':
+			(d== 4 || d==11 || d==18 || d==25 || d==32 || d==39 || d==46 || d==53) ? 'pink':
+			(d== 5 || d==12 || d==19 || d==26 || d==33 || d==40 || d==47 || d==54) ? 'cyan':
+			(d== 6 || d==13 || d==20 || d==27 || d==34 || d==41 || d==48 || d==55) ? 'green':
+			(d== 7 || d==14 || d==21 || d==28 || d==35 || d==42 || d==49 || d==56) ? 'brown':
+			'black'
+		};
+
+		<!--Funcion para colorear perímetro cultivos/edificios-->
+		function ColorPerimetro(d) {
+			return d < 100? 'white':
+				'black'
+		};
+
+		<!--Funcion para llamar subfunciones de coloreo perímetros y áreas-->
+		function personalizarPerimetro(feature) {
+			return {
+			fillColor: ColorFondo(feature.properties.Numero),
+			weight: 4,
+			opacity: 1,
+			color: ColorPerimetro(feature.properties.Numero),
+			dashArray: '3',
+			fillOpacity: 0.3}};
+				
+		function onEachFeature(feature, layer) {
+			if (Number.isInteger(valor)) {
+				coord_territorio=(feature.geometry.coordinates[0][1]+", "+feature.geometry.coordinates[0][0]).split(",");
+				var centroide=layer.getBounds().getCenter();
+				var coord=[];
+				coord.push(centroide.lat,centroide.lng);
+				mapa.flyTo(coord,18);
+				if (feature.properties.Barrio !==null) {
+					var barrio=feature.properties.Barrio}
+				else {
+					var barrio="Sin información"
+				};
+				if (feature.properties.No_Visitar !==null) {
+					var novisitar=feature.properties.No_Visitar}
+				else {
+					var novisitar="No hay casas 'NO VISITAR' en este territorio"
+				};
+				L.marker(coord,{icon:L.icon({iconUrl: 'images/'+feature.properties.Numero+'.jpg',iconSize: [32, 37],iconAnchor: [16, 37],popupAnchor: [0, -28]}),title:""+feature.properties.Numero}).addTo(mapa)
+					.bindPopup("<strong>Territorio Nº "+feature.properties.Numero+"</strong>"+"<br>Barrio: "+barrio+"<br><br><strong>NO VISITAR:</strong><br>"+novisitar)
+					.openPopup();
+			}
+			else {
+				var formatoPopup = {
+					'maxWidth': '600',
+					'className' : 'popups'};
+				<!--Establecer la foto del frente de la casa-->
+				var nom_foto="";
+				nombrefoto=(feature.properties.Flia).split(" ");
+				nombrefoto.forEach(nombre => nom_foto=nom_foto+nombre+"_");
+				nombrefoto = nom_foto.slice(0, nom_foto.length - 1);
+				//var foto='./images/'+nombrefoto+".jpg";
+				try {
+					var foto='./images/'+nombrefoto+".jpg";
+				} catch {
+					var foto='./images/'+'SinInfo.jpg';
+				};
+				if (feature.properties.Integrante !=null) {var integrantes=feature.properties.Integrante} else {var integrantes="Sin datos"};
+				if (feature.properties.Privilegio !=null) {var privilegios=feature.properties.Privilegio} else {var privilegios="Sin datos"};
+				if (feature.properties.Direccion !=null) {var direccion=feature.properties.Direccion} else {var direccion="Sin datos"};
+				if (feature.properties.Telefono !=null) {var telefono=feature.properties.Telefono} else {var telefono="Sin datos"};
+				var contenidoPopup="<img src="+foto+" width='90' height='90' /img><br><strong>Flia. "+feature.properties.Flia+"</strong><br>Integrantes: "+integrantes+"<br>Privilegios: "+privilegios+"<br>Dirección: "+direccion+"<br>Teléfono: "+telefono;
+				coord_casa=(feature.geometry.coordinates[0][1]+", "+feature.geometry.coordinates[0][0]).split(",");
+				L.marker(coord_casa).addTo(mapa)
+					.bindPopup(contenidoPopup)
+					.openPopup();
+				mapa.flyTo(coord_casa,zum);
+			};
+		};
+		
+		<!--Función para activar el seguimiento en tiempo real y hacer zoom en él-->
+		function activar_seguimiento(seguimiento) {
+			seguimiento="si";
+			console.log(seguimiento);
+			if((! navigator.geolocation || ! navigator.onLine) && seguimiento=="si") {
+				alert("Oho...!!! Parece que no tenés activado del GPS y/o no tenés conexión a internet...!!!.-");
+			} else {
+				setInterval(() => {
+				navigator.geolocation.getCurrentPosition(getPosition)
+				}, 2000);
+				document.getElementById("gps").src="./images/slide_on.jpg";
+				document.getElementById("ubicacion_estado").href="javascript:desactivar_seguimiento(seguimiento)";
+			};
+		};
+		
+		<!--Función para capturar la ubicación actual-->
+		function getPosition(position){
+			var lat = position.coords.latitude;
+			var lon = position.coords.longitude;
+			var accuracy = position.coords.accuracy;
+			if(marcador) {
+				mapa.removeLayer(marcador)
+			};
+			if(circulo) {
+				mapa.removeLayer(circulo)
+			};
+			var icono = L.icon({
+				iconUrl: './images/posicion.png',
+				iconSize: [18, 21],
+			});
+			marcador = L.marker([lat, lon],{icon:icono});
+			circulo = L.circle([lat, lon], {radius: accuracy});
+			var featureGroup = L.featureGroup([marcador, circulo]).addTo(mapa);
+			if (seguimiento=="si") {
+				mapa.flyToBounds(featureGroup.getBounds());
+				mapa.setView([lat,lon]);
+			};
+		};
+		
+		<!--Función para desactivar el seguimiento en tiempo real-->
+		function desactivar_seguimiento(seguimiento) {
+			seguimiento="no";
+			document.getElementById("gps").src="./images/slide_off.jpg";
+			console.log(seguimiento);
+		};
+		
+		<!--Funcion para verificar estado de conectividad-->
+		function verificarConexion() {
+		  if (navigator.onLine) {
+			conexion="si";
+		  } else {
+			conexion="no";
+		  }
+		};
+		verificarConexion();
+		
+		document.getElementById("casas_hnos").style.display='none';
+		document.getElementById("ayuda_usuario").style.display='none';
+		document.getElementById("log_si").style.display='none';
+		
+		if (conexion=="no") {
+			document.getElementById("Conectividad").style.display="inline";
+		} else {
+			document.getElementById("Conectividad").style.display="none";
+		};
+
+		if (! navigator.userAgent.match(/Windows/i)) {
+			document.getElementById("modal_inicial").showModal()
+		} else {
+			if (conexion=="no") {document.getElementById("Conectividad").style.display="inline"; document.getElementById("Apaisado").style.display="none";document.getElementById("modal_inicial").showModal();}
+		};
+
+		const btncerrarmodalinicial=document.querySelector("#btn-cerrar-modal-inicial");
+		const modalinicial=document.querySelector("#modal_inicial");
+		btncerrarmodalinicial.addEventListener("click",()=>{modalinicial.close();});
+	</script>
+</html>
