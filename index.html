@@ -81,7 +81,7 @@
 </header>
 <body>
 	<!--<body onload="contadordevisitas(contador_visitas)">-->
-	<div id="barralateral" class="sidebar collapsed" padding-left="22">
+	<div id="barralateral" class="sidebar collapsed">
         <div class="sidebar-tabs" "background-color: #3182bd">
             <ul role="tablist">
                 <li><a href="#home" role="tab"><i class="fa fa-bars" style="color: #3f08f2;"></i></a></li>
@@ -201,8 +201,11 @@
 		var mapa = L.map('mapa', {editable:true,
 			center: ["-32.910814909848675", "-68.77197721149017"],
 			zoom: 16,
-			layers: [osm]
+			layers: [osm],
+			zoomControl:false
 		});
+		L.control.zoom({
+			position:'topright'}).addTo(mapa);
 		<!--Añadir el mini-mapa al lienzo-->
 		var worldMiniMap = L.control.worldMiniMap({position: 'bottomright', style: {opacity: 0.9, borderRadius: '0px', backgroundColor: 'lightblue'}}).addTo(mapa);
 		$('.chosenCasas').chosen({no_results_text: "No se encuentran familias ni publicadores de nombre...",allow_single_deselect: true});
