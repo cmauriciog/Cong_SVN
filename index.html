@@ -422,13 +422,17 @@
 				nombrefoto.forEach(nombre => nom_foto=nom_foto+nombre+"_");
 				nombrefoto = nom_foto.slice(0, nom_foto.length - 1);
 				<!--Establecer qué familias tienen fotos del frente de su casa y cuáles no para distinguir qué imagen mostrar-->
-				if (nombrefoto=="Agüero" || nombrefoto=="Astudillo_Elio" || nombrefoto=="Bonada_Alfredo" || nombrefoto=="Bonada_Gaston" || nombrefoto=="Bringas"
+				if (nombrefoto=="Agüero" || nombrefoto=="Arce" || nombrefoto=="Argüello" || nombrefoto=="Astudillo_Elio" || nombrefoto=="Astudillo_Elio"
+				|| nombrefoto=="Astudillo_Jonatan" || nombrefoto=="Battaglia" || nombrefoto=="Biscontin_Irma" || nombrefoto=="Biscontin_Ruben"
+				|| nombrefoto=="Bonada_Alfredo" || nombrefoto=="Bonada_Gaston" || nombrefoto=="Bringas" || nombrefoto=="Bustos_Ethel"
 				|| nombrefoto=="Cabañez_Carlos" || nombrefoto=="Candia" || nombrefoto=="Castillo" || nombrefoto=="Cinco" || nombrefoto=="Cuadro"
-				|| nombrefoto=="Del_Balzo" || nombrefoto=="Diaz-Algañaraz" || nombrefoto=="Ferranti-Ricalde" || nombrefoto=="Galdamez" || nombrefoto=="Garcia_Cristian"
-				|| nombrefoto=="Garcia_Gonzalo" || nombrefoto=="Garcia_Roberto" || nombrefoto=="Gualpa" || nombrefoto=="Miron_Daniel" || nombrefoto=="Miron_Gustavo"
-				|| nombrefoto=="Nuñez_Alejandro" || nombrefoto=="Nuñez_Estela" || nombrefoto=="Ortiz_Elias" || nombrefoto=="Ortiz_Hector"
-				|| nombrefoto=="Ortiz_Jose-Videla_Alejandro" || nombrefoto=="Quevedo" || nombrefoto=="Reyes" || nombrefoto=="Rossi" || nombrefoto=="Snieg"
-				|| nombrefoto=="Vargas" || nombrefoto=="Villafañe") {
+				|| nombrefoto=="Del_Balzo" || nombrefoto=="Diaz-Algañaraz" || nombrefoto=="Ferranti-Ricalde" || nombrefoto=="Figueroa"
+				|| nombrefoto=="Galdames" || nombrefoto=="Garcia_Cristian" || nombrefoto=="Garcia_Gonzalo" || nombrefoto=="Garcia_Roberto" || nombrefoto=="Godoy"
+				|| nombrefoto=="Gualpa" || nombrefoto=="Huallpa" || nombrefoto=="Lahiton" || nombrefoto=="Leites" || nombrefoto=="Manresa" || nombrefoto=="Miron_Daniel"
+				|| nombrefoto=="Miron_Gustavo" || nombrefoto=="Muñoz" || nombrefoto=="Nuñez_Alejandro" || nombrefoto=="Nuñez_Estela" || nombrefoto=="Ortiz_Elias"
+				|| nombrefoto=="Ortiz_Hector" || nombrefoto=="Ortiz_Jose-Videla" || nombrefoto=="Quevedo" || nombrefoto=="Quiroga_Jose" || nombrefoto=="Quiroga-Ramirez"
+				|| nombrefoto=="Reyes" || nombrefoto=="Rossi" || nombrefoto=="Sarmiento" || nombrefoto=="Snieg" || nombrefoto=="Sosa_Noelia"
+				|| nombrefoto=="Sosa_Tamara" || nombrefoto=="Vargas" || nombrefoto=="Vera_Debora" || nombrefoto=="Vera_Natalia" || nombrefoto=="Villafañe") {
 					var foto='./images/'+nombrefoto+".jpg";
 				} else {
 					var foto='./images/'+'SinInfo.jpg';
