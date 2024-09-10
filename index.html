@@ -86,7 +86,7 @@
             <ul role="tablist">
                 <li><a href="#home" role="tab"><i class="fa fa-bars" style="color: #3f08f2;"></i></a></li>
 				<li><a href="#mapita" role="tab"><i class="fa fa-map-location-dot" style="color: #3f08f2;"></i></a></li>
-				<li><a id="casas_hnos" href="#casas" role="tab"><i class="fa-solid fa-house" style="color: #3f08f2;"></i></a></li>
+				<li><a id="casas_hnos" href="#familias" role="tab"><i class="fa-solid fa-house" style="color: #3f08f2;"></i></a></li>
 				<li><a href="#ayuda" role="tab"><i class="fa-solid fa-circle-info" style="color: #3f08f2;"></i></a></li>
             </ul>
             <ul role="tablist">
@@ -122,7 +122,7 @@
 				<br></br>
 				<p style="color:blue">Escribe el número del territorio que deseás ubicar o bien elegilo desde el menú desplegable y te centrará el mapa sobre él, mostrándote su información, tal como nombre de los barrios que abarca y lista de casas "NO VISITAR".</p>
             </div>
-			<div class="sidebar-pane" id="casas">				
+			<div class="sidebar-pane" id="familias">				
 				<h1 class="sidebar-header">Buscar la casa...<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
 				<br></br>
 				<p id="titulobuscarflia" class="lorem">Escribí o seleccioná una familia...</p>
@@ -134,8 +134,8 @@
 				<p style="color:blue">Escribe algún dato que conozcas del publicador o familia que deseás ubicar (nombre y/o apellido) o bien elegilo desde el menú desplegable y te centrará el mapa sobre su casa, mostrándote información, tal como nombres de los integrantes de la familia, privilegios de servicio, dirección postal, teléfono y foto del frente de la casa para que podás identificarla al llegar.</p>
 				<br></br>
 				<p>
-					<input type="submit" style="background-color:#acf89f" value="Ver todas las familias" onclick="VerTodasFlias();"></input>
-					<input type="submit" style="background-color:#f48d8d" value="Quitar familias del mapa" onclick="QuitarTodasFlias();"></input>
+					<input id="mostrarflias" type="submit" style="background-color:#acf89f" value="Ver todas las familias" onclick="VerTodasFlias();"></input>
+					<input id="ocultarflias" type="submit" style="background-color:#f48d8d" value="Quitar familias del mapa" onclick="QuitarTodasFlias();"></input>
 				</p>
             </div>
 			<div class="sidebar-pane" id="logueo">
@@ -222,6 +222,11 @@
 		var circulo="";
 		var marcador="";
 		var seguimiento="si";
+		var casa="";
+		var casitas="";
+		var casas=[];
+		var capa_casas={};
+		var familia="";
 
 		<!--Añadir la barra lateral-->
 		var barralateral = L.control.sidebar('barralateral').addTo(mapa);
@@ -269,12 +274,25 @@
 		
 		<!--Función para mapear todas las familias-->
 		function VerTodasFlias() {
-			alert("Aún no se ha programado nada por aquí.-");
+			barralateral.close();
+			if(Object.keys(capa_casas).length !== 0) {capa_casas.remove()};
+			capa_casas = L.geoJson(casasdehnos, {onEachFeature}).addTo(mapa);
+			document.getElementById("ocultarflias").style.display="inline";
+			document.getElementById("mostrarflias").style.display="none";
 		};
 		
 		<!--Función para mapear todas las familias-->
 		function QuitarTodasFlias() {
-			alert("Aún no se ha programado nada por aquí.-");
+			capa_casas.remove();
+			capa_casas={};
+			casa.remove();
+			casa="";
+			casitas.remove();
+			casitas="";
+			casas=[];
+			barralateral.close();
+			document.getElementById("mostrarflias").style.display="inline";
+			document.getElementById("ocultarflias").style.display="none";
 		};
 		
 		<!--Función armado de los Popups de las casas-->
@@ -341,10 +359,11 @@
 		};
 		
 		<!--Función buscar casas elegida-->
-		function CasaAbuscar(familia) {
-			valor=familia;
+		function CasaAbuscar(valor) {
 			barralateral.close();
-			var casa=L.geoJSON(casasdehnos,{filter:filtrar_casas, onEachFeature}).addTo(mapa);
+			familia=valor;
+			casas.push(familia);
+			capa_casas=L.geoJSON(casasdehnos,{filter:filtrar_casas,onEachFeature}).addTo(mapa);
 		};
 		
 		<!--Función buscar territorio elegido-->
@@ -355,9 +374,12 @@
 		};
 		
 		function filtrar_casas(feature) {
-			var cadenabusqueda=valor;
-			var criterio = new RegExp(cadenabusqueda, "gi");
-			if (valor !="") {if (feature.properties.Flia==valor) return true};
+			if(Object.keys(capa_casas).length !== 0) {capa_casas.remove()};
+			for (i = 0; i < casas.length; i++) {
+				if (feature.properties.Flia==casas[i]) {return true};
+			};
+			document.getElementById("ocultarflias").style.display="inline";
+			document.getElementById("mostrarflias").style.display="inline";
 		};
 		
 		function filtrar_territorios(feature) {
@@ -443,11 +465,15 @@
 				if (feature.properties.Direccion !=null) {var direccion=feature.properties.Direccion} else {var direccion="Sin datos"};
 				if (feature.properties.Telefono !=null) {var telefono=feature.properties.Telefono} else {var telefono="Sin datos"};
 				var contenidoPopup="<img src="+foto+" width='90' height='90' /img><br><strong>Flia. "+feature.properties.Flia+"</strong><br>Integrantes: "+integrantes+"<br>Privilegios: "+privilegios+"<br>Dirección: "+direccion+"<br>Teléfono: "+telefono;
-				coord_casa=(feature.geometry.coordinates[0][1]+", "+feature.geometry.coordinates[0][0]).split(",");
-				L.marker(coord_casa).addTo(mapa)
-					.bindPopup(contenidoPopup)
-					.openPopup();
-				mapa.flyTo(coord_casa,zum);
+				if (feature.properties.Flia==familia) {
+					if (casa !=[]) {casa.remove()};
+					coord_casa=(feature.geometry.coordinates[0][1]+", "+feature.geometry.coordinates[0][0]).split(",");
+					mapa.flyTo(coord_casa,zum);
+					casa=L.marker(coord_casa).addTo(mapa)
+						.bindPopup(contenidoPopup)
+						.openPopup()};
+				casitas=layer.bindPopup(contenidoPopup)
+						.openPopup();
 			};
 		};
 		
@@ -510,6 +536,7 @@
 		document.getElementById("casas_hnos").style.display='none';
 		document.getElementById("ayuda_usuario").style.display='none';
 		document.getElementById("log_si").style.display='none';
+		document.getElementById("ocultarflias").style.display="none";
 		
 		if (conexion=="no") {
 			document.getElementById("Conectividad").style.display="inline";
