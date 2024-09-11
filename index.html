@@ -285,9 +285,9 @@
 		function QuitarTodasFlias() {
 			capa_casas.remove();
 			capa_casas={};
-			casa.remove();
+			if (casa !="") {casa.remove()};
 			casa="";
-			casitas.remove();
+			if (casitas !="") {casitas.remove()};
 			casitas="";
 			casas=[];
 			barralateral.close();
@@ -296,7 +296,7 @@
 		};
 		
 		<!--Función armado de los Popups de las casas-->
-		function popups_casas(feature, layer) { 
+		function popups_casas(feature, layer) {
 			if (feature.properties && feature.properties.Flia) {
 				layer.bindPopup(feature.properties.Flia);
 				listacasas.push(feature.properties.Flia)};
