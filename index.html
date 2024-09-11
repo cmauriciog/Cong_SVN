@@ -79,10 +79,14 @@
 	</div>
 	<img src="images/Tetragramaton.jpg" width="60" height="60"></img>
 </header>
+<header>
+	<div id="texto_ayuda">
+		<a style="font-size:12px; text-align:left-side; color:blue;">Si necesiSi necesitás ayuda, tocá las tres líneas de la barra izquierda</a>
+	</div>
+</header>
 <body>
-	<!--<body onload="contadordevisitas(contador_visitas)">-->
 	<div id="barralateral" class="sidebar collapsed">
-        <div class="sidebar-tabs" "background-color: #3182bd">
+        <div class="sidebar-tabs">
             <ul role="tablist">
                 <li><a href="#home" role="tab"><i class="fa fa-bars" style="color: #3f08f2;"></i></a></li>
 				<li><a href="#mapita" role="tab"><i class="fa fa-map-location-dot" style="color: #3f08f2;"></i></a></li>
@@ -110,6 +114,13 @@
                 <p class="lorem"><i class="fa-solid fa-circle-info" style="color: #3f08f2;"></i>Te dará detalles sobre cómo usar cada herramienta</p>
 				<br></br>
 				<p class="lorem"><i class="fa fa-user" style="color: #3f08f2;"></i>Sección para usuarios registrados</p>
+				<br></br>
+				<br></br>
+				<br></br>
+				<br></br>
+				<br></br>
+				<p class="lorem"><i class="fa-solid fa-circle-exclamation" style="color: #3f08f2;"></i>¿Encontraste algún problema o tenés alguna sugerencia para mejorar este sitio?</p>
+				<p class="lorem">Por favor, comunicate con alguno de los ancianos.-</p>
             </div>
             <div class="sidebar-pane" id="mapita">
                 <h1 class="sidebar-header">Buscar el territorio...<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
@@ -173,13 +184,13 @@
             </div>
         </div>
     </div>
-	<div id="mapa" style="width:100%;height:90%;"></div>
+	<div id="mapa" style="width:100%;height:87%;"></div>
 	</body>
 	<!--Ventana modal inicial-->
 	<dialog id="modal_inicial" style="text-align: center; background-color:yellow">
 		<div id="Apaisado">
-			<span id="titulo_modalinicial"><h4>Parece que estas usando un dispositivo movil (celular o tablet).</h4></span>
-			<br/>
+			<span id="titulo_modalinicial"><h4>Parece que estás usando un dispositivo movil (celular o tablet).</h4></span>
+			<br><br/>
 			<span id="cuerpo_modalinicial"><h4>En ese caso, te recomendamos girarlo.<br/>Al usarlo en "modo apaisado", podrás tener una mejor visión<br/>del mapa y sus herramientas sobre el margen izquierdo.-</h4></span>
 		</div>
 		<div id="Conectividad">
@@ -193,9 +204,9 @@
 	<script>
 		<!--Mapas o capas bases-->
 		var osm = new L.tileLayer('http://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-			//attribution: '<a style="color:#287404">Cantidad de visitas: '+contador_visitas+'</a> - Teselas <a href="https://www.openstreetmap.org/" target="blanck">OSM</a> &copy',
+			//attribution: '<a style="color:#287404">¿Necesitás ayuda? Tocá las tres líneas de la barra izquierda</a> - Teselas <a href="https://www.openstreetmap.org/" target="blanck">OSM</a> &copy',
 			attribution: 'Teselas <a href="https://www.openstreetmap.org/" target="blanck">OSM</a> &copy',
-			//minZoom: 1
+			minZoom: 1
 		});
 		<!--Establecer el área para el mapa y definir cuál será la capa base por defecto-->
 		var mapa = L.map('mapa', {editable:true,
@@ -479,8 +490,12 @@
 		
 		<!--Función para activar el seguimiento en tiempo real y hacer zoom en él-->
 		function activar_seguimiento(seguimiento) {
+			if (! navigator.userAgent.match(/Windows/i)) {
+				document.getElementById("titulo_modalinicial").innerHTML=("<h1>"+"Por favor, activá manualmente el GPS del celular"+"</h1>");
+				document.getElementById("cuerpo_modalinicial").innerHTML=("<h4>"+"Después de hacerlo, aguardá unos momentos y se te mostrará tu ubicación."+"</h4>");
+				document.getElementById("modal_inicial").showModal()
+			}; 
 			seguimiento="si";
-			console.log(seguimiento);
 			if((! navigator.geolocation || ! navigator.onLine) && seguimiento=="si") {
 				alert("Oho...!!! Parece que no tenés activado del GPS y/o no tenés conexión a internet...!!!.-");
 			} else {
@@ -549,7 +564,7 @@
 		} else {
 			if (conexion=="no") {document.getElementById("Conectividad").style.display="inline"; document.getElementById("Apaisado").style.display="none";document.getElementById("modal_inicial").showModal();}
 		};
-
+		
 		const btncerrarmodalinicial=document.querySelector("#btn-cerrar-modal-inicial");
 		const modalinicial=document.querySelector("#modal_inicial");
 		btncerrarmodalinicial.addEventListener("click",()=>{modalinicial.close();});
