@@ -253,6 +253,7 @@
 		var sondeo_posicion=0;
 		var lat="";
 		var lon="";
+		var buscar="";
 
 		<!--Añadir la barra lateral-->
 		var barralateral = L.control.sidebar('barralateral').addTo(mapa);
@@ -389,6 +390,7 @@
 			barralateral.close();
 			familia=valor;
 			casas.push(familia);
+			buscar="casa";
 			capa_casas=L.geoJSON(casasdehnos,{filter:filtrar_casas,onEachFeature}).addTo(mapa);
 		};
 		
@@ -396,13 +398,14 @@
 		function TerritorioAbuscar(territorio) {
 			valor=Number(territorio);
 			barralateral.close();
+			buscar="territorio";
 			capa_territorio=L.geoJSON(territorios,{filter:filtrar_territorios, onEachFeature});
 		};
 		
 		function filtrar_casas(feature) {
 			if(Object.keys(capa_casas).length !== 0) {capa_casas.remove()};
 			for (i = 0; i < casas.length; i++) {
-				if (feature.properties.Flia==casas[i]) {return true};
+				if (feature.properties.Flia==casas[i]) {return true};//,console.log(feature.properties.Flia,casas[i])};
 			};
 			document.getElementById("ocultarflias").style.display="inline";
 			document.getElementById("mostrarflias").style.display="inline";
@@ -440,7 +443,7 @@
 			fillOpacity: 0.3}};
 				
 		function onEachFeature(feature, layer) {
-			if (Number.isInteger(valor)) {
+			if (buscar=="territorio") {//Number.isInteger(valor)) {
 				coord_territorio=(feature.geometry.coordinates[0][1]+", "+feature.geometry.coordinates[0][0]).split(",");
 				var centroide=layer.getBounds().getCenter();
 				var coord=[];
@@ -470,7 +473,7 @@
 				nombrefoto.forEach(nombre => nom_foto=nom_foto+nombre+"_");
 				nombrefoto = nom_foto.slice(0, nom_foto.length - 1);
 				<!--Establecer qué familias tienen fotos del frente de su casa y cuáles no para distinguir qué imagen mostrar-->
-				if (nombrefoto=="Agüero" || nombrefoto=="Arce" || nombrefoto=="Argüello" || nombrefoto=="Astudillo_Elio" || nombrefoto=="Astudillo_Elio"
+				if (nombrefoto=="Agüero" || nombrefoto=="Arce" || nombrefoto=="Argüello" || nombrefoto=="Astudillo_Elio"
 				|| nombrefoto=="Astudillo_Jonatan" || nombrefoto=="Battaglia" || nombrefoto=="Biscontin_Irma" || nombrefoto=="Biscontin_Ruben"
 				|| nombrefoto=="Bonada_Alfredo" || nombrefoto=="Bonada_Gaston" || nombrefoto=="Bringas" || nombrefoto=="Bustos_Ethel"
 				|| nombrefoto=="Cabañez_Carlos" || nombrefoto=="Calderon-Andrada" || nombrefoto=="Candia" || nombrefoto=="Castillo" || nombrefoto=="Cinco" || nombrefoto=="Cuadro"
