@@ -250,6 +250,7 @@
 		var capa_casas={};
 		var familia="";
 		var ubicacion_real="";
+		var borrar_ubicacion_real="";
 		var sondeo_posicion=0;
 		var lat="";
 		var lon="";
@@ -522,6 +523,9 @@
 				ubicacion_real=setInterval(() => {
 				navigator.geolocation.getCurrentPosition(getPosition)
 				}, 2000);
+				if (borrar_ubicacion_real !=="") {
+					clearInterval(borrar_ubicacion_real);
+				};
 				document.getElementById("gps").src="./images/slide_on.jpg";
 				document.getElementById("ubicacion_estado").href="javascript:desactivar_seguimiento(seguimiento)";
 			};
@@ -569,6 +573,7 @@
 					mapa.removeLayer(circulo)
 				}
 			}, 1000);
+			mapa.flyTo(["-32.910814909848675", "-68.77197721149017"],16);
 		};
 		
 		function Centrar_Localizacion() {
