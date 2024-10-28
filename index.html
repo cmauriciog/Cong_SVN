@@ -521,7 +521,8 @@
 			} else {
 				document.getElementById("localizacion").style.display='inline';
 				ubicacion_real=setInterval(() => {
-				navigator.geolocation.getCurrentPosition(getPosition)
+				navigator.geolocation.getCurrentPosition(getPosition,
+				onError, {maximumAge: 0,timeout: 100,enableHighAccuracy:true})
 				}, 2000);
 				if (borrar_ubicacion_real !=="") {
 					clearInterval(borrar_ubicacion_real);
@@ -555,6 +556,11 @@
 					mapa.flyToBounds(featureGroup.getBounds());
 					mapa.setView([lat,lon])};
 			};
+		};
+		
+		<!--Función de error de geolocalización-->
+		function onError(positionError) {
+			console.log("Error de GPS");
 		};
 		
 		<!--Función para desactivar el seguimiento en tiempo real-->
