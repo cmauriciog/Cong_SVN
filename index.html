@@ -70,7 +70,7 @@
 		}
     </style>
 	<!--Icono para la pestaña del navegador-->
-	 <link rel="shortcut icon" href="./images/Tetragramaton.ico" type="image/x-icon"/>
+	<link rel="shortcut icon" href="./images/Tetragramaton.ico" type="image/x-icon"/>
 </head>
 <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
 	<a style="font-size:15px; color:white; display=inline-block"><strong>MAPA DE TERRITORIOS DE LA CONGREGACION SUR VILLA NUEVA (Nº 6379)</strong></a>
@@ -386,7 +386,7 @@
 			};
 		};
 		
-		<!--Función buscar casas elegida-->
+		<!--Función buscar casa elegida-->
 		function CasaAbuscar(valor) {
 			barralateral.close();
 			familia=valor;
@@ -477,7 +477,7 @@
 				if (nombrefoto=="Agüero" || nombrefoto=="Arce" || nombrefoto=="Argüello" || nombrefoto=="Astudillo_Elio"
 				|| nombrefoto=="Astudillo_Jonatan" || nombrefoto=="Battaglia" || nombrefoto=="Biscontin_Irma" || nombrefoto=="Biscontin_Ruben"
 				|| nombrefoto=="Bonada_Alfredo" || nombrefoto=="Bonada_Gaston" || nombrefoto=="Bringas" || nombrefoto=="Bustos_Ethel"
-				|| nombrefoto=="Cabañez_Carlos" || nombrefoto=="Calderon-Andrada" || nombrefoto=="Candia" || nombrefoto=="Castillo" || nombrefoto=="Cinco" || nombrefoto=="Cuadro"
+				|| nombrefoto=="Cabañez_Carlos" || nombrefoto=="Calderon-Andrada" || nombrefoto=="Candia" || nombrefoto=="Castillo" || nombrefoto=="Cinco-Castillo" || nombrefoto=="Cuadro"
 				|| nombrefoto=="Del_Balzo" || nombrefoto=="Diaz-Algañaraz" || nombrefoto=="Ferranti-Ricalde" || nombrefoto=="Figueroa"
 				|| nombrefoto=="Galdames" || nombrefoto=="Garcia_Cristian" || nombrefoto=="Garcia_Gonzalo" || nombrefoto=="Garcia_Roberto" || nombrefoto=="Godoy"
 				|| nombrefoto=="Gualpa" || nombrefoto=="Huallpa" || nombrefoto=="Lahiton" || nombrefoto=="Leites"
@@ -517,13 +517,15 @@
 			sondeo_posicion=0;
 			seguimiento="si";
 			if((! navigator.geolocation || ! navigator.onLine) && seguimiento=="si") {
-				alert("Oho...!!! Parece que no tenés activado del GPS y/o no tenés conexión a internet...!!!.-");
+				document.getElementById("titulo_modalinicial").innerHTML=("<h1>"+"Por favor, activá manualmente el GPS del celular"+"</h1>");
+				document.getElementById("cuerpo_modalinicial").innerHTML=("<h4>"+"Después de hacerlo, aguardá unos momentos y se te mostrará tu ubicación."+"</h4>");
+				document.getElementById("modal_inicial").showModal()
 			} else {
 				document.getElementById("localizacion").style.display='inline';
 				ubicacion_real=setInterval(() => {
 				navigator.geolocation.getCurrentPosition(getPosition,
 				onError, {maximumAge: 0,timeout: 100,enableHighAccuracy:true})
-				}, 2000);
+				}, 500);
 				if (borrar_ubicacion_real !=="") {
 					clearInterval(borrar_ubicacion_real);
 				};
@@ -560,7 +562,11 @@
 		
 		<!--Función de error de geolocalización-->
 		function onError(positionError) {
-			console.log("Error de GPS");
+			if (! navigator.userAgent.match(/Windows/i)) {
+			document.getElementById("titulo_modalinicial").innerHTML=("<h1>"+"Por favor, activá manualmente el GPS del celular"+"</h1>");
+			document.getElementById("cuerpo_modalinicial").innerHTML=("<h4>"+"Después de hacerlo, aguardá unos momentos y se te mostrará tu ubicación."+"</h4>");
+			document.getElementById("modal_inicial").showModal()
+		};
 		};
 		
 		<!--Función para desactivar el seguimiento en tiempo real-->
