@@ -13,6 +13,8 @@
 	<link href="modals.css" rel="stylesheet">
 	<script src="geojson/casas.geojson" type="text/javascript"></script>
 	<script src="geojson/territorios.geojson" type="text/javascript"></script>
+	<script src="usuario.txt" type="text/javascript"></script>
+	<script src="contrasenia.txt" type="text/javascript"></script>
 	<!-- JS -->
 	<script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
 	integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
@@ -277,7 +279,7 @@
 		function loguearse() {
 			usuario=document.getElementsByName("username")[0].value;
 			contrasena=document.getElementsByName("password")[0].value;
-			if (usuario=="SVN" && contrasena=="6379") {
+			if (usuario==usuarios && contrasena==contrasenias) {
 				barralateral.close();
 				document.getElementById("casas_hnos").style.display='inline';
 				document.getElementById("ayuda_usuario").style.display='inline';
