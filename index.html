@@ -358,7 +358,6 @@
 </head>
 <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
 	<a style="font-size:15px; color:#22d3ee; display=inline-block"><strong>MAPA DE TERRITORIOS DE LA CONGREGACION SUR VILLA NUEVA (Nº 6379)</strong></a>
-	<!--<div id="activargps" class="colorful-div">¿Necesitás indicaciones para llegar? Activá aquí...</div>-->
 	<div id="ubicacion">
 		<div id="activargps" class="colorful-div">¿Necesitás indicaciones para llegar? Activá aquí...</div>
 		<div id="ubicacion_texto" style="font-size:10px; text-align:right; background-color:grey; color:blue"><strong>Activar/Desactivar mi ubicación</strong><a id="ubicacion_estado" href="javascript:activar_seguimiento()"><img id="gps" src="images/slide_off.jpg" width="50" height="30"></img></a></div>
@@ -438,6 +437,7 @@
 					<input id="ocultarflias" type="submit" style="background-color:#f48d8d" value="Quitar familias del mapa" onclick="QuitarTodasFlias();"></input>
 				</p>
             </div>
+			<!--
 			<div class="sidebar-pane" id="localizacion">
                 <h1 class="sidebar-header">Sección de herramientas...<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
 				<br></br>
@@ -447,9 +447,8 @@
 				<p id="gpson"><a href="javascript:desactivar_seguimiento()"><i class="fa-solid fa-location-dot" style="color: red;"></i></a>  <a href="javascript:desactivar_seguimiento()" style="color: blue;">  Desactivar mi ubicación actual</a></p>
 				<p id="gpsoff"><a href="javascript:activar_seguimiento()"><i class="fa-solid fa-location-dot" style="color: green;"></i></a>  <a href="javascript:activar_seguimiento()" style="color: blue;">  Mi ubicación actual</a></p>
 				<p id="dondestoy"><a href="javascript:CentrarMiUbicacion()"><i class="fa-solid fa-location-crosshairs" style="color: green";></i></a>  <a href="javascript:CentrarMiUbicacion()" style="color: blue;">  Centrar en mi ubicación actual</a></p>
-				<!--<p id="medir"><a href="#"><i class="fa-solid fa-ruler-horizontal" style="color: green";></i></a><a href="#" style="color: blue;">  Medir distancias ó perímetros y superficie</a></p>
-				<p style="color:blue" onclick="Centrar_Localizacion();">Centrar mapa en mi ubicación actual</p>-->
 			</div>
+			-->
 			<div class="sidebar-pane" id="logueo">
                 <div id="log_no">
 					<h1 class="sidebar-header">Por favor, ingrese sus datos...<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
@@ -501,12 +500,11 @@
 		</button>
 		<!--Botón para el Calendario-->
 		<div class="controles">
-			<!--<button id="AbrirCalendario" class="boton-calendario">Salidas del mes...</button>-->
-			<button onclick="AbrirModalCalendario('modal1')" class="boton-calendario">Salidas del mes...</button>
+			<button  class="boton-calendario" id="botonsalidas" onclick="AbrirModalCalendario('modal1')">Salidas del mes...</button>
 		</div>
 		<!--Botón para recargar la página-->
 		<div class="controles">
-			<button class="boton-recargar" onclick="location.reload()">Volver a empezar...</button>
+			<button id="botonrecargar" class="boton-recargar" onclick="location.reload()">Volver a empezar...</button>
 		</div>
 	</div>
 	
@@ -530,13 +528,10 @@
 	
 	<!--Bloque para el Calendario-->
     <!-- Modal Calendario -->
-	<!--<div id="ModalCalendario" class="modal-calendario" aria-hidden="true" role="dialog" aria-modal="true" >-->
 	<div id="ModalCalendario" class="capaoscura">
-		<!--<div class="modalcal">-->
 		<div id="modal1" class="modales">
 			<div class="modalcal-cabecera">
 				<div class="modalcal-titulo" id="TituloCalendario">Calendario</div>
-				<!--<button class="modalcal-cerrar" id="CerrarCalendario" aria-label="Cerrar">✕</button>-->
 				<button class="modalcal-cerrar" onclick="CerrarModalCalendario('modal1')">✕</button>
 			</div>
 			<div class="calendario">
@@ -549,12 +544,9 @@
 			</div>
 		</div>
 		<!--Modal Salidas-->
-		<!--<div class="modalsal" id="ModalSalidas" aria-hidden="true" role="dialog" aria-modal="true">-->
-		<!--<div class="modalsal" id="modal2">-->
 		<div id="modal2" class="modales" style="display:none;">
 			<div class="modalsal-cabecera">
 				<div class="modalsal-titulo" id="titulo-modalsal"></div>
-				<!--<button class="modalsal-cerrar" id="CerrarSalidas" aria-label="Cerrar">✕</button>-->
 				<button class="modalsal-cerrar" onclick="CerrarModalCalendario('modal2')">✕</button>
 			</div>
 			<div class="infosalidas" id="DetallesSalidas"></div>
@@ -1462,6 +1454,7 @@
 		function VerTodasFlias() {
 			barralateral.close();
 			if (capa_casas) {mapa.removeLayer(capa_casas)};
+			buscar="casa";
 			capa_casas = L.geoJson(casasdehnos, {onEachFeature}).addTo(mapa);
 			document.getElementById("ocultarflias").style.display="inline";
 			document.getElementById("mostrarflias").style.display="none";
@@ -1885,9 +1878,9 @@
 			seguimiento="si";
 			barralateral.close();
 			document.getElementById("gps").src="./images/slide_on.jpg";
-			document.getElementById("gpson").style.visibility='visible';
-			document.getElementById("gpsoff").style.visibility='hidden';
-			document.getElementById("dondestoy").style.visibility='visible';
+			//document.getElementById("gpson").style.visibility='visible';
+			//document.getElementById("gpsoff").style.visibility='hidden';
+			//document.getElementById("dondestoy").style.visibility='visible';
 			document.getElementById("activargps").style.visibility='hidden';
 			document.getElementById("ubicacion_estado").href="javascript:desactivar_seguimiento()";
 			VerificarConexion();
@@ -2008,7 +2001,7 @@
 			cuerpomodalflash.innerHTML = '<span style="color:red"><br><b>Se cancelará la actualización del trazado de ruta.</b><br><br><span style="color:black">porque apagaste el GPS.-</span>';
 			tiempomodalflash=5000;
 			ModalFlash(tiempomodalflash);
-			document.getElementById("dondestoy").style.visibility='hidden';
+			//document.getElementById("dondestoy").style.visibility='hidden';
 			coordenadas_ubicacion_real="";
 			distancia="";
 			mapa.stopLocate();
@@ -2037,20 +2030,22 @@
 		function desactivar_seguimiento() {
 			barralateral.close();
 			seguimiento="no";
+			avisollegada="";
 			document.getElementById("gps").src="./images/slide_off.jpg";
-			document.getElementById("gpson").style.visibility='hidden';
-			document.getElementById("gpsoff").style.visibility='visible';
+			//document.getElementById("gpson").style.visibility='hidden';
+			//document.getElementById("gpsoff").style.visibility='visible';
 			document.getElementById("botoncentrado").style.visibility='hidden';
 			document.getElementById("activargps").style.visibility='visible';
 			cajadistancia.style.visibility="hidden";
-			document.getElementById("dondestoy").style.visibility='hidden';
+			//document.getElementById("dondestoy").style.visibility='hidden';
 			document.getElementById("ubicacion_estado").href="javascript:activar_seguimiento()";
 			DetenerActualizarUbicacion();
-			mapa.removeLayer(marca_ubicacion_real);
+			if (marca_ubicacion_real) {mapa.removeLayer(marca_ubicacion_real)};
 			marca_ubicacion_real="";
 			coordenadas_ubicacion_real="";
-			ruta.remove();
-			CentrarMiUbicacion();
+			if (ruta) {ruta.remove()};
+			if (marcapuntosalida) {marcapuntosalida.remove()};
+			mapa.flyTo([-32.92744016451933, -68.77696929435363],16);
 		};
 
 		<!--Función para Trazar Ruta Sugerida con OSRM-->
@@ -2064,6 +2059,12 @@
 			document.getElementById("btn-indicaciones-modal-flash").style.visibility='hidden';
 			document.getElementById("MiModalFlash").style.visibility='hidden';
 			distancia=DistanciaEnTiempoReal();
+			cajadistancia.style.visibility="visible";
+			if (distancia>6000) {msg="¡Estás a unos "+(Math.round(distancia/1000).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" kilómetros del destino! (En línea recta).-"};
+			if (distancia<6001) {msg="¡Estás a unos "+(Math.round(distancia).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" metros del destino! (En línea recta).-"};
+			cajadistancia.textContent = msg;
+			cajadistancia.style.background = "#d4edda";
+			cajadistancia.style.color = "#155724";
 			if (distancia<=2200 && lugar) {
 				if (ruta) {ruta.remove()};
 				clearInterval(actualizarruta);
@@ -2220,11 +2221,11 @@
 		document.getElementById("botoncentrado").style.visibility='hidden';
 		
 		//Activar/Desactivar/Mostrar/Ocultar/Ejecutar lo que corresponda al iniciar
-		document.getElementById("gpson").style.visibility='hidden';
+		//document.getElementById("gpson").style.visibility='hidden';
 		document.getElementById("btn-indicaciones-modal-flash").style.visibility='hidden';
 		document.getElementById("distancia").style.visibility='hidden';
 		document.getElementById("botoncentrado").style.visibility='hidden';
-		document.getElementById("dondestoy").style.visibility='hidden';
+		//document.getElementById("dondestoy").style.visibility='hidden';
 		document.getElementById("botonnorte").style.visibility='hidden';
 		VerificarConexion();
 		VerificarVersion();
@@ -2233,16 +2234,10 @@
 		
 		//Bloque para el Calendario
 		// ==== 2) Estado y helpers ====
-		//const modalcalendario = document.getElementById('ModalCalendario');
-		//const abrircalendario = document.getElementById('AbrirCalendario');
-		//const cerrarcalendario = document.getElementById('CerrarCalendario');
-		//const modalsalidas = document.getElementById("ModalSalidas");
 		const borrarfecha = document.getElementById('BorrarFecha');
 		const titulocalendario = document.getElementById('TituloCalendario');
 		const diasdelasemanaEl = document.getElementById('diasdelasemana');
 		const diasEl = document.getElementById('dias');
-		//diasEl.addEventListener('click', (e) => {alert(diasEl)});
-		//const fechaelegida = document.getElementById('FechaElegida');
 
 		let fechaISO = null; // Fecha seleccionada en formato ISO (YYYY-MM-DD)
 
@@ -2312,47 +2307,37 @@
 					diasEl.querySelectorAll('.calendario-dia.selected').forEach(el=>el.classList.remove('selected'));
 					btn.classList.add('selected');
 					fechaISO = iso;
-					//fechaelegida.textContent = iso;//formatHuman(d, month, year);
-					// Ejemplo de "capturar" la fecha: disparar evento personalizado
 					const ev = new CustomEvent('fecha-seleccionada', { detail: { iso, day: d, month: mes+1, anio} });
 					window.dispatchEvent(ev);
-					// Cerrar modal automáticamente
-					//CerrarModalCalendario();
-					//modalsalidas.setAttribute('aria-hidden','false');
 				});
 				diasEl.appendChild(btn);
 			};
 		};
 
 		// ==== 5) Abrir/Cerrar modal ====
-		<!--function AbrirModalCalendario(){modalcalendario.setAttribute('aria-hidden','false');modalsalidas.setAttribute('aria-hidden','true');}-->
-		<!--function CerrarModalCalendario(){modalcalendario.setAttribute('aria-hidden','true')}-->
-		
 		function AbrirModalCalendario(id) {
 			document.getElementById("ModalCalendario").classList.add("active");
 			document.getElementById(id).style.display = "block";
-			//if (id === "modal1") generarCalendario();
+			document.getElementById("botonnorte").style.display="none";
+			document.getElementById("botonsalidas").style.display="none";
+			document.getElementById("botonrecargar").style.display="none";
 		};
 		
 		function CerrarModalCalendario(id) {
 			document.getElementById(id).style.display = "none";
-
 			// si no queda ningún modal abierto, cerramos overlay
 			const modal1Visible = document.getElementById("modal1").style.display === "block";
 			const modal2Visible = document.getElementById("modal2").style.display === "block";
 			if (!modal1Visible && !modal2Visible) {
 				document.getElementById("ModalCalendario").classList.remove("active");
+				document.getElementById("botonnorte").style.display="inline";
+				document.getElementById("botonsalidas").style.display="inline";
+				document.getElementById("botonrecargar").style.display="inline";
 			};
 		};
-		
-		//abrircalendario.style.visibility='hidden';
-		<!--abrircalendario.addEventListener('click', AbrirModalCalendario);-->
-		<!--cerrarcalendario.addEventListener('click', CerrarModalCalendario);-->
-		//modalcalendario.addEventListener('click', (e) => { if(e.target === modalcalendario) CerrarModalCalendario()});
 
 		borrarfecha.addEventListener('click', () => {
 			fechaISO = null;
-			//fechaelegida.textContent = '—';
 			diasEl.querySelectorAll('.calendario-dia.selected').forEach(el=>el.classList.remove('selected'));
 		});
 
@@ -2367,10 +2352,6 @@
 			document.getElementById('modal2').style.display = "block";
 			BuscarSalida(e.detail["day"],e.detail["month"],e.detail["anio"]);
 		});
-		
-		//Bloque para los detalles de las salidas
-		//const cerrarsalidas = document.getElementById('CerrarSalidas');
-		//cerrarsalidas.addEventListener('click', CerrarModalCalendario('modal2'));
 		
 		function BuscarSalida(dia,mes,anio) {
 			document.getElementById("modal2").classList.add("active");
