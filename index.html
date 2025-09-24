@@ -124,7 +124,8 @@
 			top: 10px;
 			left: 50%;
 			transform: translateX(-50%);
-			background: white;
+			background: "#d4edda";
+			font-size: 16px;
 			padding: 8px 14px;
 			border-radius: 8px;
 			box-shadow: 0 0 6px rgba(0,0,0,0.2);
@@ -132,7 +133,8 @@
 			font-weight: bold;
 			transition: background 0.3s;
 		}
-				/*Modal Flash*/
+		
+		/*Modal Flash*/
 		.modalflash {
 			position: fixed;
 			top: 45%;
@@ -172,6 +174,20 @@
 			}
 		}
 		
+		/*Botón para recargar la página*/
+		.boton-recargar {
+			border: 3px solid #374151; background: linear-gradient(180deg, #1f2937, #111827);
+			color: #22d3ee; border-radius: 14px; cursor: pointer; font-weight: 600; box-shadow: 0 6px 18px rgba(0,0,0,.35);
+			transition: transform .08s ease, box-shadow .2s ease, border-color .2s ease; position:fixed;
+			bottom:10px;right:30px; width: 200px; height: 50px;
+		}
+		.boton-recargar:hover {
+			border-color: #22d3ee; box-shadow: 0 8px 24px rgba(34,211,238,.25);
+		}
+		.boton-recargar:active {
+			transform: translateY(1px);
+		}
+		
 		/*Bloque para el Calendario*/
 		.controles {
 			position: absolute; top: 12px; right: 12px; display: flex; flex-direction: column; gap: 10px; z-index: 500;
@@ -180,7 +196,7 @@
 			border: 3px solid #374151; background: linear-gradient(180deg, #1f2937, #111827);
 			color: #22d3ee; border-radius: 14px; cursor: pointer; font-weight: 600; box-shadow: 0 6px 18px rgba(0,0,0,.35);
 			transition: transform .08s ease, box-shadow .2s ease, border-color .2s ease; position:fixed;
-			bottom:50px;right:30px; width: 200px; height: 50px;
+			bottom:70px;right:30px; width: 200px; height: 50px;
 		}
 		.boton-calendario:hover {
 			border-color: #22d3ee; box-shadow: 0 8px 24px rgba(34,211,238,.25);
@@ -194,15 +210,62 @@
 		.pill strong {
 			color: #38bdf8;
 		}
+		
 		/*Fondo Oscurecido*/
-		.modal-calendario {
-			position: fixed; inset: 0; background: rgba(3,7,18,.6); backdrop-filter: blur(2px); display: none; z-index: 1000; place-items: center start;
+		/*.modal-calendario {*/
+			/*position: fixed; inset: 0; background: rgba(3,7,18,.6); backdrop-filter: blur(2px); display: none; z-index: 1000; place-items: center start;*/
+		/*}*/
+		/*.modal-calendario[aria-hidden="false"] {*/
+			/*display: grid;*/
+		/*}*/
+		
+		/* Fondo oscuro con blur */
+		.capaoscura {
+			position: fixed;
+			inset: 0;
+			background: rgba(3,7,18,.6);
+			backdrop-filter: blur(5px);
+			display: none;
+			align-items: center;
+			justify-content: center;
+			z-index: 1000;
 		}
-		.modal-calendario[aria-hidden="false"] {
+		.capaoscura.active {
+			display: flex;
+		}
+
+		/* Contenedor de modales */
+		.modales {
+			background: #111827ee;
 			display: grid;
+			gap: 1rem;
+			width: 90%;
+			max-width: 800px;
+			max-height: 350px;
+			margin-left: 25px;
 		}
+		@media (min-width: 700px) {
+			.modales {
+				grid-template-columns: 1fr 1fr;
+			}
+		}
+
+		.modal {
+			background: pink;
+			padding: 1rem;
+			border-radius: 12px;
+			box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+			position: relative;
+			min-width: 250px;
+		}
+
+		.modal h2 {
+			margin-top: 0;
+		}
+  
 		.modalcal {
-			justify-self: start; margin-left: 20%; background: #111827ee; border: 1px solid #374151; border-radius: 18px; box-shadow: 0 30px 80px rgba(0,0,0,.5); overflow: hidden; width:25%;/*width: min(92vw, 420px);*/
+			justify-self: start; margin-left: 20%; margin-top:20%; background: #111827ee; border: 1px solid #374151; border-radius: 18px; box-shadow: 0 30px 80px rgba(0,0,0,.5); overflow: hidden; width:25%;/*width: min(92vw, 420px);*/
+			/*justify-self: start; margin-left: 20%; background: #111827ee; border: 1px solid #374151; border-radius: 18px; box-shadow: 0 30px 80px rgba(0,0,0,.5); overflow: hidden; width:30%; height:75%;/*width: min(92vw, 420px);*/*/
 		}
 		.modalcal-cabecera {
 			display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-bottom: 1px solid #374151;
@@ -247,7 +310,8 @@
 			display: flex; justify-content: space-between; align-items: center; margin-top: 12px; font-size: 13px; color: #9ca3af;
 		}
 		.modalsal {
-			justify-self: start; margin-left: 70%; background: #111827ee; border: 1px solid #374151; border-radius: 18px; box-shadow: 0 30px 80px rgba(0,0,0,.5); overflow: hidden; width: 25%;/*width: min(92vw, 420px);*/
+			justify-self: start; margin-left: 40%; margin-top:10%; background: #111827ee; border: 1px solid #374151; border-radius: 18px; box-shadow: 0 30px 80px rgba(0,0,0,.5); overflow: hidden; width: 25%;/*width: min(92vw, 420px);*/
+			/*justify-self: start; margin-left: 70%; background: #111827ee; border: 1px solid #374151; border-radius: 18px; box-shadow: 0 30px 80px rgba(0,0,0,.5); overflow: hidden; width: 30%; height:75%;/*width: min(92vw, 420px);*/*/
 		}
 		.modalsal-cabecera {
 			display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-bottom: 1px solid #374151;
@@ -263,6 +327,30 @@
 		}
 		.infosalidas {
 			height:300px; padding: 12px 16px 18px;
+			overflow: auto;
+		}
+		
+		/*Cuadro animado*/
+		.colorful-div {
+			width: 300px;
+			height: 10%;
+			border-radius: 20px;
+			background: linear-gradient(270deg, #ff5f6d, #ffc371, #24c6dc, #514a9d);
+			background-size: 800% 800%;
+			animation: gradientShift 10s ease infinite;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			color: white;
+			font-size: 1rem;
+			box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+			text-align: center;
+		}
+
+		@keyframes gradientShift {
+			0% { background-position: 0% 50%; }
+			50% { background-position: 100% 50%; }
+			100% { background-position: 0% 50%; }
 		}
     </style>
 	<!--Icono para la pestaña del navegador-->
@@ -270,8 +358,10 @@
 </head>
 <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
 	<a style="font-size:15px; color:#22d3ee; display=inline-block"><strong>MAPA DE TERRITORIOS DE LA CONGREGACION SUR VILLA NUEVA (Nº 6379)</strong></a>
+	<!--<div id="activargps" class="colorful-div">¿Necesitás indicaciones para llegar? Activá aquí...</div>-->
 	<div id="ubicacion">
-		<div id="ubicacion_texto" style="font-size:10px; text-align:right; background-color:grey; color:blue"><strong>Activar/Desactivar mi ubicación</strong><a id="ubicacion_estado" href="javascript:activar_seguimiento(seguimiento)"><img id="gps" src="images/slide_off.jpg" width="50" height="30"></img></a></div>
+		<div id="activargps" class="colorful-div">¿Necesitás indicaciones para llegar? Activá aquí...</div>
+		<div id="ubicacion_texto" style="font-size:10px; text-align:right; background-color:grey; color:blue"><strong>Activar/Desactivar mi ubicación</strong><a id="ubicacion_estado" href="javascript:activar_seguimiento()"><img id="gps" src="images/slide_off.jpg" width="50" height="30"></img></a></div>
 	</div>
 	<img src="images/Tetragramaton.jpg" width="60" height="60"></img>
 </header>
@@ -326,7 +416,7 @@
 				<br></br>
 				<p id="titulobuscarterritorio" class="lorem">Escribí o seleccioná el territorio...</p>
 				<select id="selector_territorios" name="CasasHnos" data-placeholder="- Seleccioná o escribí el territorio que deseás ubicar -"
-					class="form-control chosenCasas" value="<%= typeof Casas != 'undefined' ? Casas : '' %>" onchange="TerritorioAbuscar(value)">
+					class="form-control chosenCasas" value="<%= typeof Casas != 'undefined' ? Casas : '' %>" onchange="TerritorioAbuscar(value,'territorio')">
 					<option value=""></option>
 				</select>
 				<br></br>
@@ -354,8 +444,8 @@
 				<p class="lorem">Las herramientas disponibles son...</p>
 				<br></br>
 				<br></br>
-				<p id="gpson"><a href="javascript:desactivar_seguimiento(seguimiento)"><i class="fa-solid fa-location-dot" style="color: red;"></i></a>  <a href="javascript:desactivar_seguimiento(seguimiento)" style="color: blue;">  Desactivar mi ubicación actual</a></p>
-				<p id="gpsoff"><a href="javascript:activar_seguimiento(seguimiento)"><i class="fa-solid fa-location-dot" style="color: green;"></i></a>  <a href="javascript:activar_seguimiento(seguimiento)" style="color: blue;">  Mi ubicación actual</a></p>
+				<p id="gpson"><a href="javascript:desactivar_seguimiento()"><i class="fa-solid fa-location-dot" style="color: red;"></i></a>  <a href="javascript:desactivar_seguimiento()" style="color: blue;">  Desactivar mi ubicación actual</a></p>
+				<p id="gpsoff"><a href="javascript:activar_seguimiento()"><i class="fa-solid fa-location-dot" style="color: green;"></i></a>  <a href="javascript:activar_seguimiento()" style="color: blue;">  Mi ubicación actual</a></p>
 				<p id="dondestoy"><a href="javascript:CentrarMiUbicacion()"><i class="fa-solid fa-location-crosshairs" style="color: green";></i></a>  <a href="javascript:CentrarMiUbicacion()" style="color: blue;">  Centrar en mi ubicación actual</a></p>
 				<!--<p id="medir"><a href="#"><i class="fa-solid fa-ruler-horizontal" style="color: green";></i></a><a href="#" style="color: blue;">  Medir distancias ó perímetros y superficie</a></p>
 				<p style="color:blue" onclick="Centrar_Localizacion();">Centrar mapa en mi ubicación actual</p>-->
@@ -364,9 +454,9 @@
                 <div id="log_no">
 					<h1 class="sidebar-header">Por favor, ingrese sus datos...<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
 					<p class="lorem">Usuario:</p>
-					<input type="text" id="username" name="username">
+					<input type="text" id="username" name="username" value="SVN">
 					<p class="lorem">Contraseña:</p>
-					<input type="password" id="password" name="password">
+					<input type="password" id="password" name="password" value="6379">
 					<input type="submit" value="Mostrar/Ocultar" onclick="Contrasenia();">
 					<br><br>
 					<input type="submit" style="background-color:#acf89f" value="Ingresar" onclick="Loguearse();">
@@ -409,9 +499,14 @@
 		<button class="botonnorte" id="botonnorte">
 			<img src="./images/norte.jpg" alt="Norte del Mapa" title="Norte terrestre">
 		</button>
-		<!--Bloque para el Calendario-->
+		<!--Botón para el Calendario-->
 		<div class="controles">
-			<button id="AbrirCalendario" class="boton-calendario">Salidas del mes...</button>
+			<!--<button id="AbrirCalendario" class="boton-calendario">Salidas del mes...</button>-->
+			<button onclick="AbrirModalCalendario('modal1')" class="boton-calendario">Salidas del mes...</button>
+		</div>
+		<!--Botón para recargar la página-->
+		<div class="controles">
+			<button class="boton-recargar" onclick="location.reload()">Volver a empezar...</button>
 		</div>
 	</div>
 	
@@ -435,11 +530,14 @@
 	
 	<!--Bloque para el Calendario-->
     <!-- Modal Calendario -->
-	<div id="ModalCalendario" class="modal-calendario" aria-hidden="true" role="dialog" aria-modal="true" >
-		<div class="modalcal">
+	<!--<div id="ModalCalendario" class="modal-calendario" aria-hidden="true" role="dialog" aria-modal="true" >-->
+	<div id="ModalCalendario" class="capaoscura">
+		<!--<div class="modalcal">-->
+		<div id="modal1" class="modales">
 			<div class="modalcal-cabecera">
 				<div class="modalcal-titulo" id="TituloCalendario">Calendario</div>
-				<button class="modalcal-cerrar" id="CerrarCalendario" aria-label="Cerrar">✕</button>
+				<!--<button class="modalcal-cerrar" id="CerrarCalendario" aria-label="Cerrar">✕</button>-->
+				<button class="modalcal-cerrar" onclick="CerrarModalCalendario('modal1')">✕</button>
 			</div>
 			<div class="calendario">
 				<div class="calendario-grid" id="diasdelasemana"></div>
@@ -451,10 +549,13 @@
 			</div>
 		</div>
 		<!--Modal Salidas-->
-		<div class="modalsal">
+		<!--<div class="modalsal" id="ModalSalidas" aria-hidden="true" role="dialog" aria-modal="true">-->
+		<!--<div class="modalsal" id="modal2">-->
+		<div id="modal2" class="modales" style="display:none;">
 			<div class="modalsal-cabecera">
 				<div class="modalsal-titulo" id="titulo-modalsal"></div>
-				<button class="modalsal-cerrar" id="CerrarSalidas" aria-label="Cerrar">✕</button>
+				<!--<button class="modalsal-cerrar" id="CerrarSalidas" aria-label="Cerrar">✕</button>-->
+				<button class="modalsal-cerrar" onclick="CerrarModalCalendario('modal2')">✕</button>
 			</div>
 			<div class="infosalidas" id="DetallesSalidas"></div>
 		</div>
@@ -482,15 +583,15 @@
 		<!--Programa de salidas en formato JSON-->
 		var salidas=[
 		  {
-			"DiaSemana": "Lunes",
+			"DiaSemana": "Miercoles",
 			"Dia": 1,
-			"Mes": 9,
+			"Mes": 10,
 			"Anio": 2025,
-			"HoraM": "",
-			"PuntoEncuentroM": "",
-			"SalidaM": "",
-			"ConductorM": "",
-			"TerritorioM": "",
+			"HoraM": "9:30",
+			"PuntoEncuentroM": "Tapon Moyano y San Francisco del Monteº",
+			"SalidaM": "Congregacional",
+			"ConductorM": "Yo",
+			"TerritorioM": "29",
 			"HoraT": "",
 			"PuntoEncuentroT": "",
 			"SalidaT": "",
@@ -1117,7 +1218,7 @@
 			"Mes": 9,
 			"Anio": 2025,
 			"HoraM": "09:30",
-			"PuntoEncuentroM": "San Francisco del Monte y Tapon Moyano",
+			"PuntoEncuentroM": "Tapon Moyano y San Francisco del Monte",
 			"SalidaM": "Grupos 1 y 3",
 			"ConductorM": "Cristian Bringas",
 			"TerritorioM": 6,
@@ -1258,7 +1359,7 @@
 		var circulo="";
 		var version="publica";
 		var marcador="";
-		var seguimiento="si";
+		var seguimiento="no";
 		var casa="";
 		var casitas="";
 		var casas=[];
@@ -1282,7 +1383,7 @@
 		var capa_numerosterritorios={};
 		var capa_territoriofiltrado={};
 		var capa_territoriofiltradonumero={};
-		var puntomascercano="";
+		var puntomascercano=L.latLng[-32.92740232843889, -68.77696838564452];
 		var numeroterritorio="";
 		var capa_popups=null;
 		var infoterritorios=null;
@@ -1300,6 +1401,8 @@
 		var anioseleccionado="";
 		var fecha="";
 		var marcapuntosalida="";
+		var cartografiar="congregacion";
+		var listaterritorios=[];
 
 		<!--Añadir la barra lateral-->
 		var barralateral = L.control.sidebar('barralateral').addTo(mapa);
@@ -1348,17 +1451,17 @@
 		<!--Función Mostrar/Habilitar u Ocultar/Deshabilitar elementos según la versión de trabajo-->
 		function VerificarVersion() {
 			if (version=="publica") {
-				console.log("Versión Pública");
+				//console.log("Versión Pública");
 			};
 			if (version=="completa") {
-				console.log("Versión Completa");
+				//console.log("Versión Completa");
 			};
 		};
 		
 		<!--Función para mapear todas las familias-->
 		function VerTodasFlias() {
 			barralateral.close();
-			if(Object.keys(capa_casas).length !== 0) {capa_casas.remove()};
+			if (capa_casas) {mapa.removeLayer(capa_casas)};
 			capa_casas = L.geoJson(casasdehnos, {onEachFeature}).addTo(mapa);
 			document.getElementById("ocultarflias").style.display="inline";
 			document.getElementById("mostrarflias").style.display="none";
@@ -1396,12 +1499,12 @@
 				else {
 					var novisitar="No hay casas 'NO VISITAR' en este territorio"
 				};
-				var listaterritorios=[];
 				listaterritorios.push(feature.properties.Numero);
-				listaterritorios.sort();
+				let sinRepetidos = [...new Set(listaterritorios)];
+				listaterritorios=sinRepetidos.sort((a, b) => a - b);
 				layer.bindPopup("<strong>Territorio Nº "+feature.properties.Numero+"</strong>"+"<br>Barrio: "+barrio+"<br><br><strong>NO VISITAR:</strong><br>"+novisitar);
-				ArmarListaTerritorios(listaterritorios);
 			};
+			//ArmarListaTerritorios();
 		};
 		
 		function NumerosTerritorios(feature, layer) {
@@ -1487,7 +1590,7 @@
 		};
 		
 		<!--Función para armar el listado de territorios y asignarlo al listbox correspondiente-->
-		function ArmarListaTerritorios(listaterritorios) {
+		function ArmarListaTerritorios() {
 			var select = document.getElementById('selector_territorios');
 			var i;
 			for (i = 0; i < listaterritorios.length; i++) {
@@ -1502,14 +1605,43 @@
 		<!--Función buscar casa elegida-->
 		function CasaAbuscar(valor) {
 			barralateral.close();
+			//if (casa !="") {casa.remove()};
+			//casa="";
+			//if (casitas !="") {casitas.remove()};
+			//casitas="";
+			//casas=[];
 			familia=valor;
 			casas.push(familia);
 			buscar="casa";
+			if (capa_coloresterritorios) {mapa.removeLayer(capa_coloresterritorios)};
+			if (capa_numerosterritorios) {mapa.removeLayer(capa_numerosterritorios)};
+			if (capa_infoterritorios) {mapa.removeLayer(capa_infoterritorios)};
+			if (nada) {mapa.removeLayer(nada)};
+			if (capa_territoriofiltrado) {mapa.removeLayer(capa_territoriofiltrado)};
+			if (capa_territoriofiltradonumero) {mapa.removeLayer(capa_territoriofiltradonumero)};
+			if (numeroterritorio) {mapa.removeLayer(numeroterritorio)};
+			if (marcapuntosalida) {marcapuntosalida.remove()};
+			if (ruta) {ruta.remove()};
+			if (capa_casas) {mapa.removeLayer(capa_casas)};
 			capa_casas=L.geoJSON(casasdehnos,{filter:Filtrar_Casas,onEachFeature}).addTo(mapa);
+			nada={
+				"type": "FeatureCollection",
+				"features": casasdehnos.features.filter(f => f.properties.Flia === valor)
+			};
+			puntomascercano=L.latLng(nada.features[0].geometry.coordinates[0][1],nada.features[0].geometry.coordinates[0][0]);
+			cartografiar="casa";
+			if (seguimiento==="si") {
+				titulomodalflash.innerText="TRAZAR RUTA";
+				cuerpomodalflash.innerHTML = '<span style="color:green"><br><b>¿Necesitás ayuda para llegar?.</b><br><br><span style="color:black">Puedo trazarte una ruta '+
+				'a partir de tu ubicación actual y brindarte algunas indicaciones.-<br></span>';
+				document.getElementById("btn-indicaciones-modal-flash").style.visibility='visible';
+				tiempomodalflash=5000;
+				ModalFlash(tiempomodalflash);
+			};
 		};
 		
 		<!--Función buscar territorio elegido-->
-		function TerritorioAbuscar(numeroterritoriobuscado) {
+		function TerritorioAbuscar(numeroterritoriobuscado,tipo) {
 			valor=Number(numeroterritoriobuscado);
 			barralateral.close();
 			buscar="territorio";
@@ -1520,18 +1652,30 @@
 			if (capa_territoriofiltrado) {mapa.removeLayer(capa_territoriofiltrado)};
 			if (capa_territoriofiltradonumero) {mapa.removeLayer(capa_territoriofiltradonumero)};
 			if (numeroterritorio) {mapa.removeLayer(numeroterritorio)};
+			if (marcapuntosalida && ! cartografiar==="salida") {marcapuntosalida.remove()};
+			if (capa_casas) {mapa.removeLayer(capa_casas)};
+			if (casa) {casa.remove()};
+			if (casitas) {casitas.remove()};
+			if (ruta) {ruta.remove()};
 			capa_territoriofiltrado=L.geoJSON(territorios,{filter:Filtrar_Territorios, style:PersonalizarTerritorioBuscado}).addTo(mapa);
 			poligono = {
 				"type": "FeatureCollection",
 				"features": territorios.features.filter(f => f.properties.Numero === valor)
 			};
-			var centroide=capa_territoriofiltrado.getBounds().getCenter();
-			var coord=[];
-			coord.push(centroide.lat,centroide.lng);
-			mapa.flyTo(coord,16);
+			if (tipo==="territorio") {
+				var centroide=capa_territoriofiltrado.getBounds().getCenter();
+				var coord=[];
+				coord.push(centroide.lat,centroide.lng);
+				mapa.flyTo(coord,16);
+				cartografiar="territorio";
+				puntomascercano = [centroide.lat, centroide.lng];
+			};
+			if (tipo==="salida") {
+				cartografiar="salida";
+			};
 			capa_territoriofiltradonumero=L.geoJSON(territorios,{filter:Filtrar_Territorios, onEachFeature: NumeroTerritorio}).addTo(mapa);
 			if (capa_infoterritorios) {capa_infoterritorios.addTo(mapa)};
-			if (orientarme=="no") {
+			if (seguimiento==="si") {
 				titulomodalflash.innerText="TRAZAR RUTA";
 				cuerpomodalflash.innerHTML = '<span style="color:green"><br><b>¿Necesitás ayuda para llegar?.</b><br><br><span style="color:black">Puedo trazarte una ruta '+
 				'a partir de tu ubicación actual y brindarte algunas indicaciones.-<br></span>';
@@ -1542,7 +1686,7 @@
 		};
 		
 		function Filtrar_Casas(feature) {
-			if(Object.keys(capa_casas).length !== 0) {capa_casas.remove()};
+			if (capa_casas) {mapa.removeLayer(capa_casas)};
 			for (i = 0; i < casas.length; i++) {
 				if (feature.properties.Flia==casas[i]) {return true};
 			};
@@ -1555,11 +1699,11 @@
 		};
 		
 		function ColorFondo(d) {
-			return (d == 1 || d==8 || d==15 || d==22 || d==29 || d==36 || d==43 || d==50) ? 'red':
-			(d== 2 || d==9 || d==16 || d==23 || d==30 || d==37 || d==44 || d==51) ? 'blue':
-			(d== 3 || d==10 || d==17 || d==24 || d==31 || d==38 || d==45 || d==52) ? 'yellow':
+			return (d == 1 || d==9 || d==15 || d==22 || d==29 || d==36 || d==43 || d==50) ? 'red':
+			(d== 2 || d==16 || d==30 || d==37 || d==44 || d==51) ? 'blue':
+			(d== 3 || d==8 || d==10 || d==13 || d==17 || d==24 || d==31 || d==38 || d==45 || d==52) ? 'yellow':
 			(d== 4 || d==11 || d==18 || d==25 || d==32 || d==39 || d==46 || d==53) ? 'pink':
-			(d== 5 || d==12 || d==19 || d==26 || d==33 || d==40 || d==47 || d==54) ? 'cyan':
+			(d== 5 || d==12 || d==16 || d==19 || d==23 || d==26 || d==33 || d==40 || d==47 || d==54) ? 'cyan':
 			(d== 6 || d==13 || d==20 || d==27 || d==34 || d==41 || d==48 || d==55) ? 'green':
 			(d== 7 || d==14 || d==21 || d==28 || d==35 || d==42 || d==49 || d==56) ? 'brown':
 			'black'
@@ -1633,19 +1777,13 @@
 				nombrefoto.forEach(nombre => nom_foto=nom_foto+nombre+"_");
 				nombrefoto = nom_foto.slice(0, nom_foto.length - 1);
 				<!--Establecer qué familias tienen fotos del frente de su casa y cuáles no para distinguir qué imagen mostrar-->
-				if (nombrefoto=="Agüero" || nombrefoto=="Arce" || nombrefoto=="Argüello" || nombrefoto=="Astudillo_Elio"
-				|| nombrefoto=="Astudillo_Jonatan" || nombrefoto=="Battaglia" || nombrefoto=="Biscontin_Irma" || nombrefoto=="Biscontin_Ruben"
-				|| nombrefoto=="Bonada_Alfredo" || nombrefoto=="Bonada_Gaston" || nombrefoto=="Bringas" || nombrefoto=="Bustos_Ethel"
-				|| nombrefoto=="Cabañez_Carlos" || nombrefoto=="Calderon-Andrada" || nombrefoto=="Candia" || nombrefoto=="Castillo" || nombrefoto=="Cinco-Castillo" || nombrefoto=="Cuadro"
-				|| nombrefoto=="Del_Balzo" || nombrefoto=="Diaz-Algañaraz" || nombrefoto=="Ferranti-Ricalde" || nombrefoto=="Figueroa"
-				|| nombrefoto=="Galdames" || nombrefoto=="Garcia_Cristian" || nombrefoto=="Garcia_Gonzalo" || nombrefoto=="Garcia_Roberto" || nombrefoto=="Godoy"
-				|| nombrefoto=="Gualpa" || nombrefoto=="Huallpa" || nombrefoto=="Lahiton" || nombrefoto=="Leites"
-				|| nombrefoto=="Manresa" || nombrefoto=="Miron_Daniel" || nombrefoto=="Miron_Gustavo" || nombrefoto=="Muñoz" || nombrefoto=="Nuñez_Alejandro"
-				|| nombrefoto=="Nuñez_Estela" || nombrefoto=="Ortiz_Elias" || nombrefoto=="Ortiz_Hector" || nombrefoto=="Ortiz_Jose-Videla" || nombrefoto=="Quevedo"
-				|| nombrefoto=="Quiroga_Jose" || nombrefoto=="Quiroga-Ramirez" || nombrefoto=="Reyes" || nombrefoto=="Rossi" || nombrefoto=="Sarmiento"
-				|| nombrefoto=="Snieg" || nombrefoto=="Sosa_Noelia" || nombrefoto=="Sosa_Tamara" || nombrefoto=="Vargas" || nombrefoto=="Vera_Debora"
-				|| nombrefoto=="Vera_Natalia" || nombrefoto=="Villafañe") {
-					var foto='./images/'+nombrefoto+".jpg";
+				if (nombrefoto=="Andrada_Liliana" || nombrefoto=="Argüello" || nombrefoto=="Astudillo_Elio-Videla_Alejandro" || nombrefoto=="Astudillo_Jonatan" || nombrefoto=="Battaglia" || nombrefoto=="Biscontin_Irma" || nombrefoto=="Biscontin_Ruben"
+				|| nombrefoto=="Bringas" || nombrefoto=="Bustos_Ethel" || nombrefoto=="Cabañez_Carlos" || nombrefoto=="Calderon-Andrada" || nombrefoto=="Candia" || nombrefoto=="Castillo" || nombrefoto=="Cinco-Castillo"
+				|| nombrefoto=="Del_Balzo" || nombrefoto=="Ferranti-Ricalde" || nombrefoto=="Figueroa" || nombrefoto=="Galdames" || nombrefoto=="Garcia_Cristian" || nombrefoto=="Garcia_Gonzalo" || nombrefoto=="Garcia_Roberto"
+				|| nombrefoto=="Godoy" || nombrefoto=="Gualpa" || nombrefoto=="Huallpa" || nombrefoto=="Leites" || nombrefoto=="Manresa" || nombrefoto=="Miron_Daniel" || nombrefoto=="Miron_Gustavo" || nombrefoto=="Muñoz"
+				|| nombrefoto=="Nuñez_Alejandro" || nombrefoto=="Nuñez_Estela" || nombrefoto=="Ortiz_Elias" || nombrefoto=="Ortiz_Hector" || nombrefoto=="Ortiz_Jose" || nombrefoto=="Quiroga_Jose"
+				|| nombrefoto=="Quiroga-Ramirez" || nombrefoto=="Reyes" || nombrefoto=="Rossi" || nombrefoto=="Sarmiento" || nombrefoto=="Snieg" || nombrefoto=="Sosa_Noelia" || nombrefoto=="Sosa_Tamara"
+				|| nombrefoto=="Vera_Debora" || nombrefoto=="Vera_Natalia") {var foto='./images/'+nombrefoto+".jpg";
 				} else {
 					var foto='./images/'+'Casa.jpg';
 				};
@@ -1660,9 +1798,10 @@
 					mapa.flyTo(coord_casa,zum);
 					casa=L.marker(coord_casa).addTo(mapa)
 						.bindPopup(contenidoPopup)
-						.openPopup()};
-				casitas=layer.bindPopup(contenidoPopup)
 						.openPopup();
+				};
+				casitas=layer.bindPopup(contenidoPopup)
+					.openPopup();
 			};
 		};
 		
@@ -1710,7 +1849,7 @@
 				ModalFlash(tiempomodalflash);
 				senialgps="no";
 			};
-			navigator.geolocation.getCurrentPosition(
+			if (!sistema_operativo==="Windows" && !sistema_operativo==="MacOS" && !sistema_operativo==="Linux") {navigator.geolocation.getCurrentPosition(
 				<!--GPS Perfecto-->
 				(pos) => {
 					senialgps="si";
@@ -1738,10 +1877,10 @@
 					timeout: 5000,
 					maximumAge: 0
 				}
-			);
+			)};
 		};
 		
-		function activar_seguimiento(seguimiento) {
+		function activar_seguimiento() {
 			sondeo_posicion=0;
 			seguimiento="si";
 			barralateral.close();
@@ -1749,13 +1888,11 @@
 			document.getElementById("gpson").style.visibility='visible';
 			document.getElementById("gpsoff").style.visibility='hidden';
 			document.getElementById("dondestoy").style.visibility='visible';
-			document.getElementById("ubicacion_estado").href="javascript:desactivar_seguimiento(seguimiento)";
+			document.getElementById("activargps").style.visibility='hidden';
+			document.getElementById("ubicacion_estado").href="javascript:desactivar_seguimiento()";
 			VerificarConexion();
 			if (conexion==="si") {
 				VerificarGPS();
-			};
-			
-			if (conexion==="si") {
 				document.getElementById("botoncentrado").style.visibility='visible';
 				mapa.locate({setView: false, watch: true, enableHighAccuracy: true});
 				mapa.on('locationfound', ActualizarUbicacion);
@@ -1778,7 +1915,6 @@
 				coordenadas_ubicacion_real=e.latlng;
 				mapa.setView(coordenadas_ubicacion_real, 17);
 			};
-			if (!lugar && ! puntomascercano) {puntomascercano = L.latLng(-32.92740232843889, -68.77696838564452)};
 			distancia=DistanciaEnTiempoReal();
 			if (distancia>2200 && orientarme=="no") {
 				titulomodalflash.innerText="TRAZAR RUTA";
@@ -1816,8 +1952,7 @@
 		// Evento en caso de error
 		function ErrorGPS(e) {
 			cajadistancia.textContent = "No se pudo obtener la ubicación: " + e.message;
-			cajadistancia.style.background = "white";
-			cajadistancia.style.color = "black";
+			cajadistancia.style.color = "red";
 		};
 		
 		//Anuncio en voz alta de cercanía/llegada a destino
@@ -1830,31 +1965,20 @@
 		};
 		
 		function DistanciaEnTiempoReal() {
-			const point = turf.point([coordenadas_ubicacion_real.lng, coordenadas_ubicacion_real.lat]);
-			if (poligono) {
-				const lineSegments = [];
-				const coords = poligono.features[0].geometry.coordinates[0][0];
-				for (let i = 0; i < coords.length - 1; i++) {
-					lineSegments.push(turf.lineString([coords[i], coords[i + 1]]));
-				};
-				let minDistance = Infinity;
-				let nearestPoint = null;
-				let nearestSegment = null;
-				lineSegments.forEach(segment => {
-					const snapped = turf.nearestPointOnLine(segment, point);
-					const dist = turf.distance(point, snapped, {units: 'meters'});
-					if (dist < minDistance) {
-						minDistance = dist;
-						nearestPoint = snapped;
-						nearestSegment = segment;
-					};
-				});
-				puntomascercano= [nearestPoint.geometry.coordinates[1], nearestPoint.geometry.coordinates[0]];
+			if (cartografiar==="salida") {
+				const destino=L.latLng(puntomascercano[0], puntomascercano[1]);
+				const minDistance=coordenadas_ubicacion_real.distanceTo(destino);
 				return minDistance;
 			};
-			if (!poligono) {
+			if (cartografiar==="casa") {
+				const minDistance=coordenadas_ubicacion_real.distanceTo(puntomascercano);
+				return minDistance;
+			};
+			const point = turf.point([coordenadas_ubicacion_real.lng, coordenadas_ubicacion_real.lat]);
+			if (cartografiar==="congregacion" || cartografiar==="territorio") {
 				const lineSegments = [];
-				const coords = perimetro.features[0].geometry.coordinates[0][0];
+				if (cartografiar==="territorio") {var coords = poligono.features[0].geometry.coordinates[0][0]};
+				if (cartografiar==="congregacion") {var coords = perimetro.features[0].geometry.coordinates[0][0]};
 				for (let i = 0; i < coords.length - 1; i++) {
 					lineSegments.push(turf.lineString([coords[i], coords[i + 1]]));
 				};
@@ -1885,7 +2009,6 @@
 			tiempomodalflash=5000;
 			ModalFlash(tiempomodalflash);
 			document.getElementById("dondestoy").style.visibility='hidden';
-			//if (ruta) {ruta.remove();rutaanimada.remove()};
 			coordenadas_ubicacion_real="";
 			distancia="";
 			mapa.stopLocate();
@@ -1911,23 +2034,22 @@
 		};
 
 		<!--Función para detener el seguimiento en tiempo real-->
-		function desactivar_seguimiento(seguimiento) {
+		function desactivar_seguimiento() {
 			barralateral.close();
 			seguimiento="no";
 			document.getElementById("gps").src="./images/slide_off.jpg";
 			document.getElementById("gpson").style.visibility='hidden';
 			document.getElementById("gpsoff").style.visibility='visible';
 			document.getElementById("botoncentrado").style.visibility='hidden';
+			document.getElementById("activargps").style.visibility='visible';
 			cajadistancia.style.visibility="hidden";
 			document.getElementById("dondestoy").style.visibility='hidden';
-			document.getElementById("ubicacion_estado").href="javascript:activar_seguimiento(seguimiento)";
+			document.getElementById("ubicacion_estado").href="javascript:activar_seguimiento()";
 			DetenerActualizarUbicacion();
 			mapa.removeLayer(marca_ubicacion_real);
 			marca_ubicacion_real="";
 			coordenadas_ubicacion_real="";
-			//centroide = L.latLng(-32.92740232843889, -68.77696838564452);
 			ruta.remove();
-			//rutaanimada.remove();
 			CentrarMiUbicacion();
 		};
 
@@ -1948,7 +2070,6 @@
 				ActualizarUbicacion();
 			};
 			if (distancia>2200) {
-				if (! lugar && ! puntomascercano) {puntomascercano = L.latLng(-32.92740232843889, -68.77696838564452)};
 				ruta=L.Routing.control({
 					waypoints: [coordenadas_ubicacion_real, puntomascercano],
 					router: L.Routing.osrmv1({
@@ -1983,19 +2104,7 @@
 							const route = data.routes[0].geometry;
 							// Convertimos las coordenadas de GeoJSON a un formato que Leaflet entienda
 							const latlngs = route.coordinates.map(coord => [coord[1], coord[0]]);
-							// Creamos la polilínea con la clase CSS para la animación
-							//rutaanimada = L.polyline(latlngs, {
-							//	color: '#ff0000',
-							//	weight: 7,
-							//	opacity: 0.8,
-							//	className: 'animated-route'
-							//}).addTo(mapa);
-						};// else {
-						//	titulomodalflash.innerText="PROBLEMAS PARA SUGERIR UNA RUTA...!!!";
-						//	cuerpomodalflash.innerHTML = '<span style="color:red"><br><b>El servidor de OSRM no puede sugerirte una ruta en este momento.-</span>';
-						//	tiempomodalflash=5000;
-						//	ModalFlash(tiempomodalflash);
-						//}
+						};
 					})
 					.catch(error => {
 						titulomodalflash.innerText="PROBLEMAS PARA SUGERIR UNA RUTA";
@@ -2038,19 +2147,7 @@
 								const route = data.routes[0].geometry;
 								// Convertimos las coordenadas de GeoJSON a un formato que Leaflet entienda
 								const latlngs = route.coordinates.map(coord => [coord[1], coord[0]]);
-								// Creamos la polilínea con la clase CSS para la animación
-								//rutaanimada = L.polyline(latlngs, {
-								//	color: '#ff0000',
-								//	weight: 7,
-								//	opacity: 0.8,
-								//	className: 'animated-route'
-								//}).addTo(mapa);
-							};// else {
-							//	titulomodalflash.innerText="PROBLEMAS PARA SUGERIR UNA RUTA...!!!";
-							//	cuerpomodalflash.innerHTML = '<span style="color:red"><br><b>El servidor de OSRM no puede sugerirte una ruta en este momento.-</span>';
-							//	tiempomodalflash=5000;
-							//	ModalFlash(tiempomodalflash);
-							//}
+							};
 						})
 						.catch(error => {
 							titulomodalflash.innerText="PROBLEMAS PARA SUGERIR UNA RUTA";
@@ -2102,17 +2199,15 @@
 		//Capturar evento sobre botones
 		const btncerrarmodalflash=document.querySelector("#btn-cerrar-modal-flash");
 		btncerrarmodalflash.addEventListener("click",()=>{
+			document.getElementById("btn-indicaciones-modal-flash").style.visibility='hidden';
 			document.getElementById("MiModalFlash").style.visibility='hidden';
 			orientarme="no";
 			avisollegada="no";
-			//if (mail=="si") {EnviarMail()};
-			//if (iraaer=="si") {TrazarRuta()};
 			clearTimeout(temporizadormodalflash);
 			tiempomodalflash=5000;
 		});
 		const btnindicacionesmodalflash=document.querySelector("#btn-indicaciones-modal-flash");
 		btnindicacionesmodalflash.addEventListener("click",()=>{
-			orientarme="si";
 			clearTimeout(temporizadormodalflash);
 			orientarme="si";
 			avisollegada="si";
@@ -2138,13 +2233,15 @@
 		
 		//Bloque para el Calendario
 		// ==== 2) Estado y helpers ====
-		const modalcalendario = document.getElementById('ModalCalendario');
-		const abrircalendario = document.getElementById('AbrirCalendario');
-		const cerrarcalendario = document.getElementById('CerrarCalendario');
+		//const modalcalendario = document.getElementById('ModalCalendario');
+		//const abrircalendario = document.getElementById('AbrirCalendario');
+		//const cerrarcalendario = document.getElementById('CerrarCalendario');
+		//const modalsalidas = document.getElementById("ModalSalidas");
 		const borrarfecha = document.getElementById('BorrarFecha');
 		const titulocalendario = document.getElementById('TituloCalendario');
 		const diasdelasemanaEl = document.getElementById('diasdelasemana');
 		const diasEl = document.getElementById('dias');
+		//diasEl.addEventListener('click', (e) => {alert(diasEl)});
 		//const fechaelegida = document.getElementById('FechaElegida');
 
 		let fechaISO = null; // Fecha seleccionada en formato ISO (YYYY-MM-DD)
@@ -2174,7 +2271,12 @@
 
 		// ==== 4) Construir el calendario SOLO del mes actual ====
 		function ArmarCalendario(){
-			titulocalendario.textContent = `${nombresmeses[mes]} ${anio}`;
+			let fechia = new Date();
+			let opciones = { month: 'long' };
+			let anioi = fechia.getFullYear();
+			let mesi = fechia.toLocaleDateString('es-ES', opciones);
+			let nombremes=mesi.charAt(0).toUpperCase() + mesi.slice(1);
+			titulocalendario.textContent = nombremes+" "+anioi;
 			mes_anio= `${nombresmeses[mes]} ${anio}`;
 			diasEl.innerHTML = '';
 
@@ -2216,18 +2318,36 @@
 					window.dispatchEvent(ev);
 					// Cerrar modal automáticamente
 					//CerrarModalCalendario();
+					//modalsalidas.setAttribute('aria-hidden','false');
 				});
 				diasEl.appendChild(btn);
 			};
 		};
 
 		// ==== 5) Abrir/Cerrar modal ====
-		function AbrirModalCalendario(){ modalcalendario.setAttribute('aria-hidden','false')}
-		function CerrarModalCalendario(){ modalcalendario.setAttribute('aria-hidden','true')}
+		<!--function AbrirModalCalendario(){modalcalendario.setAttribute('aria-hidden','false');modalsalidas.setAttribute('aria-hidden','true');}-->
+		<!--function CerrarModalCalendario(){modalcalendario.setAttribute('aria-hidden','true')}-->
+		
+		function AbrirModalCalendario(id) {
+			document.getElementById("ModalCalendario").classList.add("active");
+			document.getElementById(id).style.display = "block";
+			//if (id === "modal1") generarCalendario();
+		};
+		
+		function CerrarModalCalendario(id) {
+			document.getElementById(id).style.display = "none";
 
+			// si no queda ningún modal abierto, cerramos overlay
+			const modal1Visible = document.getElementById("modal1").style.display === "block";
+			const modal2Visible = document.getElementById("modal2").style.display === "block";
+			if (!modal1Visible && !modal2Visible) {
+				document.getElementById("ModalCalendario").classList.remove("active");
+			};
+		};
+		
 		//abrircalendario.style.visibility='hidden';
-		abrircalendario.addEventListener('click', AbrirModalCalendario);
-		cerrarcalendario.addEventListener('click', CerrarModalCalendario);
+		<!--abrircalendario.addEventListener('click', AbrirModalCalendario);-->
+		<!--cerrarcalendario.addEventListener('click', CerrarModalCalendario);-->
 		//modalcalendario.addEventListener('click', (e) => { if(e.target === modalcalendario) CerrarModalCalendario()});
 
 		borrarfecha.addEventListener('click', () => {
@@ -2239,26 +2359,27 @@
 		// ==== 6) Inicializar calendario ====
 		ArmarSemanas();
 		ArmarCalendario();
+		ArmarListaTerritorios();
 
 		// ==== 7) Demostración de captura: escuchar el evento y hacer algo en el mapa ====
 		window.addEventListener('fecha-seleccionada', (e) => {
 			const { iso } = e.detail;
+			document.getElementById('modal2').style.display = "block";
 			BuscarSalida(e.detail["day"],e.detail["month"],e.detail["anio"]);
 		});
 		
 		//Bloque para los detalles de las salidas
-		const modalsalidas=document.getElementById("ModalSalidas");
-		const cerrarsalidas = document.getElementById('CerrarSalidas');
-		cerrarsalidas.addEventListener('click', CerrarModalDetallesSalidas);
-		function CerrarModalDetallesSalidas(){modalsalidas.setAttribute('aria-hidden','true')};
-		function AbrirModalDetallesSalidas() {modalsalidas.setAttribute('aria-hidden','false')};
+		//const cerrarsalidas = document.getElementById('CerrarSalidas');
+		//cerrarsalidas.addEventListener('click', CerrarModalCalendario('modal2'));
 		
 		function BuscarSalida(dia,mes,anio) {
+			document.getElementById("modal2").classList.add("active");
 			const encontrados = salidas.filter(item => item.Dia === (Number(dia)) && item.Mes===(Number(mes)) && item.Anio===(Number(anio)));
 			detallessalidas="";
 			detallessalidasm="";
 			detallessalidast="";
 			detallessalidasn="";
+			presencial="no";
 			vueltam=0;
 			vueltat=0;
 			vueltan=0;
@@ -2277,28 +2398,40 @@
 								territoriom1=objeto["TerritorioM"];
 								tiposalidam1=objeto["SalidaM"];
 								horam1=objeto[clave];
-								detallessalidasm=detallessalidasm+"La salida por la mañana será a las "+objeto[clave]+" "+objeto["SalidaM"]+" desde <a href='#' onclick='PuntoEncuentro(salidam1,territoriom1,fechita,horam1,tiposalidam1)'>"+salidam1+"</a>. Conductor: "+objeto["ConductorM"]+". Territorio: "+objeto["TerritorioM"]+".";
+								if (salidam1==="Zoom") {detallessalidasm=detallessalidasm+"La salida por la mañana será a las "+objeto[clave]+" "+objeto["SalidaM"]+" por "+salidam1+". Conductor: "+objeto["ConductorM"]+". Territorio: "+objeto["TerritorioM"]+"."}
+								else {presencial="si";detallessalidasm=detallessalidasm+"La salida por la mañana será a las "+objeto[clave]+" "+objeto["SalidaM"]+" desde <a href='#' onclick='PuntoEncuentro(salidam1,territoriom1,fechita,horam1,tiposalidam1)'>"+salidam1+"</a>. Conductor: "+objeto["ConductorM"]+". Territorio: "+objeto["TerritorioM"]+"."};
 							};
 							if (vueltam===2) {
 								salidam2=objeto["PuntoEncuentroM"];
 								territoriom2=objeto["TerritorioM"];
 								tiposalidam2=objeto["SalidaM"];
 								horam2=objeto[clave];
-								detallessalidasm=detallessalidasm+"La salida por la mañana será a las "+objeto[clave]+" "+objeto["SalidaM"]+" desde <a href='#' onclick='PuntoEncuentro(salidam2,territoriom2,fechita,horam2,tiposalidam2)'>"+salidam2+"</a>. Conductor: "+objeto["ConductorM"]+". Territorio: "+objeto["TerritorioM"]+".";
+								if (salidam2==="Zoom") {detallessalidasm=detallessalidasm+"<br>La salida por la mañana será a las "+objeto[clave]+" "+objeto["SalidaM"]+" por "+salidam2+". Conductor: "+objeto["ConductorM"]+". Territorio: "+objeto["TerritorioM"]+"."}
+								else {presencial="si";detallessalidasm=detallessalidasm+"<br>La salida por la mañana será a las "+objeto[clave]+" "+objeto["SalidaM"]+" desde <a href='#' onclick='PuntoEncuentro(salidam2,territoriom2,fechita,horam2,tiposalidam2)'>"+salidam2+"</a>. Conductor: "+objeto["ConductorM"]+". Territorio: "+objeto["TerritorioM"]+"."};
 							};
 							if (vueltam===3) {
 								salidam3=objeto["PuntoEncuentroM"];
 								territoriom3=objeto["TerritorioM"];
 								tiposalidam3=objeto["SalidaM"];
 								horam3=objeto[clave];
-								detallessalidasm=detallessalidasm+"La salida por la mañana será a las "+objeto[clave]+" "+objeto["SalidaM"]+" desde <a href='#' onclick='PuntoEncuentro(salidam3,territoriom3,fechita,horam3,tiposalidam3)'>"+salidam3+"</a>. Conductor: "+objeto["ConductorM"]+". Territorio: "+objeto["TerritorioM"]+".";
+								if (salidam3==="Zoom") {detallessalidasm=detallessalidasm+"<br>La salida por la mañana será a las "+objeto[clave]+" "+objeto["SalidaM"]+" por "+salidam3+". Conductor: "+objeto["ConductorM"]+". Territorio: "+objeto["TerritorioM"]+"."}
+								else {presencial="si";detallessalidasm=detallessalidasm+"<br>La salida por la mañana será a las "+objeto[clave]+" "+objeto["SalidaM"]+" desde <a href='#' onclick='PuntoEncuentro(salidam3,territoriom3,fechita,horam3,tiposalidam3)'>"+salidam3+"</a>. Conductor: "+objeto["ConductorM"]+". Territorio: "+objeto["TerritorioM"]+"."};
 							};
 							if (vueltam===4) {
 								salidam4=objeto["PuntoEncuentroM"];
 								territoriom4=objeto["TerritorioM"];
 								tiposalidam4=objeto["SalidaM"];
 								horam4=objeto[clave];
-								detallessalidasm=detallessalidasm+"La salida por la mañana será a las "+objeto[clave]+" "+objeto["SalidaM"]+" desde <a href='#' onclick='PuntoEncuentro(salidam4,territoriom4,fechita,horam4,tiposalidam4)'>"+salidam4+"</a>. Conductor: "+objeto["ConductorM"]+". Territorio: "+objeto["TerritorioM"]+".";
+								if (salidam4==="Zoom") {detallessalidasm=detallessalidasm+"<br>La salida por la mañana será a las "+objeto[clave]+" "+objeto["SalidaM"]+" por "+salidam4+". Conductor: "+objeto["ConductorM"]+". Territorio: "+objeto["TerritorioM"]+"."}
+								else {presencial="si";detallessalidasm=detallessalidasm+"<br>La salida por la mañana será a las "+objeto[clave]+" "+objeto["SalidaM"]+" desde <a href='#' onclick='PuntoEncuentro(salidam4,territoriom4,fechita,horam4,tiposalidam4)'>"+salidam4+"</a>. Conductor: "+objeto["ConductorM"]+". Territorio: "+objeto["TerritorioM"]+"."};
+							};
+							if (vueltam===5) {
+								salidam5=objeto["PuntoEncuentroM"];
+								territoriom5=objeto["TerritorioM"];
+								tiposalidam5=objeto["SalidaM"];
+								horam5=objeto[clave];
+								if (salidam5==="Zoom") {detallessalidasm=detallessalidasm+"<br>La salida por la mañana será a las "+objeto[clave]+" "+objeto["SalidaM"]+" por "+salidam5+". Conductor: "+objeto["ConductorM"]+". Territorio: "+objeto["TerritorioM"]+"."}
+								else {presencial="si";detallessalidasm=detallessalidasm+"<br>La salida por la mañana será a las "+objeto[clave]+" "+objeto["SalidaM"]+" desde <a href='#' onclick='PuntoEncuentro(salidam5,territoriom5,fechita,horam5,tiposalidam5)'>"+salidam5+"</a>. Conductor: "+objeto["ConductorM"]+". Territorio: "+objeto["TerritorioM"]+"."};
 							};
 						};
 						if (clave==="HoraT" && objeto[clave] !=="") {
@@ -2308,28 +2441,40 @@
 								territoriot1=objeto["TerritorioT"];
 								tiposalidat1=objeto["SalidaT"];
 								horat1=objeto[clave];
-								detallessalidast=detallessalidast+"<br>La salida por la tarde será a las "+objeto[clave]+" "+objeto["SalidaT"]+" desde <a href='#' onclick='PuntoEncuentro(salidat1,territoriot1,fechita,horat1,tiposalidat1)'>"+salidat1+"</a>. Conductor: "+objeto["ConductorT"]+". Territorio: "+objeto["TerritorioT"]+".";
+								if (salidat1==="Zoom") {detallessalidast=detallessalidast+"La salida por la tarde será a las "+objeto[clave]+" "+objeto["SalidaT"]+" por "+salidat1+". Conductor: "+objeto["ConductorT"]+". Territorio: "+objeto["TerritorioT"]+"."}
+								else {presencial="si";detallessalidast=detallessalidast+"La salida por la tarde será a las "+objeto[clave]+" "+objeto["SalidaT"]+" desde <a href='#' onclick='PuntoEncuentro(salidat1,territoriot1,fechita,horat1,tiposalidat1)'>"+salidat1+"</a>. Conductor: "+objeto["ConductorT"]+". Territorio: "+objeto["TerritorioT"]+"."};
 							};
 							if (vueltat===2) {
 								salidat2=objeto["PuntoEncuentroT"];
 								territoriot2=objeto["TerritorioT"];
 								tiposalidat2=objeto["SalidaT"];
 								horat2=objeto[clave];
-								detallessalidast=detallessalidast+"<br>La salida por la tarde será a las "+objeto[clave]+" "+objeto["SalidaT"]+" desde <a href='#' onclick='PuntoEncuentro(salidat2,territoriot2,fechita,horat2,tiposalidat2)'>"+salidat2+"</a>. Conductor: "+objeto["ConductorT"]+". Territorio: "+objeto["TerritorioT"]+".";
+								if (salidat2==="Zoom") {detallessalidast=detallessalidast+"<br>La salida por la tarde será a las "+objeto[clave]+" "+objeto["SalidaT"]+" por "+salidat2+". Conductor: "+objeto["ConductorT"]+". Territorio: "+objeto["TerritorioT"]+"."}
+								else {presencial="si";detallessalidast=detallessalidast+"<br>La salida por la tarde será a las "+objeto[clave]+" "+objeto["SalidaT"]+" desde <a href='#' onclick='PuntoEncuentro(salidat2,territoriot2,fechita,horat2,tiposalidat2)'>"+salidat2+"</a>. Conductor: "+objeto["ConductorT"]+". Territorio: "+objeto["TerritorioT"]+"."};
 							};
 							if (vueltat===3) {
 								salidat3=objeto["PuntoEncuentroT"];
 								territoriot3=objeto["TerritorioT"];
 								tiposalidat3=objeto["SalidaT"];
 								horat3=objeto[clave];
-								detallessalidast=detallessalidast+"<br>La salida por la tarde será a las "+objeto[clave]+" "+objeto["SalidaT"]+" desde <a href='#' onclick='PuntoEncuentro(salidat3,territoriot3,fechita,horat3,tiposalidat3)'>"+salidat3+"</a>. Conductor: "+objeto["ConductorT"]+". Territorio: "+objeto["TerritorioT"]+".";
+								if (salidat3==="Zoom") {detallessalidast=detallessalidast+"<br>La salida por la tarde será a las "+objeto[clave]+" "+objeto["SalidaT"]+" por "+salidat3+". Conductor: "+objeto["ConductorT"]+". Territorio: "+objeto["TerritorioT"]+"."}
+								else {presencial="si";detallessalidast=detallessalidast+"<br>La salida por la tarde será a las "+objeto[clave]+" "+objeto["SalidaT"]+" desde <a href='#' onclick='PuntoEncuentro(salidat3,territoriot3,fechita,horat3,tiposalidat3)'>"+salidat3+"</a>. Conductor: "+objeto["ConductorT"]+". Territorio: "+objeto["TerritorioT"]+"."};
 							};
 							if (vueltat===4) {
 								salidat4=objeto["PuntoEncuentroT"];
 								territoriot4=objeto["TerritorioT"];
 								tiposalidat4=objeto["SalidaT"];
 								horat4=objeto[clave];
-								detallessalidast=detallessalidast+"<br>La salida por la tarde será a las "+objeto[clave]+" "+objeto["SalidaT"]+" desde <a href='#' onclick='PuntoEncuentro(salidat4,territoriot4,fechita,horat4,tiposalidat4)'>"+salidat4+"</a>. Conductor: "+objeto["ConductorT"]+". Territorio: "+objeto["TerritorioT"]+".";
+								if (salidat4==="Zoom") {detallessalidast=detallessalidast+"<br>La salida por la tarde será a las "+objeto[clave]+" "+objeto["SalidaT"]+" por "+salidat4+". Conductor: "+objeto["ConductorT"]+". Territorio: "+objeto["TerritorioT"]+"."}
+								else {presencial="si";detallessalidast=detallessalidast+"<br>La salida por la tarde será a las "+objeto[clave]+" "+objeto["SalidaT"]+" desde <a href='#' onclick='PuntoEncuentro(salidat4,territoriot4,fechita,horat4,tiposalidat4)'>"+salidat4+"</a>. Conductor: "+objeto["ConductorT"]+". Territorio: "+objeto["TerritorioT"]+"."};
+							};
+							if (vueltat===5) {
+								salidat5=objeto["PuntoEncuentroT"];
+								territoriot5=objeto["TerritorioT"];
+								tiposalidat5=objeto["SalidaT"];
+								horat5=objeto[clave];
+								if (salidat5==="Zoom") {detallessalidast=detallessalidast+"<br>La salida por la tarde será a las "+objeto[clave]+" "+objeto["SalidaT"]+" por "+salidat5+". Conductor: "+objeto["ConductorT"]+". Territorio: "+objeto["TerritorioT"]+"."}
+								else {presencial="si";detallessalidast=detallessalidast+"<br>La salida por la tarde será a las "+objeto[clave]+" "+objeto["SalidaT"]+" desde <a href='#' onclick='PuntoEncuentro(salidat5,territoriot5,fechita,horat5,tiposalidat5)'>"+salidat5+"</a>. Conductor: "+objeto["ConductorT"]+". Territorio: "+objeto["TerritorioT"]+"."};
 							};
 						};
 						if (clave==="HoraN" && objeto[clave] !=="") {
@@ -2339,54 +2484,74 @@
 								territorion1=objeto["TerritorioN"];
 								tiposalidan1=objeto["SalidaN"];
 								horan1=objeto[clave];
-								detallessalidasn=detallessalidasn+"<br>La salida por la noche será a las "+objeto[clave]+" "+objeto["SalidaN"]+" desde <a href='#' onclick='PuntoEncuentro(salidan1,territorion1,fechita,horan1,tiposalidan1)'>"+salidan1+"</a>. Conductor: "+objeto["ConductorN"]+". Territorio: "+objeto["TerritorioN"]+".";
+								if (salidan1==="Zoom") {detallessalidasn=detallessalidasn+"La salida por la noche será a las "+objeto[clave]+" "+objeto["SalidaN"]+" por "+salidan1+". Conductor: "+objeto["ConductorN"]+". Territorio: "+objeto["TerritorioN"]+"."}
+								else {presencial="si";detallessalidasn=detallessalidasn+"La salida por la noche será a las "+objeto[clave]+" "+objeto["SalidaN"]+" desde <a href='#' onclick='PuntoEncuentro(salidan1,territorion1,fechita,horan1,tiposalidan1)'>"+salidan1+"</a>. Conductor: "+objeto["ConductorN"]+". Territorio: "+objeto["TerritorioN"]+"."};
 							};
 							if (vueltan===2) {
 								salidan2=objeto["PuntoEncuentroN"];
 								territorion2=objeto["TerritorioN"];
 								tiposalidan2=objeto["SalidaN"];
 								horan2=objeto[clave];
-								detallessalidasn=detallessalidasn+"<br>La salida por la noche será a las "+objeto[clave]+" "+objeto["SalidaN"]+" desde <a href='#' onclick='PuntoEncuentro(salidan2,territorion2,fechita,horan2,tiposalidan2)'>"+salidan2+"</a>. Conductor: "+objeto["ConductorN"]+". Territorio: "+objeto["TerritorioN"]+".";
+								if (salidan2==="Zoom") {detallessalidasn=detallessalidasn+"<br>La salida por la noche será a las "+objeto[clave]+" "+objeto["SalidaN"]+" por "+salidan2+". Conductor: "+objeto["ConductorN"]+". Territorio: "+objeto["TerritorioN"]+"."}
+								else {presencial="si";detallessalidasn=detallessalidasn+"<br>La salida por la noche será a las "+objeto[clave]+" "+objeto["SalidaN"]+" desde <a href='#' onclick='PuntoEncuentro(salidan2,territorion2,fechita,horan2,tiposalidan2)'>"+salidan2+"</a>. Conductor: "+objeto["ConductorN"]+". Territorio: "+objeto["TerritorioN"]+"."};
 							};
 							if (vueltan===3) {
 								salidan3=objeto["PuntoEncuentroN"];
 								territorion3=objeto["TerritorioN"];
 								tiposalidan3=objeto["SalidaN"];
 								horan3=objeto[clave];
-								detallessalidasn=detallessalidasn+"<br>La salida por la noche será a las "+objeto[clave]+" "+objeto["SalidaN"]+" desde <a href='#' onclick='PuntoEncuentro(salidan3,territorion3,fechita,horan3,tiposalidan3)'>"+salidan3+"</a>. Conductor: "+objeto["ConductorN"]+". Territorio: "+objeto["TerritorioN"]+".";
+								if (salidan3==="Zoom") {detallessalidasn=detallessalidasn+"<br>La salida por la noche será a las "+objeto[clave]+" "+objeto["SalidaN"]+" por "+salidan3+". Conductor: "+objeto["ConductorN"]+". Territorio: "+objeto["TerritorioN"]+"."}
+								else {presencial="si";detallessalidasn=detallessalidasn+"<br>La salida por la noche será a las "+objeto[clave]+" "+objeto["SalidaN"]+" desde <a href='#' onclick='PuntoEncuentro(salidan3,territorion3,fechita,horan3,tiposalidan3)'>"+salidan3+"</a>. Conductor: "+objeto["ConductorN"]+". Territorio: "+objeto["TerritorioN"]+"."};
 							};
 							if (vueltan===4) {
 								salidan4=objeto["PuntoEncuentroN"];
 								territorion4=objeto["TerritorioN"];
 								tiposalidan4=objeto["SalidaN"];
 								horan4=objeto[clave];
-								detallessalidasn=detallessalidasn+"<br>La salida por la noche será a las "+objeto[clave]+" "+objeto["SalidaN"]+" desde <a href='#' onclick='PuntoEncuentro(salidan4,territorion4,fechita,horan4,tiposalidan4)'>"+salidan4+"</a>. Conductor: "+objeto["ConductorN"]+". Territorio: "+objeto["TerritorioN"]+".";
+								if (salidan4==="Zoom") {detallessalidasn=detallessalidasn+"<br>La salida por la noche será a las "+objeto[clave]+" "+objeto["SalidaN"]+" por "+salidan4+". Conductor: "+objeto["ConductorN"]+". Territorio: "+objeto["TerritorioN"]+"."}
+								else {presencial="si";detallessalidasn=detallessalidasn+"<br>La salida por la noche será a las "+objeto[clave]+" "+objeto["SalidaN"]+" desde <a href='#' onclick='PuntoEncuentro(salidan4,territorion4,fechita,horan4,tiposalidan4)'>"+salidan4+"</a>. Conductor: "+objeto["ConductorN"]+". Territorio: "+objeto["TerritorioN"]+"."};
+							};
+							if (vueltan===5) {
+								salidan5=objeto["PuntoEncuentroN"];
+								territorion5=objeto["TerritorioN"];
+								tiposalidan5=objeto["SalidaN"];
+								horan5=objeto[clave];
+								if (salidan5==="Zoom") {detallessalidasn=detallessalidasn+"<br>La salida por la noche será a las "+objeto[clave]+" "+objeto["SalidaN"]+" por "+salidan5+". Conductor: "+objeto["ConductorN"]+". Territorio: "+objeto["TerritorioN"]+"."}
+								else {presencial="si";detallessalidasn=detallessalidasn+"<br>La salida por la noche será a las "+objeto[clave]+" "+objeto["SalidaN"]+" desde <a href='#' onclick='PuntoEncuentro(salidan5,territorion5,fechita,horan5,tiposalidan5)'>"+salidan5+"</a>. Conductor: "+objeto["ConductorN"]+". Territorio: "+objeto["TerritorioN"]+"."};
 							};
 						};
 					};
 				});
 			};
+			
 			if (detallessalidasm) {detallessalidas=detallessalidasm};
-			if (detallessalidast) {detallessalidas=detallessalidas+"<br>"+detallessalidast};
-			if (detallessalidasn) {detallessalidas=detallessalidas+"<br>"+detallessalidasn};
-			if (detallessalidas) {detallessalidas+"<br><br>Toca el lugar de encuentro para verlo en el mapa junto con el territorio a predicar.-"};
+			if (detallessalidast && detallessalidas) {detallessalidas=detallessalidas+"<br>"+detallessalidast};
+			if (detallessalidast && !detallessalidas) {detallessalidas=detallessalidast};
+			if (detallessalidasn && detallessalidas) {detallessalidas=detallessalidas+"<br>"+detallessalidasn};
+			if (detallessalidasn && !detallessalidas) {detallessalidas=detallessalidasn};
+			if (detallessalidas && presencial==="si") {detallessalidas=detallessalidas+"<br><br>En el caso de las salidas de casa en casa, toca el lugar de encuentro (lo veras resaltado en color) para verlo en el mapa junto con el territorio a predicar.-"};
 			if (!detallessalidas) {detallessalidas="Ese día no hay salidas programadas.-"};
 			document.getElementById("DetallesSalidas").innerHTML=detallessalidas;
 			document.getElementById("titulo-modalsal").innerText=fecha;
 		};
 		
 		function PuntoEncuentro(puntosalida,territorioapredicar,fecha,hora,tiposalida) {
-			CerrarModalCalendario();
+			CerrarModalCalendario('modal1');
+			CerrarModalCalendario('modal2');
 			let resultado = puntosencuentro.find(p => p.Lugar === puntosalida);
 			coordsalida=resultado.Coordenadas.split(",");
 			var coord=[];
 			coord.push(coordsalida[0],coordsalida[1]);
 			if (marcapuntosalida) {marcapuntosalida.remove()};
-			marcapuntosalida=L.marker(coord,{icon:L.icon({iconUrl: 'images/predicando.jpg',iconSize: [32, 37],iconAnchor: [16, 37],popupAnchor: [0, -28]}),title:""+fecha+" a las "+hora+" "+tiposalida+": "+puntosalida})
-					.bindPopup(""+fecha+" a las "+hora+" "+tiposalida+": "+puntosalida)
+			marcapuntosalida=L.marker(coord,{icon:L.icon({iconUrl: 'images/predicando.jpg',iconSize: [32, 37],iconAnchor: [16, 37],popupAnchor: [0, -28]}),title:""+fecha+" a las "+hora+" "+tiposalida+": "+puntosalida+". Territorio: "+territorioapredicar})
+					.bindPopup(""+fecha+" a las "+hora+" "+tiposalida+": "+puntosalida+". Territorio: "+territorioapredicar)
 					.openPopup().addTo(mapa);
 			mapa.flyTo(coord,16);
-			TerritorioAbuscar(territorioapredicar);
+			puntomascercano=[];
+			let coordlat= Number(coordsalida[0]);
+			let coordlon= Number(coordsalida[1]);
+			puntomascercano.push(coordlat,coordlon);
+			TerritorioAbuscar(territorioapredicar,"salida");
 		};
 	</script>
 </html>
