@@ -1,6 +1,6 @@
 var casasdehnos={
 "type": "FeatureCollection",
-"name": "casas1",
+"name": "casas2",
 "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
 "features": [
 { "type": "Feature", "properties": { "id": 5, "Flia": "Ortiz Jose", "Direccion": "Olavarría 1553", "Telefono": "2617109441/2615594209", "Privilegio": "SM-PR", "Integrante": "Jose y Silvia" }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -68.787609367022398, -32.92340602072764 ] ] } },
@@ -46,6 +46,7 @@ var casasdehnos={
 { "type": "Feature", "properties": { "id": null, "Flia": "Arredondo-Gomez", "Direccion": null, "Telefono": "2615177175/", "Privilegio": null, "Integrante": "Claudina, Diana" }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -68.786234788462323, -32.92291675232002 ] ] } },
 { "type": "Feature", "properties": { "id": null, "Flia": "Andrada Liliana", "Direccion": "9 de Julio", "Telefono": "2615081874", "Privilegio": null, "Integrante": "Liliana" }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -68.779321137695092, -32.925047878750384 ] ] } },
 { "type": "Feature", "properties": { "id": null, "Flia": "Castillo Juan Carlos", "Direccion": "Pedro Goyena 3551, Casa", "Telefono": "2612065480", "Privilegio": null, "Integrante": "Juan Carlos" }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -68.779117827290847, -32.927446944083997 ] ] } },
-{ "type": "Feature", "properties": { "id": null, "Flia": "Gutierrez Griselda", "Direccion": "Ascasubi", "Telefono": "2615889595", "Privilegio": null, "Integrante": "Griselda" }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -68.784311843473802, -32.928633641528123 ] ] } }
+{ "type": "Feature", "properties": { "id": null, "Flia": "Gutierrez Griselda", "Direccion": "Ascasubi", "Telefono": "2615889595", "Privilegio": null, "Integrante": "Griselda" }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -68.784311843473802, -32.928633641528123 ] ] } },
+{ "type": "Feature", "properties": { "id": 41, "Flia": "Quiroga-Ramirez", "Direccion": "Capitan Giachino", "Telefono": null, "Privilegio": "PR", "Integrante": "Sandra, Norma, Liliana y Julio" }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -68.783417606268301, -32.922225669331738 ] ] } }
 ]
 };
