@@ -3296,7 +3296,7 @@
 					cartografiar="salida";
 					FiltrarVariosTerritorios(territorioapredicar);
 					if (capa_infoterritorios) {capa_infoterritorios.addTo(mapa)};
-					//capa_territoriofiltradonumero=L.geoJSON(capa_territoriofiltrado,{filter:Filtrar_Territorios, onEachFeature: NumeroTerritorio}).addTo(mapa);
+					//capa_territoriofiltradonumero=L.geoJSON(territorios,{filter:FiltrarVariosTerritoriosNumero, onEachFeature: NumeroTerritorio}).addTo(mapa);
 					if (seguimiento==="si") {
 						titulomodalflash.innerText="TRAZAR RUTA";
 						cuerpomodalflash.innerHTML = '<span style="color:green"><br><b>¿Necesitás ayuda para llegar?.</b><br><br><span style="color:black">Puedo trazarte una ruta '+
@@ -3317,6 +3317,11 @@
 				onEachFeature: (f, layer) => {
 					layer.bindPopup(`Numero: ${f.properties.Numero}<br>`);
 				}
+			}).addTo(mapa);
+			if (capa_territoriofiltradonumero) {mapa.removeLayer(capa_territoriofiltradonumero)};
+			capa_territoriofiltradonumero = L.geoJSON(territorios, {
+				filter: f => featureMatchesSet(f, idSet),
+				onEachFeature: NumeroTerritorio
 			}).addTo(mapa);
 		};
 		
