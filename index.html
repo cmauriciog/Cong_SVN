@@ -583,7 +583,7 @@
 			"PuntoEncuentroM": "Tapon Moyano y San Francisco del Monte",
 			"SalidaM": "Congregacional",
 			"ConductorM": "Yo",
-			"TerritorioM": "1,2; 3 y 9-13",
+			"TerritorioM": "9-10",
 			"HoraT": "",
 			"PuntoEncuentroT": "",
 			"SalidaT": "",
@@ -1381,12 +1381,12 @@
 			"PuntoEncuentroM": "Galdames",
 			"SalidaM": "Congregacional",
 			"ConductorM": "Juan Carlos Vidal",
-			"TerritorioM": "11 y 15",
+			"TerritorioM": "11, 15",
 			"HoraT": "18:00",
 			"PuntoEncuentroT": "Jose Quiroga",
 			"SalidaT": "Congregacional",
 			"ConductorT": "Juan Carlos Vidal",
-			"TerritorioT": "9 y 10",
+			"TerritorioT": "9-10",
 			"HoraN": "",
 			"PuntoEncuentroN": "",
 			"SalidaN": "",
@@ -3261,28 +3261,92 @@
 		};
 		
 		function PuntoEncuentro(puntosalida,territorioapredicar,fecha,hora,tiposalida) {
+			CerrarModalCalendario('modal1');
+			CerrarModalCalendario('modal2');
+			if (capa_territoriofiltrado) mapa.removeLayer(capa_territoriofiltrado);
+			let resultado = puntosencuentro.find(p => p.Lugar === puntosalida);
+			coordsalida=resultado.Coordenadas.split(",");
+			var coord=[];
+			coord.push(coordsalida[0],coordsalida[1]);
+			if (marcapuntosalida) {marcapuntosalida.remove()};
+			marcapuntosalida=L.marker(coord,{icon:L.icon({iconUrl: 'images/predicando.jpg',iconSize: [32, 37],iconAnchor: [16, 37],popupAnchor: [0, -28]}),title:""+fecha+" a las "+hora+" "+tiposalida+": "+puntosalida+". Territorio: "+territorioapredicar})
+					.bindPopup(""+fecha+" a las "+hora+" "+tiposalida+": "+puntosalida+". Territorio: "+territorioapredicar)
+					.openPopup().addTo(mapa);
+			mapa.flyTo(coord,16);
+			puntomascercano=[];
+			let coordlat= Number(coordsalida[0]);
+			let coordlon= Number(coordsalida[1]);
+			puntomascercano.push(coordlat,coordlon);
 			if (typeof territorioapredicar === "number" && !isNaN(territorioapredicar)) {
-				CerrarModalCalendario('modal1');
-				CerrarModalCalendario('modal2');
-				let resultado = puntosencuentro.find(p => p.Lugar === puntosalida);
-				coordsalida=resultado.Coordenadas.split(",");
-				var coord=[];
-				coord.push(coordsalida[0],coordsalida[1]);
-				if (marcapuntosalida) {marcapuntosalida.remove()};
-				marcapuntosalida=L.marker(coord,{icon:L.icon({iconUrl: 'images/predicando.jpg',iconSize: [32, 37],iconAnchor: [16, 37],popupAnchor: [0, -28]}),title:""+fecha+" a las "+hora+" "+tiposalida+": "+puntosalida+". Territorio: "+territorioapredicar})
-						.bindPopup(""+fecha+" a las "+hora+" "+tiposalida+": "+puntosalida+". Territorio: "+territorioapredicar)
-						.openPopup().addTo(mapa);
-				mapa.flyTo(coord,16);
-				puntomascercano=[];
-				let coordlat= Number(coordsalida[0]);
-				let coordlon= Number(coordsalida[1]);
-				puntomascercano.push(coordlat,coordlon);
 				TerritorioAbuscar(territorioapredicar,"salida");
 			} else {
 				if (territorioapredicar.includes("y") || territorioapredicar.includes(",") || territorioapredicar.includes(";") || territorioapredicar.includes("-") || territorioapredicar.includes(" ")) {
-					console.log("Territoria a Predicar contiene 'y', ',' o ';' o '-' o espacios");
+					if (capa_coloresterritorios) {mapa.removeLayer(capa_coloresterritorios)};
+					if (capa_numerosterritorios) {mapa.removeLayer(capa_numerosterritorios)};
+					if (capa_infoterritorios) {mapa.removeLayer(capa_infoterritorios)};
+					if (nada) {mapa.removeLayer(nada)};
+					if (capa_territoriofiltrado) {mapa.removeLayer(capa_territoriofiltrado)};
+					if (capa_territoriofiltradonumero) {mapa.removeLayer(capa_territoriofiltradonumero)};
+					if (numeroterritorio) {mapa.removeLayer(numeroterritorio)};
+					if (marcapuntosalida && ! cartografiar==="salida") {marcapuntosalida.remove()};
+					if (capa_casas) {mapa.removeLayer(capa_casas)};
+					if (casa) {casa.remove()};
+					if (casitas) {casitas.remove()};
+					if (ruta) {ruta.remove()};
+					cartografiar="salida";
+					FiltrarVariosTerritorios(territorioapredicar);
+					if (capa_infoterritorios) {capa_infoterritorios.addTo(mapa)};
+					//capa_territoriofiltradonumero=L.geoJSON(capa_territoriofiltrado,{filter:Filtrar_Territorios, onEachFeature: NumeroTerritorio}).addTo(mapa);
+					if (seguimiento==="si") {
+						titulomodalflash.innerText="TRAZAR RUTA";
+						cuerpomodalflash.innerHTML = '<span style="color:green"><br><b>¿Necesitás ayuda para llegar?.</b><br><br><span style="color:black">Puedo trazarte una ruta '+
+						'a partir de tu ubicación actual y brindarte algunas indicaciones.-<br></span>';
+						document.getElementById("btn-indicaciones-modal-flash").style.visibility='visible';
+						tiempomodalflash=5000;
+						ModalFlash(tiempomodalflash);
+					};
 				};
 			};
+		};
+		
+		function FiltrarVariosTerritorios(num_terr) {
+			const idSet = parseIdStringToSet(num_terr);
+			capa_territoriofiltrado = L.geoJSON(territorios, {
+				filter: f => featureMatchesSet(f, idSet),
+				style: f => featureMatchesSet(f, idSet) ? highlightStyle : defaultStyle,
+				onEachFeature: (f, layer) => {
+					layer.bindPopup(`Numero: ${f.properties.Numero}<br>`);
+				}
+			}).addTo(mapa);
+		};
+		
+		// --- Parser que soporta rangos ---
+		function parseIdStringToSet(str) {
+			const result = new Set();
+			if (!str) return result;
+			str.split(',').forEach(part => {
+				const token = part.trim();
+				if (!token) return;
+				// Si es rango "x-y"
+				if (/^\d+\s*-\s*\d+$/.test(token)) {
+				let [start, end] = token.split('-').map(s => Number(s.trim()));
+				if (!isNaN(start) && !isNaN(end)) {
+					if (start > end) [start, end] = [end, start]; // soporta "7-3"
+					for (let i = start; i <= end; i++) result.add(i);
+				}
+				} else {
+					// Número suelto
+					const n = Number(token);
+					if (!isNaN(n)) result.add(n);
+				}
+			});
+			return result;
+		};
+		const defaultStyle = {fillColor: "#020259",	weight: 4, opacity: 1, color: "#46fafa", dashArray: '3', fillOpacity: 0.3};
+		const highlightStyle = {color: '#020259', weight: 2, fillOpacity: 0.35};
+		function featureMatchesSet(feature, idSet, propName = 'Numero') {
+			if (!feature || !feature.properties) return false;
+			return idSet.has(feature.properties[propName]);
 		};
 	</script>
 </html>
