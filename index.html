@@ -16,6 +16,7 @@
 	<script src="geojson/perimetro.geojson" type="text/javascript"></script>
 	<script src="geojson/PerimetroLineal.geojson" type="text/javascript"></script>
 	<script src="geojson/encuentros.json" type="text/javascript"></script>
+	<script src="geojson/manzanas.geojson" type="text/javascript"></script>
 	<script src="usuario.txt" type="text/javascript"></script>
 	<script src="contrasenia.txt" type="text/javascript"></script>
 	<!-- JS -->
@@ -47,6 +48,8 @@
 	<!-- Leaflet Routing Machine -->
 	<link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
 	<script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.min.js"></script>
+	<!--Permiso para acceder a Google-Drive-->
+	<script src="permisogoogledrive.txt" type="text/javascript"></script>
 	<!-- Añado un pluging de minimapa -->
 	<!--<script src="https://cdn.jsdelivr.net/gh/maneoverland/leaflet.WorldMiniMap@1.0.0/dist/Control.WorldMiniMap.js" integrity="sha512-PFw8St3qenU1/dmwCfiYYN/bRcqY1p3+sBATR+rZ6622eyXOk/8izVtlmm/k8qW7KbRIJsku838WCV5LMs6FCg==" crossorigin=""></script>-->
 	
@@ -141,7 +144,7 @@
 			left: 50%;
 			transform: translate(-50%, -50%);
 			width: 35vw;
-			height: 45vh;
+			height: 75vh;
 			background-color: yellow;
 			border-radius: 10px;
 			box-shadow: 0 0 10px rgba(0,0,0,0.3);
@@ -170,7 +173,7 @@
 		@media (max-width: 600px) {
 			.modalflash {
 			width: 80vw;
-			height: 50vh;
+			height: 80vh;
 			}
 		}
 		
@@ -188,6 +191,20 @@
 			transform: translateY(1px);
 		}
 		
+		/*Botón para informar lo que se predicó*/
+		.boton-predicado {
+			border: 3px solid #374151; background: linear-gradient(180deg, #1f2937, #111827);
+			color: #22d3ee; border-radius: 14px; cursor: pointer; font-weight: 600; box-shadow: 0 6px 18px rgba(0,0,0,.35);
+			transition: transform .08s ease, box-shadow .2s ease, border-color .2s ease; position:fixed;
+			bottom:70px;right:30px; width: 200px; height: 50px;
+		}
+		.boton-predicado:hover {
+			border-color: #22d3ee; box-shadow: 0 8px 24px rgba(34,211,238,.25);
+		}
+		.boton-predicado:active {
+			transform: translateY(1px);
+		}
+		
 		/*Bloque para el Calendario*/
 		.controles {
 			position: absolute; top: 12px; right: 12px; display: flex; flex-direction: column; gap: 10px; z-index: 500;
@@ -196,7 +213,7 @@
 			border: 3px solid #374151; background: linear-gradient(180deg, #1f2937, #111827);
 			color: #22d3ee; border-radius: 14px; cursor: pointer; font-weight: 600; box-shadow: 0 6px 18px rgba(0,0,0,.35);
 			transition: transform .08s ease, box-shadow .2s ease, border-color .2s ease; position:fixed;
-			bottom:70px;right:30px; width: 200px; height: 50px;
+			bottom:130px;right:30px; width: 200px; height: 50px;
 		}
 		.boton-calendario:hover {
 			border-color: #22d3ee; box-shadow: 0 8px 24px rgba(34,211,238,.25);
@@ -352,6 +369,14 @@
 			50% { background-position: 100% 50%; }
 			100% { background-position: 0% 50%; }
 		}
+		/*Iconos manzanas*/
+		.circle-label {
+			font-size: 14px;
+			font-weight: bold;
+			color: white;
+			text-align: center;
+			text-shadow: 0 0 2px black;
+		}
     </style>
 	<!--Icono para la pestaña del navegador-->
 	<link rel="shortcut icon" href="./images/Tetragramaton.ico" type="image/x-icon"/>
@@ -437,18 +462,6 @@
 					<input id="ocultarflias" type="submit" style="background-color:#f48d8d" value="Quitar familias del mapa" onclick="QuitarTodasFlias();"></input>
 				</p>
             </div>
-			<!--
-			<div class="sidebar-pane" id="localizacion">
-                <h1 class="sidebar-header">Sección de herramientas...<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
-				<br></br>
-				<p class="lorem">Las herramientas disponibles son...</p>
-				<br></br>
-				<br></br>
-				<p id="gpson"><a href="javascript:desactivar_seguimiento()"><i class="fa-solid fa-location-dot" style="color: red;"></i></a>  <a href="javascript:desactivar_seguimiento()" style="color: blue;">  Desactivar mi ubicación actual</a></p>
-				<p id="gpsoff"><a href="javascript:activar_seguimiento()"><i class="fa-solid fa-location-dot" style="color: green;"></i></a>  <a href="javascript:activar_seguimiento()" style="color: blue;">  Mi ubicación actual</a></p>
-				<p id="dondestoy"><a href="javascript:CentrarMiUbicacion()"><i class="fa-solid fa-location-crosshairs" style="color: green";></i></a>  <a href="javascript:CentrarMiUbicacion()" style="color: blue;">  Centrar en mi ubicación actual</a></p>
-			</div>
-			-->
 			<div class="sidebar-pane" id="logueo">
                 <div id="log_no">
 					<h1 class="sidebar-header">Por favor, ingrese sus datos...<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
@@ -506,9 +519,13 @@
 		<div class="controles">
 			<button id="botonrecargar" class="boton-recargar" onclick="location.reload()">Volver a empezar...</button>
 		</div>
+		<!--Botón para informar los territorios predicados-->
+		<div class="controles">
+			<button id="botonreportarpredicado" class="boton-predicado" onclick="ReportarPredicado()">¿Dirigiste una salida? Por favor, informá qué se predicó</button>
+		</div>
 	</div>
 	
-	<div class="modalflash" id="MiModalFlash">
+	<div class="modalflash" id="MiModalFlash" style="font-size:15px;">
 		<div class="modalflash-cabecera" id="titulomodalflash">¡¡¡ BIENVENIDO AL MAPA WEB DE LA CONGREGACION SUR VILLA NUEVA...!!!</div>
 		<p class="modalflash-cuerpo" id="cuerpomodalflash"><img src="./images/presentacion.jpg" style="display: block; margin: auto; height:80px" id="imagenmodalflash"/><br><strong>Si sos un publicador, este mapa en línea te permitirá:</strong>
 			<br>Ubicar un territorio con la opción de hacerlo a partir de tu ubicación en tiempo real.
@@ -523,6 +540,31 @@
 				<button id="btn-cerrar-modal-flash" style="height:30px; width:90px; background-color:red;border-color:white;color:white;">Cerrar</button>
 			</div>
 			<span style="font-weight: bold; color:red; text-align: center;">Me cierro en: <span id="contador"> </span> segundos</span>
+		</p>
+	</div>
+	
+	<!--Modal para reportar lo que se predicó en una salida-->
+	<div class="modalflash" id="ModalReportePredicado" style="font-size:15px;">
+		<div class="modalflash-cabecera" id="titulomodalpredicado">¡¡¡ MUCHAS GRACIAS POR TOMARTE ESTE TIEMPITO...!!!</div>
+		<p></p>
+		<p class="modalflash-cuerpo" id="cuerpomodalpredicado"><strong>Estos registros ayudan a predicar a conciencia nuestro territorio</strong>
+			<p></p>
+			<label>Fecha: <input id="fechapredicado" type="date" style="width:300px;"></label><br>
+			<label>Tu nombre: <input id="nombrepredicado" style="width:300px;"></label><br>
+			<label>Número del territorio: <input id="territoriopredicado" style="width:300px;"></label><br>
+			<label>¿Se predicó TODO el territorio?  <input type="checkbox" id="todopredicado">SI&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type="checkbox" id="algopredicado">NO</label><br><br>
+			<label id="manzanaspredicadas">Lo que se abarcó: <input id="abarcadopredicado" placeholder="Letras de las manzanas predicadas" style="width:300px;">#Por favor, no usés comas, punto y comas ni puntos. Separa las letras con espacio.</label><br><br>
+			<label id="leyendamanzanaspredicadas">Para identificar las manzanas, debés hacer Zoom en el territorio. Para ello, podés usar el símbolo + sobre el costado derecho, o tocar dos veces seguidas en el territorio o bien tocar la pantalla con dos dedos y separarlos lentamente.-</label><br><br>
+			<p></p>
+			<p></p>
+			<pre id="enviandoreporte"></pre>
+			<div style="text-align: center">
+				<button id="btn-cerrar-reporte" style="height:30px; width:150px; background-color:red;border-color:white;color:white;" onclick="CerrarModalReporte()">Cerrar</button>
+				<button id="btn-enviar-reporte" style="height:30px; width:150px; background-color:green;border-color:white;color:white;">Enviar información</button>
+			</div>
+			<p></p>
+			<p></p>
+			<pre id="enviandoreporte"></pre>
 		</p>
 	</div>
 	
@@ -555,7 +597,7 @@
 	
 </body>
 	<!--Ventana modal inicial-->
-	<dialog id="modal_inicial" style="text-align: center; background-color:yellow">
+	<dialog id="modal_inicial" style="text-align: center; background-color:yellow; font-size:13px;">
 		<div id="Apaisado">
 			<span id="titulo_modalinicial"><h4>Parece que estás usando un dispositivo movil (celular o tablet).</h4></span>
 			<br><br/>
@@ -574,742 +616,7 @@
 	
 		<!--Programa de salidas en formato JSON-->
 		var salidas=[
-		  {
-			"DiaSemana": "Miercoles",
-			"Dia": 1,
-			"Mes": 9,
-			"Anio": 2025,
-			"HoraM": "9:30",
-			"PuntoEncuentroM": "Tapon Moyano y San Francisco del Monte",
-			"SalidaM": "Congregacional",
-			"ConductorM": "Yo",
-			"TerritorioM": "9-10",
-			"HoraT": "",
-			"PuntoEncuentroT": "",
-			"SalidaT": "",
-			"ConductorT": "",
-			"TerritorioT": "",
-			"HoraN": "",
-			"PuntoEncuentroN": "",
-			"SalidaN": "",
-			"ConductorN": "",
-			"TerritorioN": ""
-		  },
-		  {
-			"DiaSemana": "Martes",
-			"Dia": 2,
-			"Mes": 9,
-			"Anio": 2025,
-			"HoraM": "",
-			"PuntoEncuentroM": "",
-			"SalidaM": "",
-			"ConductorM": "",
-			"TerritorioM": "",
-			"HoraT": "",
-			"PuntoEncuentroT": "",
-			"SalidaT": "",
-			"ConductorT": "",
-			"TerritorioT": "",
-			"HoraN": "",
-			"PuntoEncuentroN": "",
-			"SalidaN": "",
-			"ConductorN": "",
-			"TerritorioN": ""
-		  },
-		  {
-			"DiaSemana": "Miercoles",
-			"Dia": 3,
-			"Mes": 9,
-			"Anio": 2025,
-			"HoraM": "",
-			"PuntoEncuentroM": "",
-			"SalidaM": "",
-			"ConductorM": "",
-			"TerritorioM": "",
-			"HoraT": "",
-			"PuntoEncuentroT": "",
-			"SalidaT": "",
-			"ConductorT": "",
-			"TerritorioT": "",
-			"HoraN": "",
-			"PuntoEncuentroN": "",
-			"SalidaN": "",
-			"ConductorN": "",
-			"TerritorioN": ""
-		  },
-		  {
-			"DiaSemana": "Jueves",
-			"Dia": 4,
-			"Mes": 9,
-			"Anio": 2025,
-			"HoraM": "",
-			"PuntoEncuentroM": "",
-			"SalidaM": "",
-			"ConductorM": "",
-			"TerritorioM": "",
-			"HoraT": "",
-			"PuntoEncuentroT": "",
-			"SalidaT": "",
-			"ConductorT": "",
-			"TerritorioT": "",
-			"HoraN": "",
-			"PuntoEncuentroN": "",
-			"SalidaN": "",
-			"ConductorN": "",
-			"TerritorioN": ""
-		  },
-		  {
-			"DiaSemana": "Viernes",
-			"Dia": 5,
-			"Mes": 9,
-			"Anio": 2025,
-			"HoraM": "",
-			"PuntoEncuentroM": "",
-			"SalidaM": "",
-			"ConductorM": "",
-			"TerritorioM": "",
-			"HoraT": "",
-			"PuntoEncuentroT": "",
-			"SalidaT": "",
-			"ConductorT": "",
-			"TerritorioT": "",
-			"HoraN": "",
-			"PuntoEncuentroN": "",
-			"SalidaN": "",
-			"ConductorN": "",
-			"TerritorioN": ""
-		  },
-		  {
-			"DiaSemana": "Sabado",
-			"Dia": 6,
-			"Mes": 9,
-			"Anio": 2025,
-			"HoraM": "",
-			"PuntoEncuentroM": "",
-			"SalidaM": "",
-			"ConductorM": "",
-			"TerritorioM": "",
-			"HoraT": "",
-			"PuntoEncuentroT": "",
-			"SalidaT": "",
-			"ConductorT": "",
-			"TerritorioT": "",
-			"HoraN": "",
-			"PuntoEncuentroN": "",
-			"SalidaN": "",
-			"ConductorN": "",
-			"TerritorioN": ""
-		  },
-		  {
-			"DiaSemana": "Domingo",
-			"Dia": 7,
-			"Mes": 9,
-			"Anio": 2025,
-			"HoraM": "",
-			"PuntoEncuentroM": "",
-			"SalidaM": "",
-			"ConductorM": "",
-			"TerritorioM": "",
-			"HoraT": "",
-			"PuntoEncuentroT": "",
-			"SalidaT": "",
-			"ConductorT": "",
-			"TerritorioT": "",
-			"HoraN": "",
-			"PuntoEncuentroN": "",
-			"SalidaN": "",
-			"ConductorN": "",
-			"TerritorioN": ""
-		  },
-		  {
-			"DiaSemana": "Lunes",
-			"Dia": 8,
-			"Mes": 9,
-			"Anio": 2025,
-			"HoraM": "",
-			"PuntoEncuentroM": "",
-			"SalidaM": "",
-			"ConductorM": "",
-			"TerritorioM": "",
-			"HoraT": "",
-			"PuntoEncuentroT": "",
-			"SalidaT": "",
-			"ConductorT": "",
-			"TerritorioT": "",
-			"HoraN": "",
-			"PuntoEncuentroN": "",
-			"SalidaN": "",
-			"ConductorN": "",
-			"TerritorioN": ""
-		  },
-		  {
-			"DiaSemana": "Martes",
-			"Dia": 9,
-			"Mes": 9,
-			"Anio": 2025,
-			"HoraM": "",
-			"PuntoEncuentroM": "",
-			"SalidaM": "",
-			"ConductorM": "",
-			"TerritorioM": "",
-			"HoraT": "",
-			"PuntoEncuentroT": "",
-			"SalidaT": "",
-			"ConductorT": "",
-			"TerritorioT": "",
-			"HoraN": "",
-			"PuntoEncuentroN": "",
-			"SalidaN": "",
-			"ConductorN": "",
-			"TerritorioN": ""
-		  },
-		  {
-			"DiaSemana": "Miercoles",
-			"Dia": 10,
-			"Mes": 9,
-			"Anio": 2025,
-			"HoraM": "",
-			"PuntoEncuentroM": "",
-			"SalidaM": "",
-			"ConductorM": "",
-			"TerritorioM": "",
-			"HoraT": "",
-			"PuntoEncuentroT": "",
-			"SalidaT": "",
-			"ConductorT": "",
-			"TerritorioT": "",
-			"HoraN": "",
-			"PuntoEncuentroN": "",
-			"SalidaN": "",
-			"ConductorN": "",
-			"TerritorioN": ""
-		  },
-		  {
-			"DiaSemana": "Jueves",
-			"Dia": 11,
-			"Mes": 9,
-			"Anio": 2025,
-			"HoraM": "",
-			"PuntoEncuentroM": "",
-			"SalidaM": "",
-			"ConductorM": "",
-			"TerritorioM": "",
-			"HoraT": "",
-			"PuntoEncuentroT": "",
-			"SalidaT": "",
-			"ConductorT": "",
-			"TerritorioT": "",
-			"HoraN": "",
-			"PuntoEncuentroN": "",
-			"SalidaN": "",
-			"ConductorN": "",
-			"TerritorioN": ""
-		  },
-		  {
-			"DiaSemana": "Viernes",
-			"Dia": 12,
-			"Mes": 9,
-			"Anio": 2025,
-			"HoraM": "09:30",
-			"PuntoEncuentroM": "Curupaiti y Castro",
-			"SalidaM": "Congregacional",
-			"ConductorM": "Oscar Galdames",
-			"TerritorioM": 28,
-			"HoraT": "18:00",
-			"PuntoEncuentroT": "Pedro Goyena y 9 de Julio",
-			"SalidaT": "Congregacional",
-			"ConductorT": "Cristian Bringas",
-			"TerritorioT": 12,
-			"HoraN": "20:00",
-			"PuntoEncuentroN": "Zoom",
-			"SalidaN": "Congregacional",
-			"ConductorN": "Noelia Garcia",
-			"TerritorioN": ""
-		  },
-		  {
-			"DiaSemana": "Sabado",
-			"Dia": 13,
-			"Mes": 9,
-			"Anio": 2025,
-			"HoraM": "09:30",
-			"PuntoEncuentroM": "Candia",
-			"SalidaM": "Grupos 1 y 2",
-			"ConductorM": "Carlos Caba�ez",
-			"TerritorioM": 14,
-			"HoraT": "18:00",
-			"PuntoEncuentroT": "Pedro Goyena y 9 de Julio",
-			"SalidaT": "Congregacional",
-			"ConductorT": "Oscar Mu�oz",
-			"TerritorioT": 13,
-			"HoraN": "",
-			"PuntoEncuentroN": "",
-			"SalidaN": "",
-			"ConductorN": "",
-			"TerritorioN": ""
-		  },
-		  {
-			"DiaSemana": "Sabado",
-			"Dia": 13,
-			"Mes": 9,
-			"Anio": 2025,
-			"HoraM": "09:30",
-			"PuntoEncuentroM": "Centro de Salud",
-			"SalidaM": "Grupos 3 y 4",
-			"ConductorM": "Daniel del Balso",
-			"TerritorioM": 18,
-			"HoraT": "",
-			"PuntoEncuentroT": "",
-			"SalidaT": "",
-			"ConductorT": "",
-			"TerritorioT": "",
-			"HoraN": "",
-			"PuntoEncuentroN": "",
-			"SalidaN": "",
-			"ConductorN": "",
-			"TerritorioN": ""
-		  },
-		  {
-			"DiaSemana": "Domingo",
-			"Dia": 14,
-			"Mes": 9,
-			"Anio": 2025,
-			"HoraM": "",
-			"PuntoEncuentroM": "",
-			"SalidaM": "",
-			"ConductorM": "",
-			"TerritorioM": "",
-			"HoraT": "",
-			"PuntoEncuentroT": "",
-			"SalidaT": "",
-			"ConductorT": "",
-			"TerritorioT": "",
-			"HoraN": "",
-			"PuntoEncuentroN": "",
-			"SalidaN": "",
-			"ConductorN": "",
-			"TerritorioN": ""
-		  },
-		  {
-			"DiaSemana": "Lunes",
-			"Dia": 15,
-			"Mes": 9,
-			"Anio": 2025,
-			"HoraM": "",
-			"PuntoEncuentroM": "",
-			"SalidaM": "",
-			"ConductorM": "",
-			"TerritorioM": "",
-			"HoraT": "18:00",
-			"PuntoEncuentroT": "Zoom",
-			"SalidaT": "Congregacional",
-			"ConductorT": "Emanuel Gualpa",
-			"TerritorioT": "",
-			"HoraN": "",
-			"PuntoEncuentroN": "",
-			"SalidaN": "",
-			"ConductorN": "",
-			"TerritorioN": ""
-		  },
-		  {
-			"DiaSemana": "Martes",
-			"Dia": 16,
-			"Mes": 9,
-			"Anio": 2025,
-			"HoraM": "09:30",
-			"PuntoEncuentroM": "Jose Ortiz",
-			"SalidaM": "Congregacional",
-			"ConductorM": "Jose Ortiz",
-			"TerritorioM": 20,
-			"HoraT": "18:00",
-			"PuntoEncuentroT": "Curupaiti y Castro",
-			"SalidaT": "Congregacional",
-			"ConductorT": "Carlos Caba�ez",
-			"TerritorioT": 26,
-			"HoraN": "",
-			"PuntoEncuentroN": "",
-			"SalidaN": "",
-			"ConductorN": "",
-			"TerritorioN": ""
-		  },
-		  {
-			"DiaSemana": "Miercoles",
-			"Dia": 17,
-			"Mes": 9,
-			"Anio": 2025,
-			"HoraM": "09:30",
-			"PuntoEncuentroM": "Curupaiti y Elpidio Gonzalez",
-			"SalidaM": "Congregacional",
-			"ConductorM": "Hector Ortiz",
-			"TerritorioM": 22,
-			"HoraT": "18:00",
-			"PuntoEncuentroT": "Tapon Moyano y San Francisco del Monte",
-			"SalidaT": "Congregacional",
-			"ConductorT": "Roberto Garcia",
-			"TerritorioT": 8,
-			"HoraN": "",
-			"PuntoEncuentroN": "",
-			"SalidaN": "",
-			"ConductorN": "",
-			"TerritorioN": ""
-		  },
-		  {
-			"DiaSemana": "Jueves",
-			"Dia": 18,
-			"Mes": 9,
-			"Anio": 2025,
-			"HoraM": "09:30",
-			"PuntoEncuentroM": "Zoom",
-			"SalidaM": "Congregacional",
-			"ConductorM": "Joaquin Rossi",
-			"TerritorioM": "",
-			"HoraT": "",
-			"PuntoEncuentroT": "",
-			"SalidaT": "",
-			"ConductorT": "",
-			"TerritorioT": "",
-			"HoraN": "",
-			"PuntoEncuentroN": "",
-			"SalidaN": "",
-			"ConductorN": "",
-			"TerritorioN": ""
-		  },
-		  {
-			"DiaSemana": "Viernes",
-			"Dia": 19,
-			"Mes": 9,
-			"Anio": 2025,
-			"HoraM": "09:30",
-			"PuntoEncuentroM": "Curupaiti y Castro",
-			"SalidaM": "Congregacional",
-			"ConductorM": "Oscar Galdames",
-			"TerritorioM": 24,
-			"HoraT": "18:00",
-			"PuntoEncuentroT": "Pedro Goyena y 9 de Julio",
-			"SalidaT": "Congregacional",
-			"ConductorT": "Cristian Bringas",
-			"TerritorioT": 12,
-			"HoraN": "20:00",
-			"PuntoEncuentroN": "Zoom",
-			"SalidaN": "Congregacional",
-			"ConductorN": "",
-			"TerritorioN": ""
-		  },
-		  {
-			"DiaSemana": "Sabado",
-			"Dia": 20,
-			"Mes": 9,
-			"Anio": 2025,
-			"HoraM": "09:30",
-			"PuntoEncuentroM": "Jose Quiroga",
-			"SalidaM": "Grupo 1",
-			"ConductorM": "Roque Castillo",
-			"TerritorioM": 8,
-			"HoraT": "18:00",
-			"PuntoEncuentroT": "Curupaiti y Castro",
-			"SalidaT": "Congregacional",
-			"ConductorT": "Carlos Caba�ez",
-			"TerritorioT": 27,
-			"HoraN": "",
-			"PuntoEncuentroN": "",
-			"SalidaN": "",
-			"ConductorN": "",
-			"TerritorioN": ""
-		  },
-		  {
-			"DiaSemana": "Sabado",
-			"Dia": 20,
-			"Mes": 9,
-			"Anio": 2025,
-			"HoraM": "09:30",
-			"PuntoEncuentroM": "Candia",
-			"SalidaM": "Grupo 2",
-			"ConductorM": "Mauricio Godoy",
-			"TerritorioM": 11,
-			"HoraT": "",
-			"PuntoEncuentroT": "",
-			"SalidaT": "",
-			"ConductorT": "",
-			"TerritorioT": "",
-			"HoraN": "",
-			"PuntoEncuentroN": "",
-			"SalidaN": "",
-			"ConductorN": "",
-			"TerritorioN": ""
-		  },
-		  {
-			"DiaSemana": "Sabado",
-			"Dia": 20,
-			"Mes": 9,
-			"Anio": 2025,
-			"HoraM": "09:30",
-			"PuntoEncuentroM": "Hector Ortiz",
-			"SalidaM": "Grupo 3",
-			"ConductorM": "Jonatan Astudillo",
-			"TerritorioM": 15,
-			"HoraT": "",
-			"PuntoEncuentroT": "",
-			"SalidaT": "",
-			"ConductorT": "",
-			"TerritorioT": "",
-			"HoraN": "",
-			"PuntoEncuentroN": "",
-			"SalidaN": "",
-			"ConductorN": "",
-			"TerritorioN": ""
-		  },
-		  {
-			"DiaSemana": "Sabado",
-			"Dia": 20,
-			"Mes": 9,
-			"Anio": 2025,
-			"HoraM": "09:30",
-			"PuntoEncuentroM": "Centro de Salud",
-			"SalidaM": "Grupo 4",
-			"ConductorM": "Gustavo Miron",
-			"TerritorioM": 16,
-			"HoraT": "",
-			"PuntoEncuentroT": "",
-			"SalidaT": "",
-			"ConductorT": "",
-			"TerritorioT": "",
-			"HoraN": "",
-			"PuntoEncuentroN": "",
-			"SalidaN": "",
-			"ConductorN": "",
-			"TerritorioN": ""
-		  },
-		  {
-			"DiaSemana": "Domingo",
-			"Dia": 21,
-			"Mes": 9,
-			"Anio": 2025,
-			"HoraM": "",
-			"PuntoEncuentroM": "",
-			"SalidaM": "",
-			"ConductorM": "",
-			"TerritorioM": "",
-			"HoraT": "",
-			"PuntoEncuentroT": "",
-			"SalidaT": "",
-			"ConductorT": "",
-			"TerritorioT": "",
-			"HoraN": "",
-			"PuntoEncuentroN": "",
-			"SalidaN": "",
-			"ConductorN": "",
-			"TerritorioN": ""
-		  },
-		  {
-			"DiaSemana": "Lunes",
-			"Dia": 22,
-			"Mes": 9,
-			"Anio": 2025,
-			"HoraM": "",
-			"PuntoEncuentroM": "",
-			"SalidaM": "",
-			"ConductorM": "",
-			"TerritorioM": "",
-			"HoraT": "18:00",
-			"PuntoEncuentroT": "Zoom",
-			"SalidaT": "Congregacional",
-			"ConductorT": "Liliana Quiroga",
-			"TerritorioT": "",
-			"HoraN": "",
-			"PuntoEncuentroN": "",
-			"SalidaN": "",
-			"ConductorN": "",
-			"TerritorioN": ""
-		  },
-		  {
-			"DiaSemana": "Martes",
-			"Dia": 23,
-			"Mes": 9,
-			"Anio": 2025,
-			"HoraM": "09:30",
-			"PuntoEncuentroM": "Centro de Salud",
-			"SalidaM": "Congregacional",
-			"ConductorM": "Jose Ortiz",
-			"TerritorioM": 19,
-			"HoraT": "18:00",
-			"PuntoEncuentroT": "Tapon Moyano y Boulevard",
-			"SalidaT": "Congregacional",
-			"ConductorT": "Carlos Caba�ez",
-			"TerritorioT": 9,
-			"HoraN": "",
-			"PuntoEncuentroN": "",
-			"SalidaN": "",
-			"ConductorN": "",
-			"TerritorioN": ""
-		  },
-		  {
-			"DiaSemana": "Miercoles",
-			"Dia": 24,
-			"Mes": 9,
-			"Anio": 2025,
-			"HoraM": "09:30",
-			"PuntoEncuentroM": "Gutierrez",
-			"SalidaM": "Congregacional",
-			"ConductorM": "Oscar Galdames",
-			"TerritorioM": 13,
-			"HoraT": "18:00",
-			"PuntoEncuentroT": "Reyes",
-			"SalidaT": "Congregacional",
-			"ConductorT": "Roberto Garcia",
-			"TerritorioT": 19,
-			"HoraN": "",
-			"PuntoEncuentroN": "",
-			"SalidaN": "",
-			"ConductorN": "",
-			"TerritorioN": ""
-		  },
-		  {
-			"DiaSemana": "Jueves",
-			"Dia": 25,
-			"Mes": 9,
-			"Anio": 2025,
-			"HoraM": "09:30",
-			"PuntoEncuentroM": "Zoom",
-			"SalidaM": "Congregacional",
-			"ConductorM": "Emanuel Gualpa",
-			"TerritorioM": "",
-			"HoraT": "",
-			"PuntoEncuentroT": "",
-			"SalidaT": "",
-			"ConductorT": "",
-			"TerritorioT": "",
-			"HoraN": "",
-			"PuntoEncuentroN": "",
-			"SalidaN": "",
-			"ConductorN": "",
-			"TerritorioN": ""
-		  },
-		  {
-			"DiaSemana": "Viernes",
-			"Dia": 26,
-			"Mes": 9,
-			"Anio": 2025,
-			"HoraM": "09:30",
-			"PuntoEncuentroM": "Curupaiti y Castro",
-			"SalidaM": "Congregacional",
-			"ConductorM": "Jose Ortiz",
-			"TerritorioM": 23,
-			"HoraT": "18:00",
-			"PuntoEncuentroT": "Curupaiti y Elpidio Gonzalez",
-			"SalidaT": "Congregacional",
-			"ConductorT": "Cristian Bringas",
-			"TerritorioT": 17,
-			"HoraN": "20:00",
-			"PuntoEncuentroN": "Zoom",
-			"SalidaN": "",
-			"ConductorN": "",
-			"TerritorioN": ""
-		  },
-		  {
-			"DiaSemana": "Sabado",
-			"Dia": 27,
-			"Mes": 9,
-			"Anio": 2025,
-			"HoraM": "09:30",
-			"PuntoEncuentroM": "Tapon Moyano y San Francisco del Monte",
-			"SalidaM": "Grupos 1 y 3",
-			"ConductorM": "Cristian Bringas",
-			"TerritorioM": 6,
-			"HoraT": "18:00",
-			"PuntoEncuentroT": "Pedro Goyena y 9 de Julio",
-			"SalidaT": "Congregacional",
-			"ConductorT": "Oscar Mu�oz",
-			"TerritorioT": 14,
-			"HoraN": "",
-			"PuntoEncuentroN": "",
-			"SalidaN": "",
-			"ConductorN": "",
-			"TerritorioN": ""
-		  },
-		  {
-			"DiaSemana": "Sabado",
-			"Dia": 27,
-			"Mes": 9,
-			"Anio": 2025,
-			"HoraM": "09:30",
-			"PuntoEncuentroM": "Tapon Moyano y Boulevard",
-			"SalidaM": "Grupos 2 y 4",
-			"ConductorM": "Oscar Galdames",
-			"TerritorioM": 10,
-			"HoraT": "",
-			"PuntoEncuentroT": "",
-			"SalidaT": "",
-			"ConductorT": "",
-			"TerritorioT": "",
-			"HoraN": "",
-			"PuntoEncuentroN": "",
-			"SalidaN": "",
-			"ConductorN": "",
-			"TerritorioN": ""
-		  },
-		  {
-			"DiaSemana": "Domingo",
-			"Dia": 28,
-			"Mes": 9,
-			"Anio": 2025,
-			"HoraM": "",
-			"PuntoEncuentroM": "",
-			"SalidaM": "",
-			"ConductorM": "",
-			"TerritorioM": "",
-			"HoraT": "",
-			"PuntoEncuentroT": "",
-			"SalidaT": "",
-			"ConductorT": "",
-			"TerritorioT": "",
-			"HoraN": "",
-			"PuntoEncuentroN": "",
-			"SalidaN": "",
-			"ConductorN": "",
-			"TerritorioN": ""
-		  },
-		  {
-			"DiaSemana": "Lunes",
-			"Dia": 29,
-			"Mes": 9,
-			"Anio": 2025,
-			"HoraM": "",
-			"PuntoEncuentroM": "",
-			"SalidaM": "",
-			"ConductorM": "",
-			"TerritorioM": "",
-			"HoraT": "18:00",
-			"PuntoEncuentroT": "Zoom",
-			"SalidaT": "Congregacional",
-			"ConductorT": "Emanuel Gualpa",
-			"TerritorioT": "",
-			"HoraN": "",
-			"PuntoEncuentroN": "",
-			"SalidaN": "",
-			"ConductorN": "",
-			"TerritorioN": ""
-		  },
-		  {
-			"DiaSemana": "Martes",
-			"Dia": 30,
-			"Mes": 9,
-			"Anio": 2025,
-			"HoraM": "09:30",
-			"PuntoEncuentroM": "Curupaiti y Elpidio Gonzalez",
-			"SalidaM": "Congregacional",
-			"ConductorM": "Hector Ortiz",
-			"TerritorioM": 22,
-			"HoraT": "",
-			"PuntoEncuentroT": "",
-			"SalidaT": "",
-			"ConductorT": "",
-			"TerritorioT": "",
-			"HoraN": "",
-			"PuntoEncuentroN": "",
-			"SalidaN": "",
-			"ConductorN": "",
-			"TerritorioN": ""
-		  },
-				{
+			{
 			"DiaSemana": "Miercoles",
 			"Dia": 1,
 			"Mes": 10,
@@ -2084,7 +1391,7 @@
 		var firstLatLng, secondLatLng;
 		var conexion="";
 		var circulo="";
-		var version="completa";//"publica";
+		var version="publica";
 		var marcador="";
 		var seguimiento="no";
 		var casa="";
@@ -2120,7 +1427,7 @@
 		var actualizarruta="si";
 		var coordenadas_ubicacion_real="";
 		var icono_posicion = L.icon({iconUrl: './images/posicion.png',iconSize: [35, 40],});
-		var tiempomodalflash=13000;//500;
+		var tiempomodalflash=20000;
 		var temporizadormodalflash="";
 		var mes_anio="";
 		var diaseleccionado="";
@@ -2130,6 +1437,32 @@
 		var marcapuntosalida="";
 		var cartografiar="congregacion";
 		var listaterritorios=[];
+		var SCRIPT_URL = enlacepermisogoogledrive;
+		
+		// Crear grupo de puntos
+		var grupomanzanas = L.geoJSON(manzanas, {
+			pointToLayer: function(feature, latlng) {
+				// Crear un círculo
+				const circle = L.circleMarker(latlng, {
+					radius: 14,
+					fillColor: "#0078ff",
+					color: "#fff",
+					weight: 2,
+					opacity: 1,
+					fillOpacity: 0.8
+				});
+				// Agregar un div centrado con el texto de "manzana"
+				const label = L.divIcon({
+					className: 'circle-label',
+					html: feature.properties.Manzana || '23',
+					iconSize: [30, 30],
+					iconAnchor: [15, 15]
+				});
+				const labelMarker = L.marker(latlng, {icon: label, interactive: false});
+				// Devolver ambos dentro de un grupo
+				return L.layerGroup([circle, labelMarker]);
+			}
+		});
 
 		<!--Añadir la barra lateral-->
 		var barralateral = L.control.sidebar('barralateral').addTo(mapa);
@@ -2971,6 +2304,8 @@
 		document.getElementById("botoncentrado").style.visibility='hidden';
 		//document.getElementById("dondestoy").style.visibility='hidden';
 		document.getElementById("botonnorte").style.visibility='hidden';
+		document.getElementById("ModalReportePredicado").style.visibility='hidden';
+		document.getElementById("manzanaspredicadas").style.visibility='hidden';
 		VerificarConexion();
 		VerificarVersion();
 		ModalFlash(tiempomodalflash);
@@ -3310,23 +2645,23 @@
 		};
 		
 		function FiltrarVariosTerritorios(num_terr) {
-			const idSet = parseIdStringToSet(num_terr);
+			const idSet = AnalizarCadenaVariosTerritorios(num_terr);
 			capa_territoriofiltrado = L.geoJSON(territorios, {
-				filter: f => featureMatchesSet(f, idSet),
-				style: f => featureMatchesSet(f, idSet) ? highlightStyle : defaultStyle,
+				filter: f => ConjuntoCoincidencias(f, idSet),
+				style: f => ConjuntoCoincidencias(f, idSet) ? highlightStyle : defaultStyle,
 				onEachFeature: (f, layer) => {
 					layer.bindPopup(`Numero: ${f.properties.Numero}<br>`);
 				}
 			}).addTo(mapa);
 			if (capa_territoriofiltradonumero) {mapa.removeLayer(capa_territoriofiltradonumero)};
 			capa_territoriofiltradonumero = L.geoJSON(territorios, {
-				filter: f => featureMatchesSet(f, idSet),
+				filter: f => ConjuntoCoincidencias(f, idSet),
 				onEachFeature: NumeroTerritorio
 			}).addTo(mapa);
 		};
 		
 		// --- Parser que soporta rangos ---
-		function parseIdStringToSet(str) {
+		function AnalizarCadenaVariosTerritorios(str) {
 			const result = new Set();
 			if (!str) return result;
 			str.split(',').forEach(part => {
@@ -3349,9 +2684,87 @@
 		};
 		const defaultStyle = {fillColor: "#020259",	weight: 4, opacity: 1, color: "#46fafa", dashArray: '3', fillOpacity: 0.3};
 		const highlightStyle = {color: '#020259', weight: 2, fillOpacity: 0.35};
-		function featureMatchesSet(feature, idSet, propName = 'Numero') {
+		function ConjuntoCoincidencias(feature, idSet, propName = 'Numero') {
 			if (!feature || !feature.properties) return false;
 			return idSet.has(feature.properties[propName]);
 		};
+		
+		<!--Función para enviar reporte de lo que se abarcó en cada salida-->
+		function ReportarPredicado() {
+			document.getElementById("ModalReportePredicado").style.visibility='visible';
+		};
+		
+		<!--Función para cerrar el modal del reporte de lo predicado-->
+		function CerrarModalReporte () {
+			document.getElementById("ModalReportePredicado").style.visibility='hidden';
+		};
+		
+		<!--Función para revisar y enviar el reporte de lo predicado-->
+		document.getElementById('btn-enviar-reporte').addEventListener('click', async () => {
+			const enviando = document.getElementById('enviandoreporte');
+			if (document.getElementById('nombrepredicado').value==="" || document.getElementById('territoriopredicado').value==="" || document.getElementById('fechapredicado').value===""
+			|| (!todopred.checked && !partepred.checked) || (partepred.checked && document.getElementById('abarcadopredicado').value==="")) {
+				if (document.getElementById('fechapredicado').value==="") {document.getElementById("fechapredicado").placeholder = "Por favor, ingresá alguna fecha aquí...";document.getElementById("fechapredicado").focus()};
+				if (document.getElementById('nombrepredicado').value==="") {document.getElementById("nombrepredicado").placeholder = "Por favor, ingresá tu nombre aquí...";document.getElementById("nombrepredicado").focus()};
+				if (document.getElementById('territoriopredicado').value==="") {document.getElementById("territoriopredicado").placeholder = "Por favor, ingresá el número del territorio aquí...";document.getElementById("territoriopredicado").focus()};
+				if (document.getElementById('abarcadopredicado').value==="") {document.getElementById("abarcadopredicado").placeholder = "Por favor, ingresá algún dato aquí...";document.getElementById("abarcadopredicado").focus()};
+				enviando.textContent = 'Por favor, revisá que falta algún dato...';
+			} else {
+				enviando.textContent = 'Enviando la información...';
+				const fd = new FormData();
+				fd.append('fecha', document.getElementById('fechapredicado').value);
+				fd.append('nombre', document.getElementById('nombrepredicado').value);
+				fd.append('territorio', document.getElementById('territoriopredicado').value);
+				if (todopred.checked) {fd.append('abarcado', "Completo")};
+				if (partepred.checked) {fd.append('abarcado', document.getElementById('abarcadopredicado').value)};
+				try {
+					const res = await fetch(SCRIPT_URL, { method: 'POST', body: fd });
+					const text = await res.text();
+					enviando.textContent = 'HTTP ' + res.status + '\\n' + text;
+					try {enviando.textContent ="Información enviada. Muchas gracias....!!!";document.getElementById('nombrepredicado').value="";document.getElementById('fechapredicado').value="";
+					document.getElementById('territoriopredicado').value="";document.getElementById('abarcadopredicado').value="";enviando.textContent ="";CerrarModalReporte()}
+					catch(e){};
+				} catch (err) {
+					enviando.textContent = 'Se produjo el siguiente error: ' + err;
+					console.error(err);
+				};
+			};
+		});
+		
+		<!--Función para revisar si se predicó total o parcialmente el territorio en una salida-->
+		var todopred=document.getElementById("todopredicado");
+		var partepred=document.getElementById("algopredicado");
+		todopred.addEventListener('change', () => {
+			if (todopred.checked) {
+				document.getElementById("manzanaspredicadas").style.visibility='hidden';
+				document.getElementById("leyendamanzanaspredicadas").style.visibility='hidden';
+				partepred.checked = false;
+			};
+		});
+		partepred.addEventListener('change', () => {
+			if (partepred.checked) {
+				document.getElementById("manzanaspredicadas").style.visibility='visible';
+				document.getElementById("leyendamanzanaspredicadas").style.visibility='visible';
+				todopred.checked = false;
+			};
+		});
+		
+		// Función que controla la vista de las manzanas según el Zoom
+		function ActualizarVistaManzanas() {
+			const z = mapa.getZoom();
+			if (z >= 17) { 
+				// Mostrar detalles en zoom alto
+				if (!mapa.hasLayer(grupomanzanas)) {
+				mapa.addLayer(grupomanzanas);
+				}
+			} else {
+				// Ocultar detalles si se aleja
+				if (mapa.hasLayer(grupomanzanas)) {
+					mapa.removeLayer(grupomanzanas);
+				}
+			}
+		};
+		// Ejecutar cada vez que cambie el zoom
+		mapa.on("zoomend", ActualizarVistaManzanas);
 	</script>
 </html>
