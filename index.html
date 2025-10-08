@@ -1454,8 +1454,8 @@
 				// Agregar un div centrado con el texto de "manzana"
 				const label = L.divIcon({
 					className: 'circle-label',
-					html: feature.properties.Manzana || '23',
-					iconSize: [30, 30],
+					html: feature.properties.Manzana || '',
+					iconSize: [40, 40],
 					iconAnchor: [15, 15]
 				});
 				const labelMarker = L.marker(latlng, {icon: label, interactive: false});
@@ -1469,7 +1469,7 @@
 		
 		const iconosterritorios= L.icon({
 			iconUrl: 'images/1.jpg',
-			iconSize: [32, 37],
+			iconSize: [42, 47],
 			iconAnchor: [16, 37],
 			popupAnchor: [0, -28]
 		});
@@ -1595,7 +1595,7 @@
 				var centroide=layer.getBounds().getCenter();
 				var coord=[];
 				coord.push(centroide.lat,centroide.lng);
-				let terri=L.marker(coord,{icon:L.icon({iconUrl: 'images/'+feature.properties.Numero+'.jpg',iconSize: [32, 37],iconAnchor: [16, 37],popupAnchor: [0, -28]}),title:""+feature.properties.Numero})
+				let terri=L.marker(coord,{icon:L.icon({iconUrl: 'images/'+feature.properties.Numero+'.jpg',iconSize: [42, 47],iconAnchor: [16, 37],popupAnchor: [0, -28]}),title:""+feature.properties.Numero})
 					.bindPopup("<strong>Territorio Nº "+feature.properties.Numero+"</strong>"+"<br>Barrio: "+barrio+"<br><br><strong>NO VISITAR:</strong><br>"+novisitar);
 				nada.addLayer(terri);
 				nada.addTo(mapa);
@@ -1617,7 +1617,7 @@
 				var centroide=layer.getBounds().getCenter();
 				var coord=[];
 				coord.push(centroide.lat,centroide.lng);
-				numeroterritorio=L.marker(coord,{icon:L.icon({iconUrl: 'images/'+feature.properties.Numero+'.jpg',iconSize: [32, 37],iconAnchor: [16, 37],popupAnchor: [0, -28]}),title:""+feature.properties.Numero})
+				numeroterritorio=L.marker(coord,{icon:L.icon({iconUrl: 'images/'+feature.properties.Numero+'.jpg',iconSize: [42, 47],iconAnchor: [16, 37],popupAnchor: [0, -28]}),title:""+feature.properties.Numero})
 					.bindPopup("<strong>Territorio Nº "+feature.properties.Numero+"</strong>"+"<br>Barrio: "+barrio+"<br><br><strong>NO VISITAR:</strong><br>"+novisitar).addTo(mapa);
 			};
 		};
@@ -2604,7 +2604,7 @@
 			var coord=[];
 			coord.push(coordsalida[0],coordsalida[1]);
 			if (marcapuntosalida) {marcapuntosalida.remove()};
-			marcapuntosalida=L.marker(coord,{icon:L.icon({iconUrl: 'images/predicando.jpg',iconSize: [32, 37],iconAnchor: [16, 37],popupAnchor: [0, -28]}),title:""+fecha+" a las "+hora+" "+tiposalida+": "+puntosalida+". Territorio: "+territorioapredicar})
+			marcapuntosalida=L.marker(coord,{icon:L.icon({iconUrl: 'images/predicando.jpg',iconSize: [42, 47],iconAnchor: [16, 37],popupAnchor: [0, -28]}),title:""+fecha+" a las "+hora+" "+tiposalida+": "+puntosalida+". Territorio: "+territorioapredicar})
 					.bindPopup(""+fecha+" a las "+hora+" "+tiposalida+": "+puntosalida+". Territorio: "+territorioapredicar)
 					.openPopup().addTo(mapa);
 			mapa.flyTo(coord,16);
