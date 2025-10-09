@@ -1,6 +1,6 @@
 var manzanas={
 "type": "FeatureCollection",
-"name": "manzanas1",
+"name": "manzanas",
 "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
 "features": [
 { "type": "Feature", "properties": { "id": null, "Territorio": 11, "Manzana": "A" }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -68.778955401695555, -32.922590707340063 ] ] } },
@@ -196,10 +196,6 @@ var manzanas={
 { "type": "Feature", "properties": { "id": null, "Territorio": 36, "Manzana": "C" }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -68.784325961118668, -32.91174341025075 ] ] } },
 { "type": "Feature", "properties": { "id": null, "Territorio": 36, "Manzana": "D" }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -68.783702008784346, -32.911870395201859 ] ] } },
 { "type": "Feature", "properties": { "id": null, "Territorio": 36, "Manzana": "E" }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -68.783008728412881, -32.911738119207165 ] ] } },
-{ "type": "Feature", "properties": { "id": null, "Territorio": 33, "Manzana": "A" }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -68.780985610237948, -32.909007898537723 ] ] } },
-{ "type": "Feature", "properties": { "id": null, "Territorio": 33, "Manzana": "B" }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -68.781105358665755, -32.909484105879372 ] ] } },
-{ "type": "Feature", "properties": { "id": null, "Territorio": 33, "Manzana": "D" }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -68.781451998851495, -32.910320108128097 ] ] } },
-{ "type": "Feature", "properties": { "id": null, "Territorio": 33, "Manzana": "C" }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -68.781061240823931, -32.910436512878377 ] ] } },
 { "type": "Feature", "properties": { "id": null, "Territorio": 33, "Manzana": "E" }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -68.782788139203774, -32.909722208589656 ] ] } },
 { "type": "Feature", "properties": { "id": null, "Territorio": 19, "Manzana": "A" }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -68.784429781662595, -32.927305204396461 ] ] } },
 { "type": "Feature", "properties": { "id": null, "Territorio": 19, "Manzana": "B" }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -68.782670340477864, -32.92844120183819 ] ] } },
