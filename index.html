@@ -196,12 +196,26 @@
 			border: 3px solid #374151; background: linear-gradient(180deg, #1f2937, #111827);
 			color: #22d3ee; border-radius: 14px; cursor: pointer; font-weight: 600; box-shadow: 0 6px 18px rgba(0,0,0,.35);
 			transition: transform .08s ease, box-shadow .2s ease, border-color .2s ease; position:fixed;
-			bottom:70px;right:30px; width: 200px; height: 50px;
+			bottom:130px;right:30px; width: 200px; height: 50px;
 		}
 		.boton-predicado:hover {
 			border-color: #22d3ee; box-shadow: 0 8px 24px rgba(34,211,238,.25);
 		}
 		.boton-predicado:active {
+			transform: translateY(1px);
+		}
+		
+		/*Botón para informar un nuevo NO VISITAR*/
+		.boton-novisitar {
+			border: 3px solid #374151; background: linear-gradient(180deg, #1f2937, #111827);
+			color: #22d3ee; border-radius: 14px; cursor: pointer; font-weight: 600; box-shadow: 0 6px 18px rgba(0,0,0,.35);
+			transition: transform .08s ease, box-shadow .2s ease, border-color .2s ease; position:fixed;
+			bottom:70px;right:30px; width: 200px; height: 50px;
+		}
+		.boton-novisitar:hover {
+			border-color: #22d3ee; box-shadow: 0 8px 24px rgba(34,211,238,.25);
+		}
+		.boton-novisitar:active {
 			transform: translateY(1px);
 		}
 		
@@ -213,7 +227,7 @@
 			border: 3px solid #374151; background: linear-gradient(180deg, #1f2937, #111827);
 			color: #22d3ee; border-radius: 14px; cursor: pointer; font-weight: 600; box-shadow: 0 6px 18px rgba(0,0,0,.35);
 			transition: transform .08s ease, box-shadow .2s ease, border-color .2s ease; position:fixed;
-			bottom:130px;right:30px; width: 200px; height: 50px;
+			bottom:190px;right:30px; width: 200px; height: 50px;
 		}
 		.boton-calendario:hover {
 			border-color: #22d3ee; box-shadow: 0 8px 24px rgba(34,211,238,.25);
@@ -515,13 +529,17 @@
 		<div class="controles">
 			<button  class="boton-calendario" id="botonsalidas" onclick="AbrirModalCalendario('modal1')">Salidas del mes...</button>
 		</div>
-		<!--Botón para recargar la página-->
-		<div class="controles">
-			<button id="botonrecargar" class="boton-recargar" onclick="location.reload()">Volver a empezar...</button>
-		</div>
 		<!--Botón para informar los territorios predicados-->
 		<div class="controles">
 			<button id="botonreportarpredicado" class="boton-predicado" onclick="ReportarPredicado()">¿Dirigiste una salida? Por favor, informá qué se predicó</button>
+		</div>
+		<!--Botón para informar NO VISITAR nuevos-->
+		<div class="controles">
+			<button id="botonreportarnovisitar" class="boton-novisitar" onclick="ReportarNoVisitar()">Una persona pidió que no la visitemos más...</button>
+		</div>
+		<!--Botón para recargar la página-->
+		<div class="controles">
+			<button id="botonrecargar" class="boton-recargar" onclick="location.reload()">Volver a empezar...</button>
 		</div>
 	</div>
 	
@@ -556,7 +574,7 @@
 			<label>Tu nombre: <input id="nombrepredicado" style="width:300px;"></label><br>
 			<label>Número del territorio: <input id="territoriopredicado" style="width:300px;"></label><br>
 			<label>¿Se predicó TODO el territorio?  <input type="checkbox" id="todopredicado">SI&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type="checkbox" id="algopredicado">NO</label><br><br>
-			<label id="manzanaspredicadas">Lo que se abarcó: <input id="abarcadopredicado" placeholder="Letras de las manzanas predicadas" style="width:300px;">#Por favor, no usés comas, punto y comas ni puntos. Separa las letras con espacio.</label><br><br>
+			<label id="manzanaspredicadas">Lo que se abarcó: <input id="abarcadopredicado" placeholder="Letras de las manzanas predicadas" style="width:300px;"></label><br><br>
 			<label id="leyendamanzanaspredicadas">Para identificar las manzanas, debés hacer Zoom en el territorio. Para ello, podés usar el símbolo + sobre el costado derecho, o tocar dos veces seguidas en el territorio o bien tocar la pantalla con dos dedos y separarlos lentamente.-</label><br><br>
 			<p></p>
 			<p></p>
@@ -564,6 +582,32 @@
 			<div style="text-align: center">
 				<button id="btn-cerrar-reporte" style="height:30px; width:150px; background-color:red;border-color:white;color:white;" onclick="CerrarModalReporte()">Cerrar</button>
 				<button id="btn-enviar-reporte" style="height:30px; width:150px; background-color:green;border-color:white;color:white;">Enviar información</button>
+			</div>
+			<p></p>
+			<p></p>
+			<pre id="enviandoreporte"></pre>
+		</p>
+	</div>
+	
+	<!--Modal para reportar una nueva casa NO VISITAR-->
+	<div class="modalflash" id="ModalReporteNoVisitar" style="font-size:15px;">
+		<div class="modalflash-cabecera" id="titulomodalnovisitar">¡¡¡ MUCHAS GRACIAS POR TOMARTE ESTE TIEMPITO...!!!</div>
+		<p></p>
+		<p class="modalflash-cuerpo" id="cuerpomodalnovisitar"><strong>Informar de una casa donde han pedido que no los volvamos a visitar, ayuda a resguardar la seguridad de nuestros hermanos y también puede ser una manera indirecta de dar testimonio.-</strong>
+			<p></p>
+			<label>Tu nombre: <input id="nombrenovisitar" style="width:300px;"></label><br>
+			<label>Fecha: <input id="fechanovisitar" type="date" style="width:300px;"></label><br>
+			<label>Dirección: <input id="direccionnovisitar" style="width:300px;"></label><br>
+			<label>Número del territorio: <input id="territorionovisitar" style="width:100px;"></label><br>
+			<label>La persona, ¿pidió expresamente que no la visitemos más?  <input type="checkbox" id="expresonovisitar">SI&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type="checkbox" id="noexpresonovisitar">NO</label><br><br>
+			<label id="motivonovisitar">Si la persona no dijo "NO QUIERO QUE ME VUELVAN A VISITAR", ¿Por qué considerás que no deberíamos volver?. ¿Qué te dijo y cómo actuó?  <input id="detallemotivonovisitar" placeholder="Indicá en detalles lo que te dijo e hizo la persona..." style="width:300px;"></label><br><br>
+			<label id="leyendadetallemotivonovisitar">Por favor, describí lo más claramente posible lo que te dijeron para evaluar si añadimos la casa a la lista de NO VISITAR.-</label><br><br>
+			<p></p>
+			<p></p>
+			<pre id="enviandoreportenovisitar"></pre>
+			<div style="text-align: center">
+				<button id="btn-cerrar-reportenovisitar" style="height:30px; width:150px; background-color:red;border-color:white;color:white;" onclick="CerrarModalNoVisitar()">Cerrar</button>
+				<button id="btn-enviar-reportenovisitar" style="height:30px; width:150px; background-color:green;border-color:white;color:white;">Enviar información</button>
 			</div>
 			<p></p>
 			<p></p>
@@ -1372,8 +1416,8 @@
 		};
 		<!--Establecer el área para el mapa y definir cuál será la capa base por defecto-->
 		var mapa = L.map('mapa', {editable:true,
-			center: ["-32.92740232843889", "-68.77696838564452"],
-			zoom: 16,
+			center: ["-32.9238842064728", "-68.77892492536746"],
+			zoom: 15,
 			layers: [osm],
 			zoomControl:false
 		});
@@ -1440,7 +1484,8 @@
 		var marcapuntosalida="";
 		var cartografiar="congregacion";
 		var listaterritorios=[];
-		var SCRIPT_URL = enlacepermisogoogledrive;
+		var SCRIPT_URL = enlacepermisogoogledriveterritoriospredicados;
+		var SCRIPT_URL1=enlacepermisogoogledrivenovisitar;
 		
 		// Crear grupo de puntos
 		var grupomanzanas = L.geoJSON(manzanas, {
@@ -1964,6 +2009,13 @@
 			VerificarConexion();
 			if (conexion==="si") {
 				VerificarGPS();
+				if (sistema_operativo==="Windows" || sistema_operativo==="Linux") {
+					titulomodalflash.innerText="TRAZAR RUTA";
+					cuerpomodalflash.innerHTML = '<span style="color:red"><br><b>Puede que la ubicación que te muestre NO SEA LA REAL.</b><br><br><span style="color:black">Parece que estás conectado desde una PC; por lo que la ubicación tal vez sea la de tu proveedor de internet; en vez del lugar donde estás.-<br></span>';
+					document.getElementById("btn-indicaciones-modal-flash").style.visibility='hidden';
+					tiempomodalflash=9000;
+					ModalFlash(tiempomodalflash);
+				};
 				document.getElementById("botoncentrado").style.visibility='visible';
 				mapa.locate({setView: false, watch: true, enableHighAccuracy: true});
 				mapa.on('locationfound', ActualizarUbicacion);
@@ -2125,7 +2177,7 @@
 			coordenadas_ubicacion_real="";
 			if (ruta) {ruta.remove()};
 			if (marcapuntosalida) {marcapuntosalida.remove()};
-			mapa.flyTo([-32.92744016451933, -68.77696929435363],16);
+			mapa.flyTo([-32.9238842064728, -68.77892492536746],15);
 		};
 
 		<!--Función para Trazar Ruta Sugerida con OSRM-->
@@ -2301,14 +2353,17 @@
 		document.getElementById("botoncentrado").style.visibility='hidden';
 		
 		//Activar/Desactivar/Mostrar/Ocultar/Ejecutar lo que corresponda al iniciar
-		//document.getElementById("gpson").style.visibility='hidden';
 		document.getElementById("btn-indicaciones-modal-flash").style.visibility='hidden';
 		document.getElementById("distancia").style.visibility='hidden';
 		document.getElementById("botoncentrado").style.visibility='hidden';
-		//document.getElementById("dondestoy").style.visibility='hidden';
 		document.getElementById("botonnorte").style.visibility='hidden';
 		document.getElementById("ModalReportePredicado").style.visibility='hidden';
 		document.getElementById("manzanaspredicadas").style.visibility='hidden';
+		document.getElementById("leyendamanzanaspredicadas").style.visibility='hidden';
+		document.getElementById("ModalReporteNoVisitar").style.visibility='hidden';
+		document.getElementById("motivonovisitar").style.visibility='hidden';
+		document.getElementById("detallemotivonovisitar").style.visibility='hidden';
+		document.getElementById("leyendadetallemotivonovisitar").style.visibility='hidden';
 		VerificarConexion();
 		VerificarVersion();
 		ModalFlash(tiempomodalflash);
@@ -2700,6 +2755,9 @@
 		<!--Función para cerrar el modal del reporte de lo predicado-->
 		function CerrarModalReporte () {
 			document.getElementById("ModalReportePredicado").style.visibility='hidden';
+			document.getElementById("manzanaspredicadas").style.visibility='hidden';
+			document.getElementById("leyendamanzanaspredicadas").style.visibility='hidden';
+			clearTimeout(temporizadorpredicado);
 		};
 		
 		<!--Función para revisar y enviar el reporte de lo predicado-->
@@ -2724,12 +2782,16 @@
 					const res = await fetch(SCRIPT_URL, { method: 'POST', body: fd });
 					const text = await res.text();
 					enviando.textContent = 'HTTP ' + res.status + '\\n' + text;
-					try {enviando.textContent ="Información enviada. Muchas gracias....!!!";document.getElementById('nombrepredicado').value="";document.getElementById('fechapredicado').value="";
-					document.getElementById('territoriopredicado').value="";document.getElementById('abarcadopredicado').value="";enviando.textContent ="";CerrarModalReporte()}
+					try {enviando.textContent ="Información enviada. Muchas gracias....!!!";
+						temporizadorpredicado=setTimeout(() => {
+							document.getElementById('nombrepredicado').value="";document.getElementById('fechapredicado').value="";
+							document.getElementById('territoriopredicado').value="";document.getElementById('abarcadopredicado').value="";
+							enviando.textContent ="";CerrarModalReporte()
+							}
+						, 5000)}
 					catch(e){};
 				} catch (err) {
-					enviando.textContent = 'Se produjo el siguiente error: ' + err;
-					console.error(err);
+					enviando.textContent = 'Hubo un error; por lo que no se pudo enviar la información. Por favor, intentalo nuevamente.-';
 				};
 			};
 		});
@@ -2749,6 +2811,78 @@
 				document.getElementById("manzanaspredicadas").style.visibility='visible';
 				document.getElementById("leyendamanzanaspredicadas").style.visibility='visible';
 				todopred.checked = false;
+			};
+		});
+		
+		<!--Función para enviar reporte de una nueva casa NO VISITAR-->
+		function ReportarNoVisitar() {
+			document.getElementById("ModalReporteNoVisitar").style.visibility='visible';
+		};
+		
+		<!--Función para cerrar el modal del reporte de NO VISITAR-->
+		function CerrarModalNoVisitar () {
+			document.getElementById("ModalReporteNoVisitar").style.visibility='hidden';
+			document.getElementById("motivonovisitar").style.visibility='hidden';
+			document.getElementById("detallemotivonovisitar").style.visibility='hidden';
+			document.getElementById("leyendadetallemotivonovisitar").style.visibility='hidden';
+			clearTimeout(temporizadornovisitar);
+		};
+		
+		<!--Función para revisar y enviar el reporte de NO VISITAR-->
+		document.getElementById('btn-enviar-reportenovisitar').addEventListener('click', async () => {
+			const enviando = document.getElementById('enviandoreportenovisitar');
+			if (document.getElementById('nombrenovisitar').value==="" || document.getElementById('territorionovisitar').value==="" || document.getElementById('fechanovisitar').value==="" || document.getElementById('direccionnovisitar').value===""
+			|| (!expresonovisitar.checked && !noexpresonovisitar.checked) || (noexpresonovisitar.checked && document.getElementById('detallemotivonovisitar').value==="")) {
+				if (document.getElementById('fechanovisitar').value==="") {document.getElementById("fechanovisitar").placeholder = "Por favor, ingresá alguna fecha aquí...";document.getElementById("fechanovisitar").focus()};
+				if (document.getElementById('nombrenovisitar').value==="") {document.getElementById("nombrenovisitar").placeholder = "Por favor, ingresá tu nombre aquí...";document.getElementById("nombrenovisitar").focus()};
+				if (document.getElementById('direccionnovisitar').value==="") {document.getElementById("direccionnovisitar").placeholder = "Por favor, ingresá la dirección de la casa aquí...";document.getElementById("direccionnovisitar").focus()};
+				if (document.getElementById('territorionovisitar').value==="") {document.getElementById("territorionovisitar").placeholder = "Por favor, ingresá el número del territorio aquí...";document.getElementById("territorionovisitar").focus()};
+				if (document.getElementById('detallemotivonovisitar').value==="") {document.getElementById("detallemotivonovisitar").placeholder = "Por favor, ingresá algún dato aquí...";document.getElementById("detallemotivonovisitar").focus()};
+				enviando.textContent = 'Por favor, revisá que falta algún dato...';
+			} else {
+				enviando.textContent = 'Enviando la información...';
+				const fd = new FormData();
+				fd.append('fecha', document.getElementById('fechanovisitar').value);
+				fd.append('direccion', document.getElementById('direccionnovisitar').value);
+				fd.append('territorio', document.getElementById('territorionovisitar').value);
+				if (expresonovisitar.checked) {fd.append('detalle', "Me lo dijo expresamente.")};
+				if (noexpresonovisitar.checked) {fd.append('detalle', document.getElementById('detallemotivonovisitar').value)};
+				fd.append('nombre', document.getElementById('nombrenovisitar').value);
+				try {
+					const res = await fetch(SCRIPT_URL1, { method: 'POST', body: fd });
+					const text = await res.text();
+					enviando.textContent = 'HTTP ' + res.status + '\\n' + text;
+					try {enviando.textContent ="Información enviada. Muchas gracias....!!!";
+						temporizadornovisitar=setTimeout(() => {
+							document.getElementById('nombrenovisitar').value="";document.getElementById('fechanovisitar').value="";
+							document.getElementById('territorionovisitar').value="";document.getElementById('detallemotivonovisitar').value="";document.getElementById('direccionnovisitar').value="";
+							enviando.textContent ="";CerrarModalNoVisitar()
+							}
+						, 5000)}
+					catch(e){};
+				} catch (err) {
+					enviando.textContent = 'Hubo un error; por lo que no se pudo enviar la información. Por favor, intentalo nuevamente.-';
+				};
+			};
+		});
+		
+		<!--Función para revisar si la persona dijo expresamente que NO LA VOLVIERAMOS A VISITAR-->
+		var expresonovisitar=document.getElementById("expresonovisitar");
+		var noexpresonovisitar=document.getElementById("noexpresonovisitar");
+		expresonovisitar.addEventListener('change', () => {
+			if (expresonovisitar.checked) {
+				document.getElementById("motivonovisitar").style.visibility='hidden';
+				document.getElementById("leyendadetallemotivonovisitar").style.visibility='hidden';
+				document.getElementById("detallemotivonovisitar").style.visibility='hidden';
+				noexpresonovisitar.checked = false;
+			};
+		});
+		noexpresonovisitar.addEventListener('change', () => {
+			if (noexpresonovisitar.checked) {
+				document.getElementById("motivonovisitar").style.visibility='visible';
+				document.getElementById("leyendadetallemotivonovisitar").style.visibility='visible';
+				document.getElementById("detallemotivonovisitar").style.visibility='visible';
+				expresonovisitar.checked = false;
 			};
 		});
 		
