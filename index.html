@@ -1486,8 +1486,8 @@
 		var marcapuntosalida="";
 		var cartografiar="congregacion";
 		var listaterritorios=[];
-		var SCRIPT_URL = enlacepermisogoogledriveterritoriospredicados;
-		var SCRIPT_URL1=enlacepermisogoogledrivenovisitar;
+		var url_script_territorios=driveterritorios;
+		var url_script_novisitar=drivenovisitar;
 		
 		// Crear grupo de puntos
 		var grupomanzanas = L.geoJSON(manzanas, {
@@ -2003,9 +2003,6 @@
 			seguimiento="si";
 			barralateral.close();
 			document.getElementById("gps").src="./images/slide_on.jpg";
-			//document.getElementById("gpson").style.visibility='visible';
-			//document.getElementById("gpsoff").style.visibility='hidden';
-			//document.getElementById("dondestoy").style.visibility='visible';
 			document.getElementById("activargps").style.visibility='hidden';
 			document.getElementById("ubicacion_estado").href="javascript:desactivar_seguimiento()";
 			VerificarConexion();
@@ -2781,7 +2778,7 @@
 				if (todopred.checked) {fd.append('abarcado', "Completo")};
 				if (partepred.checked) {fd.append('abarcado', document.getElementById('abarcadopredicado').value)};
 				try {
-					const res = await fetch(SCRIPT_URL, { method: 'POST', body: fd });
+					const res = await fetch(url_script_territorios, { method: 'POST', body: fd });
 					const text = await res.text();
 					enviando.textContent = 'HTTP ' + res.status + '\\n' + text;
 					try {enviando.textContent ="Información enviada. Muchas gracias....!!!";
@@ -2813,6 +2810,7 @@
 				document.getElementById("manzanaspredicadas").style.visibility='visible';
 				document.getElementById("leyendamanzanaspredicadas").style.visibility='visible';
 				todopred.checked = false;
+				document.getElementById("abarcadopredicado").focus();
 			};
 		});
 		
@@ -2851,7 +2849,7 @@
 				if (noexpresonovisitar.checked) {fd.append('detalle', document.getElementById('detallemotivonovisitar').value)};
 				fd.append('nombre', document.getElementById('nombrenovisitar').value);
 				try {
-					const res = await fetch(SCRIPT_URL1, { method: 'POST', body: fd });
+					const res = await fetch(url_script_novisitar, { method: 'POST', body: fd });
 					const text = await res.text();
 					enviando.textContent = 'HTTP ' + res.status + '\\n' + text;
 					try {enviando.textContent ="Información enviada. Muchas gracias....!!!";
@@ -2885,6 +2883,7 @@
 				document.getElementById("leyendadetallemotivonovisitar").style.visibility='visible';
 				document.getElementById("detallemotivonovisitar").style.visibility='visible';
 				expresonovisitar.checked = false;
+				document.getElementById("detallemotivonovisitar").focus();
 			};
 		});
 		
