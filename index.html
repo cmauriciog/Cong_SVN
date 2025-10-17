@@ -391,6 +391,54 @@
 			text-align: center;
 			text-shadow: 0 0 2px black;
 		}
+		
+		/*Bloque para resaltar lo NUEVO*/
+		/* Clase resaltado con animación */
+		.resaltarlonovedoso {
+			animation: palpitar 1s infinite ease-in-out, cambiarColor 2s infinite alternate;
+		}
+		/* Palpitar (latido) */
+		@keyframes palpitar {
+			0%   { transform: scale(1); }
+			50%  { transform: scale(1.15); }
+			100% { transform: scale(1); }
+		}
+		/* Cambiar color entre dos tonos */
+		@keyframes cambiarColor {
+			0%   { background-color: #f1c40f; color: red; }
+			50%  { background-color: #e67e22; color: yellow; }
+			100% { background-color: #f1c40f; color: red; }
+		}
+		
+		/*Bloque modal lo NUEVO*/
+		/* el elemento al que apunta la flecha del modal*/
+		/*.area-elemento-novedoso{gap:20px;}/*display:flex;gap:20px;align-items:center}*/*/
+		/* guía/tooltip */
+		.guide{
+			position:absolute;max-width:320px;padding:14px 16px;border-radius:10px;background:var(--modal-bg);box-shadow:0 8px 22px rgba(0,0,0,0.18);z-index:50;cursor:pointer;transform-origin:center top;transition:transform .14s ease,opacity .12s ease;opacity:0;transform:translateY(-6px);
+		}
+		.guide.show{opacity:1;transform:translateY(0)}
+
+		/* flecha: apuntando hacia abajo (modal encima del botón) */
+		.guide::after{
+			content:"";position:absolute;width:14px;height:14px;background:var(--modal-bg);transform:rotate(45deg);left:50%;transform-origin:center;box-shadow:0 4px 8px rgba(0,0,0,0.08);
+			/* se colocará con JS ajustando --arrow-x */
+			top:100%;margin-left:calc(var(--arrow-x, -7px));
+		}
+
+		/* cuando el modal está debajo del botón, usamos la clase bottom y movemos la flecha arriba */
+		.guide.bottom::after{top:auto;bottom:100%;}
+
+		/* texto dentro de la guía */
+		.guide h4{margin:0 0 6px 0;font-size:15px}
+		.guide p{margin:0;font-size:13px;color:#444}
+
+		/* estilo pequeño para indicar acción */
+		.hint{margin-top:10px;font-size:12px;color:#666}
+
+		@media (max-width:420px){
+			.guide{left:8px;right:8px;max-width:calc(100% - 16px)}
+		}
     </style>
 	<!--Icono para la pestaña del navegador-->
 	<link rel="shortcut icon" href="./images/Tetragramaton.ico" type="image/x-icon"/>
@@ -640,6 +688,13 @@
 			</div>
 			<div class="infosalidas" id="DetallesSalidas"></div>
 		</div>
+	</div>
+	
+	<!--Bloque Modal LO NUEVO-->
+	<div id="modalnovedoso" class="guide" role="dialog" aria-modal="true" style="display:none">
+		<h4>ESTO ES NUEVO...!!!</h4>
+		<p>Ahora, se puede hacer esto o lo otro desde aquí...</p>
+		<!--<div class="hint">Presiona Esc para cerrar también</div>-->
 	</div>
 	
 </body>
@@ -2054,8 +2109,10 @@
 				tiempomodalflash=5000;
 				ModalFlash(tiempomodalflash);
 			};
+			if (orientarme=="si" && distancia>1100) {cajadistancia.style.visibility="visible"};
+			if (orientarme=="si" && capa_territoriofiltradonumero) {cajadistancia.style.visibility="visible"};
 			if (distancia > 7 && orientarme=="si") {
-				cajadistancia.style.visibility="visible";
+				//cajadistancia.style.visibility="visible";
 				if (distancia>6000) {msg="¡Estás a unos "+(Math.round(distancia/1000).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" kilómetros del destino! (En línea recta).-"};
 				if (distancia<6001) {msg="¡Estás a unos "+(Math.round(distancia).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" metros del destino! (En línea recta).-"};
 				cajadistancia.textContent = msg;
@@ -2063,7 +2120,7 @@
 				cajadistancia.style.color = "#155724";
 			};
 			if (distancia <= 7 && orientarme=="si") {
-				cajadistancia.style.visibility="visible";
+				//cajadistancia.style.visibility="visible";
 				cajadistancia.textContent = "¡Has llegado a tu destino!";
 				cajadistancia.style.background = "#d4edda";
 				cajadistancia.style.color = "#155724";
@@ -2348,7 +2405,7 @@
 		const cajadistancia = document.getElementById("distancia");
 		const btncerrarmodalinicial=document.querySelector("#btn-cerrar-modal-inicial");
 		const modalinicial=document.querySelector("#modal_inicial");
-		btncerrarmodalinicial.addEventListener("click",()=>{modalinicial.close();});
+		btncerrarmodalinicial.addEventListener("click",()=>{modalinicial.close();openGuide()});
 		document.getElementById("botoncentrado").style.visibility='hidden';
 		
 		//Activar/Desactivar/Mostrar/Ocultar/Ejecutar lo que corresponda al iniciar
@@ -2904,5 +2961,113 @@
 		};
 		// Ejecutar cada vez que cambie el zoom
 		mapa.on("zoomend", ActualizarVistaManzanas);
+		
+		//Bloque para resaltar o remarcar lo nuevo
+		const elementonovedoso = document.getElementById('botonreportarnovisitar');
+		const modalnovedoso = document.getElementById('modalnovedoso');
+		// Fechas de inicio y fin para resaltar o remarcar una novedad (pueden incluir hora si querés)
+		const inicio = new Date("2025-10-15");
+		const fin = new Date("2025-10-28");
+		const hoy = new Date();
+		if (hoy >= inicio && hoy <= fin) {
+			console.log("Estamos dentro del plazo para mostrar la novedad...!!!.-");
+			elementonovedoso.classList.add('resaltarlonovedoso');
+			openGuide();
+			const tiempo = setTimeout(() => {
+				elementonovedoso.classList.remove('resaltarlonovedoso');
+			}, 10000);
+		};
+		
+		// Si el usuario hace clic, detiene la animación de inmediato
+		elementonovedoso.addEventListener('click', () => {
+			elementonovedoso.classList.remove('resaltarlonovedoso');
+			clearTimeout(tiempo);
+		});
+		//Detener al tocar en cualquier lugar de la pantalla
+		document.addEventListener('click', () => {
+			elementonovedoso.classList.remove('resaltarlonovedoso');
+		});
+		
+		//Bloque para el modal flotante sobre LO NUEVO
+		function openGuide(){
+			modalnovedoso.style.visibility = 'visible';
+			//overlay.classList.add('active');
+			// posicionar la guía apuntando al botón
+			positionGuide();
+			// animación de aparición
+			requestAnimationFrame(()=> modalnovedoso.classList.add('show'));
+			// accesibilidad
+			modalnovedoso.setAttribute('tabindex','-1');
+			modalnovedoso.focus();
+		}
+
+		function closeGuide(){
+			modalnovedoso.classList.remove('show');
+			//overlay.classList.remove('active');
+			// después de la transición, ocultamos
+			setTimeout(()=> modalnovedoso.style.display = 'none', 160);
+		}
+
+		function positionGuide(){
+			const btnRect = elementonovedoso.getBoundingClientRect();
+			const gRect = modalnovedoso.getBoundingClientRect();
+			const margin = 10; // separación mínima
+
+			// ancho disponible y cálculo base
+			const viewportW = document.documentElement.clientWidth;
+			const viewportH = document.documentElement.clientHeight;
+
+			// calculamos left centrado respecto al botón
+			let left = btnRect.left + (btnRect.width/2) - (gRect.width/2);
+			// recortamos para que no se salga de la pantalla
+			left = Math.max(8, Math.min(left, viewportW - gRect.width - 8));
+
+			// por defecto situamos arriba del botón
+			let top = btnRect.top - gRect.height - margin;
+			modalnovedoso.classList.remove('bottom');
+
+			// si no cabe arriba, lo ponemos abajo
+			if(top < 8){
+			top = btnRect.bottom + margin;
+			modalnovedoso.classList.add('bottom');
+			}
+
+			modalnovedoso.style.left = left + 'px';
+			modalnovedoso.style.top = top + 'px';
+
+			// posicionamos la flecha horizontalmente para que apunte al centro del botón
+			// calculamos la diferencia entre el centro del modal y el centro del botón
+			const modalCenterX = left + gRect.width/2;
+			const btnCenterX = btnRect.left + btnRect.width/2;
+			// queremos que --arrow-x sea la mitad de la flecha (negativa) + offset para centrar
+			const arrowOffset = btnCenterX - modalCenterX;
+			// la pseudo-element tiene left:50% y margin-left: calc(var(--arrow-x, -7px))
+			// así que ponemos --arrow-x en px
+			modalnovedoso.style.setProperty('--arrow-x', (arrowOffset - 7) + 'px');
+			console.log("¿....?");
+		}
+
+		// abrir con el botón
+		//openBtn.addEventListener('click', openGuide);
+
+		// reposicionar si hay resize o scroll
+		window.addEventListener('resize', ()=>{
+			if(modalnovedoso.style.display !== 'none') positionGuide();
+		});
+		window.addEventListener('scroll', ()=>{
+			if(modalnovedoso.style.display !== 'none') positionGuide();
+		}, {passive:true});
+
+		// cerrar al hacer click fuera (overlay) o dentro (guide)
+		//overlay.addEventListener('click', closeGuide);
+		modalnovedoso.addEventListener('click', closeGuide);
+
+		// tambien cerrar con escape
+		document.addEventListener('keydown', (e)=>{
+			if(e.key === 'Escape') closeGuide();
+		});
+
+		// si el usuario hace scroll dentro del body (p. ej. mobile) reposicionamos para mantener la flecha alineada
+		// ya cubierto por scroll listener
 	</script>
 </html>
