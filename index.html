@@ -400,14 +400,14 @@
 		/* Palpitar (latido) */
 		@keyframes palpitar {
 			0%   { transform: scale(1); }
-			50%  { transform: scale(1.15); }
+			50%  { transform: scale(1.8); }
 			100% { transform: scale(1); }
 		}
 		/* Cambiar color entre dos tonos */
 		@keyframes cambiarColor {
-			0%   { background-color: #f1c40f; color: red; }
-			50%  { background-color: #e67e22; color: yellow; }
-			100% { background-color: #f1c40f; color: red; }
+			0%   {background: #F4A60B; color: red;}
+			50%  {background: #011806; color: yellow;}
+			100% {background: #F4A60B; color: red;}
 		}
 		
 		/*Bloque modal lo NUEVO*/
@@ -2063,7 +2063,7 @@
 			VerificarConexion();
 			if (conexion==="si") {
 				VerificarGPS();
-				if (sistema_operativo==="Windows" || sistema_operativo==="Linux") {
+				if (sistema_operativo=="Windows" || sistema_operativo=="Linux") {
 					titulomodalflash.innerText="TRAZAR RUTA";
 					cuerpomodalflash.innerHTML = '<span style="color:red"><br><b>Puede que la ubicación que te muestre NO SEA LA REAL.</b><br><br><span style="color:black">Parece que estás conectado desde una PC; por lo que la ubicación tal vez sea la de tu proveedor de internet; en vez del lugar donde estás.-<br></span>';
 					document.getElementById("btn-indicaciones-modal-flash").style.visibility='hidden';
@@ -2180,6 +2180,20 @@
 			};
 		};
 		
+		function checkInside(coords) {
+			const pt = turf.point([coords.lng, coords.lat]);
+			let found = null;
+			for (const f of perimetro.features) {
+				if (["Polygon", "MultiPolygon"].includes(f.geometry.type)) {
+					if (turf.booleanPointInPolygon(pt, f)) {
+						found = f;
+						break;
+					}
+				}
+			}
+			return found;
+		};
+		
 		// Función para detener geolocalización
 		function DetenerActualizarUbicacion() {
 			orientarme="no";
@@ -2247,6 +2261,8 @@
 			document.getElementById("btn-indicaciones-modal-flash").style.visibility='hidden';
 			document.getElementById("MiModalFlash").style.visibility='hidden';
 			distancia=DistanciaEnTiempoReal();
+			//const dentro = checkInside(coordenadas_ubicacion_real);
+			//alert(dentro);
 			cajadistancia.style.visibility="visible";
 			if (distancia>6000) {msg="¡Estás a unos "+(Math.round(distancia/1000).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" kilómetros del destino! (En línea recta).-"};
 			if (distancia<6001) {msg="¡Estás a unos "+(Math.round(distancia).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" metros del destino! (En línea recta).-"};
@@ -2286,21 +2302,21 @@
 				if (actualizarruta=="si") {const centrar = L.latLngBounds(coordenadas_ubicacion_real, puntomascercano);mapa.fitBounds(centrar, {padding: [50, 50]});};
 				const osrmUrl = `https://router.project-osrm.org/route/v1/driving/${coordenadas_ubicacion_real.lng},${coordenadas_ubicacion_real.lat};${puntomascercano.lng},${puntomascercano.lat}?overview=full&geometries=geojson`;
 				//Solicito la ruta y la dibujo con animación
-				fetch(osrmUrl)
-					.then(response => response.json())
-					.then(data => {
-						if (data.routes && data.routes.length > 0) {
-							const route = data.routes[0].geometry;
-							// Convertimos las coordenadas de GeoJSON a un formato que Leaflet entienda
-							const latlngs = route.coordinates.map(coord => [coord[1], coord[0]]);
-						};
-					})
-					.catch(error => {
-						titulomodalflash.innerText="PROBLEMAS PARA SUGERIR UNA RUTA";
-						cuerpomodalflash.innerHTML = '<span style="color:red"><br><b>El servidor de OSRM no puede sugerirte una ruta en este momento.-</span>';
-						tiempomodalflash=5000;
-						ModalFlash(tiempomodalflash);
-					});
+				//fetch(osrmUrl)
+				//	.then(response => response.json())
+				//	.then(data => {
+				//		if (data.routes && data.routes.length > 0) {
+				//			const route = data.routes[0].geometry;
+				//			// Convertimos las coordenadas de GeoJSON a un formato que Leaflet entienda
+				//			const latlngs = route.coordinates.map(coord => [coord[1], coord[0]]);
+				//		};
+				//	})
+				//	.catch(error => {
+				//		titulomodalflash.innerText="PROBLEMAS PARA SUGERIR UNA RUTA";
+				//		cuerpomodalflash.innerHTML = '<span style="color:red"><br><b>El servidor de OSRM no puede sugerirte una ruta en este momento.-</span>';
+				//		tiempomodalflash=5000;
+				//		ModalFlash(tiempomodalflash);
+				//	});
 					
 				actualizarruta=setInterval(()=>{
 					if (ruta) {ruta.remove()};
@@ -2975,17 +2991,15 @@
 			openGuide();
 			const tiempo = setTimeout(() => {
 				elementonovedoso.classList.remove('resaltarlonovedoso');
-			}, 10000);
+			}, 12000);
 		};
-		
-		// Si el usuario hace clic, detiene la animación de inmediato
-		elementonovedoso.addEventListener('click', () => {
-			elementonovedoso.classList.remove('resaltarlonovedoso');
-			clearTimeout(tiempo);
-		});
 		//Detener al tocar en cualquier lugar de la pantalla
-		document.addEventListener('click', () => {
-			elementonovedoso.classList.remove('resaltarlonovedoso');
+		//document.addEventListener('click', () => {
+		//	elementonovedoso.classList.remove('resaltarlonovedoso');
+		//});
+		// Tambien cerrar con escape
+		document.addEventListener('keydown', (e)=>{
+			if(e.key === 'Escape') elementonovedoso.classList.remove('resaltarlonovedoso');
 		});
 		
 		//Bloque para el modal flotante sobre LO NUEVO
