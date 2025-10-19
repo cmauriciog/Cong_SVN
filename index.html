@@ -25,6 +25,8 @@
 	crossorigin=""></script>
 	<!-- Turf.js para cálculos geométricos -->
 	<script src="https://unpkg.com/@turf/turf/turf.min.js"></script>
+	<!--Evitar recarga de caché por si hay actualizaciones-->
+	<script src="app.js?v=<?= Date.now() ?>"></script>
 	<!-- CSS -->
 	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
@@ -2063,7 +2065,8 @@
 			VerificarConexion();
 			if (conexion==="si") {
 				VerificarGPS();
-				if (sistema_operativo=="Windows" || sistema_operativo=="Linux") {
+				if (sistema_operativo==="Windows") {alert(sistema_operativo)};
+				if (sistema_operativo=="Windows" || sistema_operativo=="Linux" || sistema_operativo=="MacOS") {
 					titulomodalflash.innerText="TRAZAR RUTA";
 					cuerpomodalflash.innerHTML = '<span style="color:red"><br><b>Puede que la ubicación que te muestre NO SEA LA REAL.</b><br><br><span style="color:black">Parece que estás conectado desde una PC; por lo que la ubicación tal vez sea la de tu proveedor de internet; en vez del lugar donde estás.-<br></span>';
 					document.getElementById("btn-indicaciones-modal-flash").style.visibility='hidden';
@@ -2112,7 +2115,7 @@
 			if (orientarme=="si" && distancia>1100) {cajadistancia.style.visibility="visible"};
 			if (orientarme=="si" && capa_territoriofiltradonumero) {cajadistancia.style.visibility="visible"};
 			if (distancia > 7 && orientarme=="si") {
-				//cajadistancia.style.visibility="visible";
+				cajadistancia.style.visibility="visible";
 				if (distancia>6000) {msg="¡Estás a unos "+(Math.round(distancia/1000).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" kilómetros del destino! (En línea recta).-"};
 				if (distancia<6001) {msg="¡Estás a unos "+(Math.round(distancia).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" metros del destino! (En línea recta).-"};
 				cajadistancia.textContent = msg;
@@ -2120,7 +2123,7 @@
 				cajadistancia.style.color = "#155724";
 			};
 			if (distancia <= 7 && orientarme=="si") {
-				//cajadistancia.style.visibility="visible";
+				cajadistancia.style.visibility="visible";
 				cajadistancia.textContent = "¡Has llegado a tu destino!";
 				cajadistancia.style.background = "#d4edda";
 				cajadistancia.style.color = "#155724";
@@ -2261,8 +2264,8 @@
 			document.getElementById("btn-indicaciones-modal-flash").style.visibility='hidden';
 			document.getElementById("MiModalFlash").style.visibility='hidden';
 			distancia=DistanciaEnTiempoReal();
-			//const dentro = checkInside(coordenadas_ubicacion_real);
-			//alert(dentro);
+			const dentro = checkInside(coordenadas_ubicacion_real);
+			alert(dentro);
 			cajadistancia.style.visibility="visible";
 			if (distancia>6000) {msg="¡Estás a unos "+(Math.round(distancia/1000).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" kilómetros del destino! (En línea recta).-"};
 			if (distancia<6001) {msg="¡Estás a unos "+(Math.round(distancia).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" metros del destino! (En línea recta).-"};
