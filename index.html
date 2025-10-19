@@ -2065,7 +2065,7 @@
 			VerificarConexion();
 			if (conexion==="si") {
 				VerificarGPS();
-				if (sistema_operativo==="Windows") {alert(sistema_operativo)};
+				//if (sistema_operativo==="Windows") {alert(sistema_operativo)};
 				if (sistema_operativo=="Windows" || sistema_operativo=="Linux" || sistema_operativo=="MacOS") {
 					titulomodalflash.innerText="TRAZAR RUTA";
 					cuerpomodalflash.innerHTML = '<span style="color:red"><br><b>Puede que la ubicación que te muestre NO SEA LA REAL.</b><br><br><span style="color:black">Parece que estás conectado desde una PC; por lo que la ubicación tal vez sea la de tu proveedor de internet; en vez del lugar donde estás.-<br></span>';
@@ -2095,6 +2095,7 @@
 				coordenadas_ubicacion_real=e.latlng;
 				mapa.setView(coordenadas_ubicacion_real, 17);
 			};
+			//console.log(coordenadas_ubicacion_real,typeof(coordenadas_ubicacion_real));
 			distancia=DistanciaEnTiempoReal();
 			if (distancia>2200 && orientarme=="no") {
 				titulomodalflash.innerText="TRAZAR RUTA";
@@ -2264,8 +2265,8 @@
 			document.getElementById("btn-indicaciones-modal-flash").style.visibility='hidden';
 			document.getElementById("MiModalFlash").style.visibility='hidden';
 			distancia=DistanciaEnTiempoReal();
-			const dentro = checkInside(coordenadas_ubicacion_real);
-			alert(dentro);
+			//const dentro = checkInside({lat:-32.92528654005454, lng:-68.7794140383554});//coordenadas_ubicacion_real);
+			//alert(dentro);
 			cajadistancia.style.visibility="visible";
 			if (distancia>6000) {msg="¡Estás a unos "+(Math.round(distancia/1000).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" kilómetros del destino! (En línea recta).-"};
 			if (distancia<6001) {msg="¡Estás a unos "+(Math.round(distancia).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" metros del destino! (En línea recta).-"};
@@ -2989,7 +2990,7 @@
 		const fin = new Date("2025-10-28");
 		const hoy = new Date();
 		if (hoy >= inicio && hoy <= fin) {
-			console.log("Estamos dentro del plazo para mostrar la novedad...!!!.-");
+			//console.log("Estamos dentro del plazo para mostrar la novedad...!!!.-");
 			elementonovedoso.classList.add('resaltarlonovedoso');
 			openGuide();
 			const tiempo = setTimeout(() => {
@@ -3061,7 +3062,7 @@
 			// la pseudo-element tiene left:50% y margin-left: calc(var(--arrow-x, -7px))
 			// así que ponemos --arrow-x en px
 			modalnovedoso.style.setProperty('--arrow-x', (arrowOffset - 7) + 'px');
-			console.log("¿....?");
+			//console.log("¿....?");
 		}
 
 		// abrir con el botón
