@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+	<!--Evitar recarga de caché por si hay actualizaciones-->
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+	<meta http-equiv="Pragma" content="no-cache">
+	<meta http-equiv="Expires" content="0">
+	<!---->
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -25,8 +30,6 @@
 	crossorigin=""></script>
 	<!-- Turf.js para cálculos geométricos -->
 	<script src="https://unpkg.com/@turf/turf/turf.min.js"></script>
-	<!--Evitar recarga de caché por si hay actualizaciones-->
-	<script src="app.js?v=<?= Date.now() ?>"></script>
 	<!-- CSS -->
 	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
@@ -620,18 +623,17 @@
 		<p></p>
 		<p class="modalflash-cuerpo" id="cuerpomodalpredicado"><strong>Estos registros ayudan a predicar a conciencia nuestro territorio</strong>
 			<p></p>
-			<label>Fecha: <input id="fechapredicado" type="date" style="width:300px;"></label><br>
-			<label>Tu nombre: <input id="nombrepredicado" style="width:300px;"></label><br>
-			<label>Número del territorio: <input id="territoriopredicado" style="width:300px;"></label><br>
+			<label>Fecha: <input id="fechapredicado" type="date" style="width:50%;"></label><br>
+			<label>Tu nombre: <input id="nombrepredicado" style="width:50%;"></label><br>
+			<label>Número del territorio: <input id="territoriopredicado" style="width:50%;"></label><br>
 			<label>¿Se predicó TODO el territorio?  <input type="checkbox" id="todopredicado">SI&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type="checkbox" id="algopredicado">NO</label><br><br>
-			<label id="manzanaspredicadas">Lo que se abarcó: <input id="abarcadopredicado" placeholder="Letras de las manzanas predicadas" style="width:300px;"></label><br><br>
-			<label id="leyendamanzanaspredicadas">Para identificar las manzanas, debés hacer Zoom en el territorio. Para ello, podés usar el símbolo + sobre el costado derecho, o tocar dos veces seguidas en el territorio o bien tocar la pantalla con dos dedos y separarlos lentamente.-</label><br><br>
-			<p></p>
+			<label id="manzanaspredicadas">Lo que se abarcó: <input id="abarcadopredicado" placeholder="Letras de las manzanas predicadas" style="width:50%;"></label><br><br>
+			<label id="leyendamanzanaspredicadas">Para identificar las manzanas, debés hacer Zoom en el territorio. Para ello, podés usar el símbolo + sobre el costado derecho, o tocar dos veces seguidas en el territorio o bien tocar la pantalla con dos dedos y separarlos lentamente.-</label>
 			<p></p>
 			<pre id="enviandoreporte"></pre>
 			<div style="text-align: center">
-				<button id="btn-cerrar-reporte" style="height:30px; width:150px; background-color:red;border-color:white;color:white;" onclick="CerrarModalReporte()">Cerrar</button>
-				<button id="btn-enviar-reporte" style="height:30px; width:150px; background-color:green;border-color:white;color:white;">Enviar información</button>
+				<button id="btn-cerrar-reporte" style="height:35px; width:30%; background-color:red;border-color:white;color:white;" onclick="CerrarModalReporte()">Cerrar</button>
+				<button id="btn-enviar-reporte" style="height:35px; width:30%; background-color:green;border-color:white;color:white;">Enviar información</button>
 			</div>
 			<p></p>
 			<p></p>
@@ -1512,6 +1514,7 @@
 		var buscar="territorio";
 		var distancia="";
 		var lugar="";
+		var dentropredio="";
 		var nada=L.layerGroup();
 		var barrio=null;
 		var no_visitar=null;
@@ -2057,7 +2060,6 @@
 		
 		function activar_seguimiento() {
 			sondeo_posicion=0;
-			seguimiento="si";
 			barralateral.close();
 			document.getElementById("gps").src="./images/slide_on.jpg";
 			document.getElementById("activargps").style.visibility='hidden';
@@ -2065,14 +2067,14 @@
 			VerificarConexion();
 			if (conexion==="si") {
 				VerificarGPS();
-				//if (sistema_operativo==="Windows") {alert(sistema_operativo)};
-				if (sistema_operativo=="Windows" || sistema_operativo=="Linux" || sistema_operativo=="MacOS") {
+				if ((sistema_operativo=="Windows" || sistema_operativo=="Linux" || sistema_operativo=="MacOS") && seguimiento=="no") {
 					titulomodalflash.innerText="TRAZAR RUTA";
 					cuerpomodalflash.innerHTML = '<span style="color:red"><br><b>Puede que la ubicación que te muestre NO SEA LA REAL.</b><br><br><span style="color:black">Parece que estás conectado desde una PC; por lo que la ubicación tal vez sea la de tu proveedor de internet; en vez del lugar donde estás.-<br></span>';
 					document.getElementById("btn-indicaciones-modal-flash").style.visibility='hidden';
 					tiempomodalflash=9000;
 					ModalFlash(tiempomodalflash);
 				};
+				seguimiento="si";
 				document.getElementById("botoncentrado").style.visibility='visible';
 				mapa.locate({setView: false, watch: true, enableHighAccuracy: true});
 				mapa.on('locationfound', ActualizarUbicacion);
@@ -2095,9 +2097,13 @@
 				coordenadas_ubicacion_real=e.latlng;
 				mapa.setView(coordenadas_ubicacion_real, 17);
 			};
-			//console.log(coordenadas_ubicacion_real,typeof(coordenadas_ubicacion_real));
 			distancia=DistanciaEnTiempoReal();
-			if (distancia>2200 && orientarme=="no") {
+			const dentro = ChequearPredio(coordenadas_ubicacion_real);//{lat:"-32.92738990461459", lng:"-68.77720752661189"});//coordenadas_ubicacion_real);
+			if (!dentro || dentro==null) {
+				dentropredio=""} else {dentropredio="si"};
+			console.log(dentropredio);
+			//if (distancia>2200 && orientarme=="no") {
+			if (orientarme=="no" && dentropredio=="") {
 				titulomodalflash.innerText="TRAZAR RUTA";
 				cuerpomodalflash.innerHTML = '<span style="color:green"><br><b>¿Necesitás ayuda para llegar?.</b><br><br><span style="color:black">Puedo trazarte una ruta '+
 				'a partir de tu ubicación actual y brindarte algunas indicaciones.-<br></span>';
@@ -2105,7 +2111,8 @@
 				tiempomodalflash=5000;
 				ModalFlash(tiempomodalflash);
 			};
-			if (distancia<=2200 && distancia>7 && orientarme=="no") {
+			//if (distancia<=2200 && distancia>7 && orientarme=="no") {
+			if (orientarme=="no" && dentropredio=="si" && distancia>7) {
 				titulomodalflash.innerText="TRAZAR RUTA";
 				cuerpomodalflash.innerHTML = '<span style="color:green"><br><b>¿Necesitás ayuda para llegar?.</b><br><br><span style="color:black">Puedo mostrarte en tiempo real por dónde vas '+
 				'y el destino con vista de ambos puntos en el mapa.-<br></span>';
@@ -2113,8 +2120,9 @@
 				tiempomodalflash=5000;
 				ModalFlash(tiempomodalflash);
 			};
-			if (orientarme=="si" && distancia>1100) {cajadistancia.style.visibility="visible"};
-			if (orientarme=="si" && capa_territoriofiltradonumero) {cajadistancia.style.visibility="visible"};
+			//if (orientarme=="si" && distancia>1100) {cajadistancia.style.visibility="visible"};
+			//if (orientarme=="si" && capa_territoriofiltradonumero) {cajadistancia.style.visibility="visible"};
+			if (orientarme=="si" && (dentropredio=="" || capa_territoriofiltrado)) {cajadistancia.style.visibility="visible"};
 			if (distancia > 7 && orientarme=="si") {
 				cajadistancia.style.visibility="visible";
 				if (distancia>6000) {msg="¡Estás a unos "+(Math.round(distancia/1000).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" kilómetros del destino! (En línea recta).-"};
@@ -2184,7 +2192,7 @@
 			};
 		};
 		
-		function checkInside(coords) {
+		function ChequearPredio(coords) {
 			const pt = turf.point([coords.lng, coords.lat]);
 			let found = null;
 			for (const f of perimetro.features) {
@@ -2237,6 +2245,7 @@
 			barralateral.close();
 			seguimiento="no";
 			avisollegada="";
+			dentropredio="";
 			document.getElementById("gps").src="./images/slide_off.jpg";
 			//document.getElementById("gpson").style.visibility='hidden';
 			//document.getElementById("gpsoff").style.visibility='visible';
@@ -2265,9 +2274,11 @@
 			document.getElementById("btn-indicaciones-modal-flash").style.visibility='hidden';
 			document.getElementById("MiModalFlash").style.visibility='hidden';
 			distancia=DistanciaEnTiempoReal();
-			//const dentro = checkInside({lat:-32.92528654005454, lng:-68.7794140383554});//coordenadas_ubicacion_real);
-			//alert(dentro);
-			cajadistancia.style.visibility="visible";
+			const dentro = ChequearPredio(coordenadas_ubicacion_real);//{lat:"-32.92738990461459", lng:"-68.77720752661189"});//coordenadas_ubicacion_real);
+			if (!dentro || dentro==null) {
+				dentropredio=""} else {dentropredio="si"};
+			console.log(dentropredio);
+			if (orientarme=="si" && (dentropredio=="" || capa_territoriofiltrado)) {cajadistancia.style.visibility="visible"};
 			if (distancia>6000) {msg="¡Estás a unos "+(Math.round(distancia/1000).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" kilómetros del destino! (En línea recta).-"};
 			if (distancia<6001) {msg="¡Estás a unos "+(Math.round(distancia).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" metros del destino! (En línea recta).-"};
 			cajadistancia.textContent = msg;
@@ -2304,7 +2315,7 @@
 				}).addTo(mapa);
 				//Centrar el mapa para que se vean ubicación en tiempo real y EEA ó Sector/Persona buscado **SOLO la primera vez**
 				if (actualizarruta=="si") {const centrar = L.latLngBounds(coordenadas_ubicacion_real, puntomascercano);mapa.fitBounds(centrar, {padding: [50, 50]});};
-				const osrmUrl = `https://router.project-osrm.org/route/v1/driving/${coordenadas_ubicacion_real.lng},${coordenadas_ubicacion_real.lat};${puntomascercano.lng},${puntomascercano.lat}?overview=full&geometries=geojson`;
+				//const osrmUrl = `https://router.project-osrm.org/route/v1/driving/${coordenadas_ubicacion_real.lng},${coordenadas_ubicacion_real.lat};${puntomascercano.lng},${puntomascercano.lat}?overview=full&geometries=geojson`;
 				//Solicito la ruta y la dibujo con animación
 				//fetch(osrmUrl)
 				//	.then(response => response.json())
@@ -2347,23 +2358,23 @@
 						});
 					}
 					}).addTo(mapa);
-					const osrmUrl = `https://router.project-osrm.org/route/v1/driving/${coordenadas_ubicacion_real.lng},${coordenadas_ubicacion_real.lat};${puntomascercano.lng},${puntomascercano.lat}?overview=full&geometries=geojson`;
+					//const osrmUrl = `https://router.project-osrm.org/route/v1/driving/${coordenadas_ubicacion_real.lng},${coordenadas_ubicacion_real.lat};${puntomascercano.lng},${puntomascercano.lat}?overview=full&geometries=geojson`;
 					//Solicito la ruta y la dibujo con animación
-					fetch(osrmUrl)
-						.then(response => response.json())
-						.then(data => {
-							if (data.routes && data.routes.length > 0) {
-								const route = data.routes[0].geometry;
-								// Convertimos las coordenadas de GeoJSON a un formato que Leaflet entienda
-								const latlngs = route.coordinates.map(coord => [coord[1], coord[0]]);
-							};
-						})
-						.catch(error => {
-							titulomodalflash.innerText="PROBLEMAS PARA SUGERIR UNA RUTA";
-							cuerpomodalflash.innerHTML = '<span style="color:red"><br><b>El servidor de OSRM no puede sugerirte una ruta en este momento.-</span>';
-							tiempomodalflash=5000;
-							ModalFlash(tiempomodalflash);
-						});
+					//fetch(osrmUrl)
+					//	.then(response => response.json())
+					//	.then(data => {
+					//		if (data.routes && data.routes.length > 0) {
+					//			const route = data.routes[0].geometry;
+					//			// Convertimos las coordenadas de GeoJSON a un formato que Leaflet entienda
+					//			const latlngs = route.coordinates.map(coord => [coord[1], coord[0]]);
+					//		};
+					//	})
+					//	.catch(error => {
+					//		titulomodalflash.innerText="PROBLEMAS PARA SUGERIR UNA RUTA";
+					//		cuerpomodalflash.innerHTML = '<span style="color:red"><br><b>El servidor de OSRM no puede sugerirte una ruta en este momento.-</span>';
+					//		tiempomodalflash=5000;
+					//		ModalFlash(tiempomodalflash);
+					//	});
 				},300000);
 			};
 		};
