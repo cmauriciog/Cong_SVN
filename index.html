@@ -3399,9 +3399,10 @@
 		VerificarConexion();
 		VerificarVersion();
 		VerificarNoVolverAMostrar();
-		if (sistema_operativo=="Windows Phone" || sistema_operativo=="Android" || sistema_operativo=="iOS (iPad o iPhone)") {dispositivo="movil"; alert(dispositivo);mapa.style.height = "80%"}
+		if (sistema_operativo=="Windows Phone" || sistema_operativo=="Android" || sistema_operativo=="iOS (iPad o iPhone)") {dispositivo="movil";mapa.style.height = "80%"}
 		else if (sistema_operativo=="Windows" || sistema_operativo=="MacOS" || sistema_operativo=="Linux") {dispositivo="pc"}
 		else {dispositivo="desconocido"};
+		//alert("-"+dispositivo+"-");
 		window.addEventListener("load", async () => {
 			//const enviando = document.getElementById('Resultado');
 			//enviando.textContent = 'Enviando la información...';
