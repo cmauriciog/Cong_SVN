@@ -709,12 +709,11 @@
 			<label id="manzanaspredicadas">Lo que se abarcó: <input id="abarcadopredicado" placeholder="Letras de las manzanas predicadas" style="width:50%;"></label><br><br>
 			<label id="leyendamanzanaspredicadas">Para identificar las manzanas, debés hacer Zoom en el territorio. Para ello, podés usar el símbolo + sobre el costado derecho, o tocar dos veces seguidas en el territorio o bien tocar la pantalla con dos dedos y separarlos lentamente.-</label>
 			<p></p>
-			<pre id="enviandoreporte"></pre>
+			<pre id="enviandoreporte" style="font-family: 'Arial'; font-weight: bold;"></pre>
 			<div style="text-align: center">
 				<button id="btn-cerrar-reporte" style="height:35px; width:30%; background-color:red;border-color:white;color:white;" onclick="CerrarModalReporte()">Cerrar</button>
 				<button id="btn-enviar-reporte" style="height:35px; width:30%; background-color:green;border-color:white;color:white;">Enviar</button>
 			</div>
-			<!--<pre id="enviandoreporte"></pre>-->
 		</p>
 	</div>
 	
@@ -732,12 +731,11 @@
 			<label id="motivonovisitar">Si la persona no dijo "NO QUIERO QUE ME VUELVAN A VISITAR", ¿Por qué considerás que no deberíamos volver?. ¿Qué te dijo y cómo actuó?  <input id="detallemotivonovisitar" placeholder="Indicá en detalles lo que te dijo e hizo la persona..." style="width:50%;"></label>
 			<label id="leyendadetallemotivonovisitar">Por favor, describí lo más claramente posible lo que te dijeron para evaluar si añadimos la casa a la lista de NO VISITAR.-</label>
 			<p></p>
-			<pre id="enviandoreportenovisitar"></pre>
+			<pre id="enviandoreportenovisitar" style="font-family: 'Arial'; font-weight: bold;"></pre>
 			<div style="text-align: center">
 				<button id="btn-cerrar-reportenovisitar" style="height:30px; width:30%; background-color:red;border-color:white;color:white;" onclick="CerrarModalNoVisitar()">Cerrar</button>
 				<button id="btn-enviar-reportenovisitar" style="height:30px; width:30%; background-color:green;border-color:white;color:white;">Enviar</button>
 			</div>
-			<!--<pre id="enviandoreportenovisitar"></pre>-->
 		</p>
 	</div>
 	
@@ -3083,6 +3081,11 @@
 		
 		<!--Función para cerrar el modal del reporte de lo predicado-->
 		function CerrarModalReporte () {
+			document.getElementById("leyendamanzanaspredicadas").style.display = "block";
+			document.getElementById("todopredicado").checked = false; document.getElementById("algopredicado").checked = false;
+			document.getElementById('nombrepredicado').value="";document.getElementById('fechapredicado').value="";
+			document.getElementById('territoriopredicado').value="";document.getElementById('abarcadopredicado').value="";
+			document.getElementById("enviandoreporte").textContent ="";
 			document.getElementById("ModalReportePredicado").style.visibility='hidden';
 			document.getElementById("manzanaspredicadas").style.visibility='hidden';
 			document.getElementById("leyendamanzanaspredicadas").style.visibility='hidden';
@@ -3092,14 +3095,17 @@
 		<!--Función para revisar y enviar el reporte de lo predicado-->
 		document.getElementById('btn-enviar-reporte').addEventListener('click', async () => {
 			const enviando = document.getElementById('enviandoreporte');
+			document.getElementById("leyendamanzanaspredicadas").style.display = "none";
 			if (document.getElementById('nombrepredicado').value==="" || document.getElementById('territoriopredicado').value==="" || document.getElementById('fechapredicado').value===""
 			|| (!todopred.checked && !partepred.checked) || (partepred.checked && document.getElementById('abarcadopredicado').value==="")) {
 				if (document.getElementById('fechapredicado').value==="") {document.getElementById("fechapredicado").placeholder = "Por favor, ingresá alguna fecha aquí...";document.getElementById("fechapredicado").focus()};
 				if (document.getElementById('nombrepredicado').value==="") {document.getElementById("nombrepredicado").placeholder = "Por favor, ingresá tu nombre aquí...";document.getElementById("nombrepredicado").focus()};
 				if (document.getElementById('territoriopredicado').value==="") {document.getElementById("territoriopredicado").placeholder = "Por favor, ingresá el número del territorio aquí...";document.getElementById("territoriopredicado").focus()};
 				if (document.getElementById('abarcadopredicado').value==="") {document.getElementById("abarcadopredicado").placeholder = "Por favor, ingresá algún dato aquí...";document.getElementById("abarcadopredicado").focus()};
+				enviando.style.color = "red";
 				enviando.textContent = 'Por favor, revisá que falta algún dato...';
 			} else {
+				enviando.style.color = "black";
 				enviando.textContent = 'Enviando la información...';
 				const fd = new FormData();
 				fd.append('fecha', document.getElementById('fechapredicado').value);
@@ -3111,8 +3117,10 @@
 					const res = await fetch(url_script_territorios, { method: 'POST', body: fd });
 					const text = await res.text();
 					enviando.textContent = 'HTTP ' + res.status + '\\n' + text;
-					try {enviando.textContent ="Información enviada. Muchas gracias....!!!";
+					try {enviando.style.color = "green";enviando.textContent ="Información enviada. Muchas gracias....!!!";
 						temporizadorpredicado=setTimeout(() => {
+							document.getElementById("leyendamanzanaspredicadas").style.display = "block";
+							document.getElementById("todopredicado").checked = false; document.getElementById("algopredicado").checked = false;
 							document.getElementById('nombrepredicado').value="";document.getElementById('fechapredicado').value="";
 							document.getElementById('territoriopredicado').value="";document.getElementById('abarcadopredicado').value="";
 							enviando.textContent ="";CerrarModalReporte()
@@ -3120,6 +3128,7 @@
 						, 5000)}
 					catch(e){};
 				} catch (err) {
+					enviando.style.color = "red";
 					enviando.textContent = 'Hubo un error; por lo que no se pudo enviar la información. Por favor, intentalo nuevamente.-';
 				};
 			};
@@ -3152,6 +3161,11 @@
 		
 		<!--Función para cerrar el modal del reporte de NO VISITAR-->
 		function CerrarModalNoVisitar () {
+			document.getElementById("leyendadetallemotivonovisitar").style.display = "block"; document.getElementById("motivonovisitar").style.display = "block"; 
+			document.getElementById("expresonovisitar").checked = false; document.getElementById("noexpresonovisitar").checked = false;
+			document.getElementById('nombrenovisitar').value="";document.getElementById('fechanovisitar').value="";
+			document.getElementById('territorionovisitar').value="";document.getElementById('detallemotivonovisitar').value="";document.getElementById('direccionnovisitar').value="";
+			document.getElementById("enviandoreportenovisitar").textContent ="";
 			document.getElementById("ModalReporteNoVisitar").style.visibility='hidden';
 			document.getElementById("motivonovisitar").style.visibility='hidden';
 			document.getElementById("detallemotivonovisitar").style.visibility='hidden';
@@ -3162,6 +3176,8 @@
 		<!--Función para revisar y enviar el reporte de NO VISITAR-->
 		document.getElementById('btn-enviar-reportenovisitar').addEventListener('click', async () => {
 			const enviando = document.getElementById('enviandoreportenovisitar');
+			document.getElementById("leyendadetallemotivonovisitar").style.display = "none";
+			document.getElementById("motivonovisitar").style.display = "none";
 			if (document.getElementById('nombrenovisitar').value==="" || document.getElementById('territorionovisitar').value==="" || document.getElementById('fechanovisitar').value==="" || document.getElementById('direccionnovisitar').value===""
 			|| (!expresonovisitar.checked && !noexpresonovisitar.checked) || (noexpresonovisitar.checked && document.getElementById('detallemotivonovisitar').value==="")) {
 				if (document.getElementById('fechanovisitar').value==="") {document.getElementById("fechanovisitar").placeholder = "Por favor, ingresá alguna fecha aquí...";document.getElementById("fechanovisitar").focus()};
@@ -3169,8 +3185,10 @@
 				if (document.getElementById('direccionnovisitar').value==="") {document.getElementById("direccionnovisitar").placeholder = "Por favor, ingresá la dirección de la casa aquí...";document.getElementById("direccionnovisitar").focus()};
 				if (document.getElementById('territorionovisitar').value==="") {document.getElementById("territorionovisitar").placeholder = "Por favor, ingresá el número del territorio aquí...";document.getElementById("territorionovisitar").focus()};
 				if (document.getElementById('detallemotivonovisitar').value==="") {document.getElementById("detallemotivonovisitar").placeholder = "Por favor, ingresá algún dato aquí...";document.getElementById("detallemotivonovisitar").focus()};
+				enviando.style.color = "red";
 				enviando.textContent = 'Por favor, revisá que falta algún dato...';
 			} else {
+				enviando.style.color = "black";
 				enviando.textContent = 'Enviando la información...';
 				const fd = new FormData();
 				fd.append('fecha', document.getElementById('fechanovisitar').value);
@@ -3183,8 +3201,10 @@
 					const res = await fetch(url_script_novisitar, { method: 'POST', body: fd });
 					const text = await res.text();
 					enviando.textContent = 'HTTP ' + res.status + '\\n' + text;
-					try {enviando.textContent ="Información enviada. Muchas gracias....!!!";
+					try {enviando.style.color = "green";enviando.textContent ="Información enviada. Muchas gracias....!!!";
 						temporizadornovisitar=setTimeout(() => {
+							document.getElementById("leyendadetallemotivonovisitar").style.display = "block"; document.getElementById("motivonovisitar").style.display = "block"; 
+							document.getElementById("expresonovisitar").checked = false; document.getElementById("noexpresonovisitar").checked = false;
 							document.getElementById('nombrenovisitar').value="";document.getElementById('fechanovisitar').value="";
 							document.getElementById('territorionovisitar').value="";document.getElementById('detallemotivonovisitar').value="";document.getElementById('direccionnovisitar').value="";
 							enviando.textContent ="";CerrarModalNoVisitar()
@@ -3192,6 +3212,7 @@
 						, 5000)}
 					catch(e){};
 				} catch (err) {
+					enviando.style.color = "red";
 					enviando.textContent = 'Hubo un error; por lo que no se pudo enviar la información. Por favor, intentalo nuevamente.-';
 				};
 			};
