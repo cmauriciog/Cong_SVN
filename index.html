@@ -3101,7 +3101,7 @@
 				if (document.getElementById('fechapredicado').value==="") {document.getElementById("fechapredicado").placeholder = "Por favor, ingresá alguna fecha aquí...";document.getElementById("fechapredicado").focus()};
 				if (document.getElementById('nombrepredicado').value==="") {document.getElementById("nombrepredicado").placeholder = "Por favor, ingresá tu nombre aquí...";document.getElementById("nombrepredicado").focus()};
 				if (document.getElementById('territoriopredicado').value==="") {document.getElementById("territoriopredicado").placeholder = "Por favor, ingresá el número del territorio aquí...";document.getElementById("territoriopredicado").focus()};
-				if (document.getElementById('abarcadopredicado').value==="") {document.getElementById("abarcadopredicado").placeholder = "Por favor, ingresá algún dato aquí...";document.getElementById("abarcadopredicado").focus()};
+				if (document.getElementById('abarcadopredicado').value==="") {document.getElementById("leyendamanzanaspredicadas").style.display = "block";document.getElementById("abarcadopredicado").placeholder = "Por favor, ingresá algún dato aquí...";document.getElementById("abarcadopredicado").focus()};
 				enviando.style.color = "red";
 				enviando.textContent = 'Por favor, revisá que falta algún dato...';
 			} else {
@@ -3184,7 +3184,7 @@
 				if (document.getElementById('nombrenovisitar').value==="") {document.getElementById("nombrenovisitar").placeholder = "Por favor, ingresá tu nombre aquí...";document.getElementById("nombrenovisitar").focus()};
 				if (document.getElementById('direccionnovisitar').value==="") {document.getElementById("direccionnovisitar").placeholder = "Por favor, ingresá la dirección de la casa aquí...";document.getElementById("direccionnovisitar").focus()};
 				if (document.getElementById('territorionovisitar').value==="") {document.getElementById("territorionovisitar").placeholder = "Por favor, ingresá el número del territorio aquí...";document.getElementById("territorionovisitar").focus()};
-				if (document.getElementById('detallemotivonovisitar').value==="") {document.getElementById("detallemotivonovisitar").placeholder = "Por favor, ingresá algún dato aquí...";document.getElementById("detallemotivonovisitar").focus()};
+				if (document.getElementById('detallemotivonovisitar').value==="") {document.getElementById("leyendadetallemotivonovisitar").style.display = "block"; document.getElementById("motivonovisitar").style.display = "block";document.getElementById("detallemotivonovisitar").placeholder = "Por favor, ingresá algún dato aquí...";document.getElementById("detallemotivonovisitar").focus()};
 				enviando.style.color = "red";
 				enviando.textContent = 'Por favor, revisá que falta algún dato...';
 			} else {
@@ -3399,7 +3399,7 @@
 		VerificarConexion();
 		VerificarVersion();
 		VerificarNoVolverAMostrar();
-		if (sistema_operativo=="Windows Phone" || sistema_operativo=="Android" || sistema_operativo=="iOS (iPad o iPhone)") {dispositivo="movil"; mapa.style.height = "80%"}
+		if (sistema_operativo=="Windows Phone" || sistema_operativo=="Android" || sistema_operativo=="iOS (iPad o iPhone)") {dispositivo="movil"; alert(dispositivo);mapa.style.height = "80%"}
 		else if (sistema_operativo=="Windows" || sistema_operativo=="MacOS" || sistema_operativo=="Linux") {dispositivo="pc"}
 		else {dispositivo="desconocido"};
 		window.addEventListener("load", async () => {
