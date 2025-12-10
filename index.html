@@ -1710,7 +1710,8 @@
 		var cartografiar="congregacion";
 		var listaterritorios=[];
 		var dispositivo="";
-		var so="";
+		//var so="";
+		//var sistema_operativo="";
 		var url_script_territorios=driveterritorios;
 		var url_script_novisitar=drivenovisitar;
 		var url_script_contadorvisitas=drivecontadorvisitas;
@@ -2154,26 +2155,17 @@
 		};
 		
 		<!--Verificar Sistema Operativo-->
-		function VerificarSistemaOperativo() {
-			const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-			let so = "Desconocido";
-			if (/windows phone/i.test(userAgent)) {
-				so = "Windows Phone";
-			} else if (/win/i.test(userAgent)) {
-				so = "Windows";
-			} else if (/android/i.test(userAgent)) {
-				so = "Android";
-			} else if (/ipad|iphone|ipod/i.test(userAgent)) {
-				so = "iOS (iPad o iPhone)";
-			} else if (/mac/i.test(userAgent)) {
-				so = "MacOS";
-			} else if (/linux/i.test(userAgent)) {
-				so = "Linux";
-			};
-			sistema_operativo=so;
-			if (so=="Windows" || so=="Linux") {document.getElementById("botonnorte").style.visibility="visible"};
+		function VerificarDispositivo() {
+			const ancho = window.screen.width;
+			const alto = window.screen.height;
+			if (Math.min(ancho, alto) < 768) {so="movil"}  // teléfonos y tablets
+			else {so="pc"};
+			dispositivo=so;
+			if (dispositivo=="pc") {document.getElementById("botonnorte").style.visibility="visible"};
+			//alert(dispositivo);
 		};
-		VerificarSistemaOperativo();
+		
+		VerificarDispositivo();
 		
 		<!--Funcion para verificar estado de conectividad-->
 		function VerificarConexion() {
@@ -2198,7 +2190,7 @@
 				ModalFlash(tiempomodalflash);
 				senialgps="no";
 			};
-			if (!sistema_operativo==="Windows" && !sistema_operativo==="MacOS" && !sistema_operativo==="Linux") {navigator.geolocation.getCurrentPosition(
+			if (!dispositivo==="pc") {navigator.geolocation.getCurrentPosition(
 				<!--GPS Perfecto-->
 				(pos) => {
 					senialgps="si";
@@ -2238,7 +2230,7 @@
 			VerificarConexion();
 			if (conexion==="si") {
 				VerificarGPS();
-				if ((sistema_operativo=="Windows" || sistema_operativo=="Linux" || sistema_operativo=="MacOS") && seguimiento=="no") {
+				if ((dispositivo=="pc") && seguimiento=="no") {
 					titulomodalflash.innerText="TRAZAR RUTA";
 					cuerpomodalflash.innerHTML = '<span style="color:red"><br><b>Puede que la ubicación que te muestre NO SEA LA REAL.</b><br><br><span style="color:black">Parece que estás conectado desde una PC; por lo que la ubicación tal vez sea la de tu proveedor de internet; en vez del lugar donde estás.-<br></span>';
 					document.getElementById("btn-indicaciones-modal-flash").style.visibility='hidden';
@@ -2322,7 +2314,7 @@
 
 		// Evento en caso de error
 		function ErrorGPS(e) {
-			if (!sistema_operativo=="Windows" && !sistema_operativo=="Linux") {
+			if (!dispositivo=="pc") {
 				cajadistancia.textContent = "No se pudo obtener la ubicación: " + e.message;
 				cajadistancia.style.color = "red";
 			};
@@ -3279,7 +3271,7 @@
 		function abrirguia(){
 			cartelnuevo.style.display = 'block';
 			// posicionar la guía apuntando al botón
-			if (sistema_operativo !=="Windows Phone" && sistema_operativo !=="Android" && sistema_operativo !=="iOS (iPad o iPhone)") {document.getElementById("flecharoja").style.visibility='visible'};
+			if (dispositivo !=="movil") {document.getElementById("flecharoja").style.visibility='visible'};
 			posicionguia();
 			// animación de aparición
 			requestAnimationFrame(()=> cartelnuevo.classList.add('show'));
@@ -3374,9 +3366,9 @@
 		//Función No Volver a mostrar sugerencia para girar el celular
 		function VerificarNoVolverAMostrar(){
 			if (Version !== (localStorage.getItem('MOSTRAR_INICIAL')|| null)) {ModalFlash(tiempomodalflash);document.getElementById("restablecernomostrar").style.visibility="hidden"} else {document.getElementById("borrableinicial").style.display="none";document.getElementById("borrablelonuevo").display="none";document.getElementById("restablecernomostrar").style.visibility="visible"};
-			if (localStorage.getItem('MOSTRAR_CELULAR') !=="no" && sistema_operativo !=="Windows" && sistema_operativo !=="Linux") {modalinicial.showModal();document.getElementById("restablecernomostrar").style.visibility="hidden"} else {document.getElementById("borrablecelular").display="none";document.getElementById("restablecernomostrar").style.visibility="visible"};
+			if (localStorage.getItem('MOSTRAR_CELULAR') !=="no" && dispositivo !=="pc") {modalinicial.showModal();document.getElementById("restablecernomostrar").style.visibility="hidden"} else {document.getElementById("borrablecelular").display="none";document.getElementById("restablecernomostrar").style.visibility="visible"};
 			if (Version !== (localStorage.getItem('MOSTRAR_NUEVO') || null)) {document.getElementById("flecharoja").style.visibility='visible'} else {document.getElementById("flecharoja").style.visibility='hidden'};
-			if (sistema_operativo=="Windows Phone" || sistema_operativo=="Android" || sistema_operativo=="iOS (iPad o iPhone)") {document.getElementById("flecharoja").style.visibility='hidden'};
+			if (dispositivo=="movil") {document.getElementById("flecharoja").style.visibility='hidden'};
 		};
 		
 		//Activar/Desactivar/Mostrar/Ocultar/Ejecutar lo que corresponda al iniciar
@@ -3399,9 +3391,9 @@
 		VerificarConexion();
 		VerificarVersion();
 		VerificarNoVolverAMostrar();
-		if (sistema_operativo=="Windows Phone" || sistema_operativo=="Android" || sistema_operativo=="iOS (iPad o iPhone)") {dispositivo="movil";mapa.style.height = "80%"}
-		else if (sistema_operativo=="Windows" || sistema_operativo=="MacOS" || sistema_operativo=="Linux") {dispositivo="pc"}
-		else {dispositivo="desconocido"};
+		if (dispositivo==="movil") {dispositivo="movil";mapa.style.height = "80%"};
+		if (dispositivo=="pc") {dispositivo="pc"};
+		if (dispositivo=="") {dispositivo="desconocido"};
 		//alert("-"+dispositivo+"-");
 		window.addEventListener("load", async () => {
 			//const enviando = document.getElementById('Resultado');
@@ -3426,6 +3418,5 @@
 				//enviando.textContent = 'Hubo un error; por lo que no se pudo enviar la información. Por favor, intentalo nuevamente.-';
 			}
 		});
-		//if (sistema_operativo=="Windows Phone" || sistema_operativo=="Android" || sistema_operativo=="iOS (iPad o iPhone)") {mapa.style.height = "80%"};
 	</script>
 </html>
