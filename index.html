@@ -166,29 +166,30 @@
 			top: 50%;
 			left: 50%;
 			transform: translate(-50%, -50%);
-			max-width: 75vh;
-			max-height: 85vh;
+			width: 90vw;
+			max-width: 600px;
+			max-height: 90vh;
 			background-color: yellow;
+			border: 2px solid black;
 			border-radius: 10px;
-			box-shadow: 0 0 10px rgba(0,0,0,0.3);
 			display: flex;
 			flex-direction: column;
-			z-index: 1000;
-			overflow-y: auto;
+			overflow: hidden;
+			z-index: 99999;   /* MUY IMPORTANTE */
 		}
 		.modalflash-cabecera {
-			background-color: red;
+			background: red;
 			color: white;
-			padding: 10px;
-			text-align: center;
+			padding: 12px;
 			font-weight: bold;
-			border-top-left-radius: 10px;
-			border-top-right-radius: 10px;
+			flex-shrink: 0;
 		}
 		.modalflash-cuerpo {
-			padding: 10px;
-			overflow-y: auto;
+			padding: 15px;
+			flex: 1;                /* OCUPA TODA LA ALTURA RESTANTE */
+			overflow-y: auto;       /* SCROLL SI SE LLENA */
 		}
+
 		@media (max-width: 600px) {
 			.modalflash {
 			width: 80vw;
@@ -501,6 +502,23 @@
 		.contenedoralineado p {
 			margin: 0; /* Elimina márgenes por defecto */
 		}
+
+		/*Giro y animación flecha activar el GPS*/
+		.img-color-animada {
+			width: 20px;
+			display: inline-block;
+			transform: rotate(-90deg);       /* Giro inicial de 90° izquierda */
+			animation: cambioColor 2s infinite alternate;
+		}
+		
+		@keyframes cambioColor {
+			from {
+				filter: hue-rotate(0deg);
+			}
+			to {
+				filter: hue-rotate(180deg);
+			}
+		}
     </style>
 	<!--Icono para la pestaña del navegador-->
 	<link rel="shortcut icon" href="./images/Tetragramaton.ico" type="image/x-icon"/>
@@ -508,7 +526,11 @@
 <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
 	<a style="font-size:15px; color:#22d3ee; display=inline-block"><strong>MAPA DE TERRITORIOS DE LA CONGREGACION SUR VILLA NUEVA (Nº 6379)</strong></a>
 	<div id="ubicacion">
-		<div id="activargps" class="colorful-div">¿Necesitás indicaciones para llegar? Activá aquí...</div>
+		<!--<div id="activargps" class="colorful-div">¿Necesitás indicaciones para llegar? Activá aquí...</div>-->
+		<div id="activargps" class="colorful-div" onclick="activar_seguimiento()">
+			¿Necesitás indicaciones para llegar? Activá...
+			<img src="images/flecha_izquierda.png" class="img-color-animada" alt="">
+		</div>
 		<div id="ubicacion_texto" style="font-size:10px; text-align:right; background-color:grey; color:blue"><strong>Activar/Desactivar mi ubicación</strong><a id="ubicacion_estado" href="javascript:activar_seguimiento()"><img id="gps" src="images/slide_off.jpg" width="50" height="30"></img></a></div>
 	</div>
 	<img src="images/Tetragramaton.jpg" width="60" height="60"></img>
@@ -570,7 +592,7 @@
 					<option value=""></option>
 				</select>
 				<br></br>
-				<p id="parrafoterritorio" style="color:blue">Escribe el número del territorio que deseás ubicar o bien elegilo desde el menú desplegable y te centrará el mapa sobre él, mostrándote su información, tal como nombre de los barrios que abarca y lista de casas "NO VISITAR".</p>
+				<p id="parrafoterritorio" style="color:blue">Escribí el número del territorio que deseás ubicar o bien elegilo desde el menú desplegable y te centrará el mapa sobre él, mostrándote su información, tal como nombre de los barrios que abarca y lista de casas "NO VISITAR".</p>
             </div>
 			<div class="sidebar-pane" id="familias">				
 				<h1 class="sidebar-header">Buscar la casa...<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
@@ -581,7 +603,7 @@
 					<option value=""></option>
 				</select>
 				<br></br>
-				<p id="parrafofamilia" style="color:blue">Escribe algún dato que conozcas del publicador o familia que deseás ubicar (nombre y/o apellido) o bien elegilo desde el menú desplegable y te centrará el mapa sobre su casa, mostrándote información, tal como nombres de los integrantes de la familia, privilegios de servicio, dirección postal, teléfono y foto del frente de la casa para que podás identificarla al llegar.</p>
+				<p id="parrafofamilia" style="color:blue">Escribí algún dato que conozcás del publicador o familia que deseás ubicar (nombre y/o apellido) o bien elegilo desde el menú desplegable y te centrará el mapa sobre su casa, mostrándote información, tal como nombres de los integrantes de la familia, privilegios de servicio, dirección postal, teléfono y foto del frente de la casa para que podás identificarla al llegar.</p>
 				<br></br>
 				<p>
 					<input id="mostrarflias" type="submit" style="background-color:#acf89f" value="Ver todas las familias" onclick="VerTodasFlias();"></input>
@@ -594,6 +616,8 @@
 				<p id="alternarcapas"><a href="#" onclick="AlternarCapas(); return false;" style="color:blue;"><i class="fa-solid fa-map" style="color: #3f08f2;"></i>  Cambiar vista del mapa de fondo.</a> (Si estás viendo el mapa callejero, pasarás a ver el satelital y a la inversa).</p>
 				<br></br>
 				<p id="miubicacion"><a href="#" onclick="CentrarMiUbicacion(); return false;" style="color:blue;"><i class="fa-solid fa-crosshairs" style="color: #3f08f2;"></i>  Mi ubicación</a> (En caso que tengás el GPS activado, centrará el mapa sobre tu ubicación actual).</p>
+				<br></br>
+				<p id="volveralterritorio"><a href="#" onclick="CentrarEnTerritorio(); return false;" style="color:blue;"><i class="fa-solid fa-earth-americas"></i>  Volver al territorio</a> (Centrar el mapa en el territorio de la congregación).</p>
 				<br></br>
 				<p id="volveraempezar"><a href="#" onclick="location.reload(); return false;" style="color:blue;"><i class="fa-solid fa-rotate"></i>  Volver a empezar</a> (Limpiar el mapa para volver a trabajar en él).</p>
 				<br></br>
@@ -699,44 +723,48 @@
 	<!--Modal para reportar lo que se predicó en una salida-->
 	<div class="modalflash" id="ModalReportePredicado" style="font-size:15px;">
 		<div class="modalflash-cabecera" id="titulomodalpredicado">¡¡¡ MUCHAS GRACIAS POR TOMARTE ESTE TIEMPITO...!!!</div>
-		<p></p>
-		<p class="modalflash-cuerpo" id="cuerpomodalpredicado"><strong>Estos registros ayudan a predicar a conciencia nuestro territorio</strong>
-			<p></p>
-			<label>Fecha: <input id="fechapredicado" type="date" style="width:50%;"></label><br>
-			<label>Tu nombre: <input id="nombrepredicado" style="width:50%;"></label><br>
+		<div class="modalflash-cuerpo" id="cuerpomodalpredicado">
+			<strong>Estos registros ayudan a predicar a conciencia nuestro territorio</strong>
+			<br><br>
+			<label>Fecha: <input id="fechapredicado" type="date" style="width:70%;"></label><br>
+			<label>Tu nombre: <input id="nombrepredicado" style="width:60%;"></label><br>
 			<label>Número del territorio: <input id="territoriopredicado" style="width:50%;"></label><br>
-			<label>¿Se predicó TODO el territorio?  <input type="checkbox" id="todopredicado">SI&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type="checkbox" id="algopredicado">NO</label><br><br>
-			<label id="manzanaspredicadas">Lo que se abarcó: <input id="abarcadopredicado" placeholder="Letras de las manzanas predicadas" style="width:50%;"></label><br><br>
-			<label id="leyendamanzanaspredicadas">Para identificar las manzanas, debés hacer Zoom en el territorio. Para ello, podés usar el símbolo + sobre el costado derecho, o tocar dos veces seguidas en el territorio o bien tocar la pantalla con dos dedos y separarlos lentamente.-</label>
-			<p></p>
+			<label>¿Se predicó TODO el territorio?  
+				<input type="checkbox" id="todopredicado">SI&nbsp;&nbsp;&nbsp;
+				<input type="checkbox" id="algopredicado">NO
+			</label>
+			<br><br>
+			<label id="manzanaspredicadas">Lo que se abarcó: <input id="abarcadopredicado" placeholder="Letras de las manzanas predicadas" style="width:60%;"></label>
+			<br><br>
+			<label id="leyendamanzanaspredicadas">Para identificar las manzanas hacé el máximo zoom posible sobre el territorio y las verás identificadas con letras.-</label>
+			<br><br>
 			<pre id="enviandoreporte" style="font-family: 'Arial'; font-weight: bold;"></pre>
 			<div style="text-align: center">
-				<button id="btn-cerrar-reporte" style="height:35px; width:30%; background-color:red;border-color:white;color:white;" onclick="CerrarModalReporte()">Cerrar</button>
-				<button id="btn-enviar-reporte" style="height:35px; width:30%; background-color:green;border-color:white;color:white;">Enviar</button>
+				<button id="btn-cerrar-reporte" onclick="CerrarModalReporte()" style="height:35px; width:30%; background-color:red; border-color:white; color:white;">Cerrar</button>
+				<button id="btn-enviar-reporte" style="height:35px; width:30%; background-color:green; border-color:white; color:white;">Enviar</button>
 			</div>
-		</p>
+		</div>
 	</div>
 	
 	<!--Modal para reportar una nueva casa NO VISITAR-->
 	<div class="modalflash" id="ModalReporteNoVisitar" style="font-size:15px;">
 		<div class="modalflash-cabecera" id="titulomodalnovisitar">¡¡¡ MUCHAS GRACIAS POR TOMARTE ESTE TIEMPITO...!!!</div>
-		<p></p>
-		<p class="modalflash-cuerpo" id="cuerpomodalnovisitar"><strong>Informar de una casa donde han pedido que no los volvamos a visitar, ayuda a resguardar la seguridad de nuestros hermanos y también puede ser una manera indirecta de dar testimonio.-</strong>
-			<p></p>
-			<label>Tu nombre: <input id="nombrenovisitar" style="width:50%;"></label><br>
-			<label>Fecha: <input id="fechanovisitar" type="date" style="width:50%;"></label><br>
-			<label>Dirección: <input id="direccionnovisitar" style="width:50%;"></label><br>
+		<div class="modalflash-cuerpo" id="cuerpomodalnovisitar"><strong>Informar de una casa donde han pedido que no los volvamos a visitar, ayuda a resguardar la seguridad de nuestros hermanos y también puede ser una manera indirecta de dar testimonio.-</strong>
+			<br><br>
+			<label>Tu nombre: <input id="nombrenovisitar" style="width:70%;"></label><br>
+			<label>Fecha: <input id="fechanovisitar" type="date" style="width:70%;"></label><br>
+			<label>Dirección: <input id="direccionnovisitar" style="width:70%;"></label><br>
 			<label>Número del territorio: <input id="territorionovisitar" style="width:20%;"></label><br>
 			<label>La persona, ¿pidió expresamente que no la visitemos más?  <input type="checkbox" id="expresonovisitar">SI&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type="checkbox" id="noexpresonovisitar">NO</label><br><br>
-			<label id="motivonovisitar">Si la persona no dijo "NO QUIERO QUE ME VUELVAN A VISITAR", ¿Por qué considerás que no deberíamos volver?. ¿Qué te dijo y cómo actuó?  <input id="detallemotivonovisitar" placeholder="Indicá en detalles lo que te dijo e hizo la persona..." style="width:50%;"></label>
+			<label id="motivonovisitar">Si la persona no dijo "NO QUIERO QUE ME VUELVAN A VISITAR", ¿Por qué considerás que no deberíamos volver?. ¿Qué te dijo y cómo actuó?  <input id="detallemotivonovisitar" placeholder="Indicá en detalles lo que te dijo e hizo la persona..." style="width:80%;"></label>
 			<label id="leyendadetallemotivonovisitar">Por favor, describí lo más claramente posible lo que te dijeron para evaluar si añadimos la casa a la lista de NO VISITAR.-</label>
-			<p></p>
+			<br>
 			<pre id="enviandoreportenovisitar" style="font-family: 'Arial'; font-weight: bold;"></pre>
 			<div style="text-align: center">
-				<button id="btn-cerrar-reportenovisitar" style="height:30px; width:30%; background-color:red;border-color:white;color:white;" onclick="CerrarModalNoVisitar()">Cerrar</button>
-				<button id="btn-enviar-reportenovisitar" style="height:30px; width:30%; background-color:green;border-color:white;color:white;">Enviar</button>
+				<button id="btn-cerrar-reportenovisitar" style="height:35px; width:30%; background-color:red;border-color:white;color:white;" onclick="CerrarModalNoVisitar()">Cerrar</button>
+				<button id="btn-enviar-reportenovisitar" style="height:35px; width:30%; background-color:green;border-color:white;color:white;">Enviar</button>
 			</div>
-		</p>
+		</div>
 	</div>
 	
 	<!--Bloque para el Calendario-->
@@ -1639,7 +1667,7 @@
 		});
 		<!--Establecer el área para el mapa y definir cuál será la capa base por defecto-->
 		var mapa = L.map('mapa', {editable:true,
-			center: ["-32.9238842064728", "-68.77892492536746"],
+			center: ["-32.9280586817747", "-68.77360525273423"],
 			zoom: 15,
 			layers: [osm],
 			zoomControl:false
@@ -1651,7 +1679,7 @@
         $(".chosenCasas").chosen().on("chosen:showing_dropdown", function(event) {  
 			$(".chosenCasas").trigger('chosen:updated');                                                                           
 			});
-		var coordenadas="-32.910814909848675, -68.77197721149017".split(",");
+		var coordenadas="-32.9280586817747, -68.77360525273423".split(",");
 		var zum=16;
 		var selector_casas=document.createElement('option');
 		var listacasas=[];
@@ -1687,7 +1715,7 @@
 		var capa_numerosterritorios={};
 		var capa_territoriofiltrado={};
 		var capa_territoriofiltradonumero={};
-		var puntomascercano=L.latLng[-32.92740232843889, -68.77696838564452];
+		var puntomascercano=L.latLng[-32.9280586817747, -68.77360525273423];
 		var numeroterritorio="";
 		var capa_popups=null;
 		var infoterritorios=null;
@@ -1710,11 +1738,19 @@
 		var cartografiar="congregacion";
 		var listaterritorios=[];
 		var dispositivo="";
-		//var so="";
-		//var sistema_operativo="";
 		var url_script_territorios=driveterritorios;
 		var url_script_novisitar=drivenovisitar;
 		var url_script_contadorvisitas=drivecontadorvisitas;
+		
+		//Capturar evento sobre botones
+		const btncerrarmodalflash=document.querySelector("#btn-cerrar-modal-flash");
+		const btnindicacionesmodalflash=document.querySelector("#btn-indicaciones-modal-flash");
+		const cajadistancia = document.getElementById("distancia");
+		const btncerrarmodalinicial=document.querySelector("#btn-cerrar-modal-inicial");
+		const modalinicial=document.querySelector("#modal_inicial");
+		const nomostrarinicial = document.getElementById('nomostrarinicial');
+		const nomostrarcelular = document.getElementById('nomostrarcelular');
+		const nomostrarlonuevo = document.getElementById('nomostrarlonuevo');
 		
 		// Crear grupo de puntos
 		var grupomanzanas = L.geoJSON(manzanas, {
@@ -1777,7 +1813,8 @@
 			else {
 				document.getElementById("titulo_modalinicial").innerHTML=("<h1>"+"DATOS INCORRECTOS...!!!"+"</h1>");
 				document.getElementById("cuerpo_modalinicial").innerHTML=("<h4>"+"El usuario y/o la contraseñas NO son las correctas...!!!"+"</h4>");
-				document.getElementById("modal_inicial").showModal();
+				//document.getElementById("modal_inicial").showModal();
+				modalinicial.showModal();
 			};
 		};
 		
@@ -1973,7 +2010,6 @@
 			if (ruta) {ruta.remove()};
 			if (capa_casas) {mapa.removeLayer(capa_casas)};
 			capa_casas=L.geoJSON(casasdehnos,{filter:Filtrar_Casas,onEachFeature}).addTo(mapa);
-			alert("Activar opción de ruta..."+capa_casas);
 			nada={
 				"type": "FeatureCollection",
 				"features": casasdehnos.features.filter(f => f.properties.Flia === valor)
@@ -2008,7 +2044,6 @@
 			if (casitas) {casitas.remove()};
 			if (ruta) {ruta.remove()};
 			capa_territoriofiltrado=L.geoJSON(territorios,{filter:Filtrar_Territorios, style:PersonalizarTerritorioBuscado}).addTo(mapa);
-			alert("Activar opción de ruta..."+capa_territoriofiltrado);
 			poligono = {
 				"type": "FeatureCollection",
 				"features": territorios.features.filter(f => f.properties.Numero === valor)
@@ -2164,7 +2199,6 @@
 			else {so="pc"};
 			dispositivo=so;
 			if (dispositivo=="pc") {document.getElementById("botonnorte").style.visibility="visible"};
-			//alert(dispositivo);
 		};
 		
 		VerificarDispositivo();
@@ -2413,6 +2447,12 @@
 			barralateral.close();
 			mapa.setView(coordenadas_ubicacion_real, 17);
 		};
+		
+		<!--Función para Centrar dentro del Territorio-->
+		function CentrarEnTerritorio() {
+			barralateral.close();
+			mapa.flyTo([-32.9280586817747, -68.77360525273423], 15);
+		};
 
 		<!--Función para detener el seguimiento en tiempo real-->
 		function desactivar_seguimiento() {
@@ -2436,7 +2476,7 @@
 			coordenadas_ubicacion_real="";
 			if (ruta) {ruta.remove()};
 			if (marcapuntosalida) {marcapuntosalida.remove()};
-			mapa.flyTo([-32.9238842064728, -68.77892492536746],15);
+			mapa.flyTo([-32.9280586817747, -68.77360525273423],15);
 		};
 
 		<!--Función para Trazar Ruta Sugerida con OSRM-->
@@ -2570,7 +2610,8 @@
 			temporizadormodalflash=setTimeout(() => {
 				document.getElementById("btn-indicaciones-modal-flash").style.visibility='hidden';
 				document.getElementById("MiModalFlash").style.visibility='hidden';
-				document.getElementById("modal-inicial").close();
+				//document.getElementById("modal-inicial").close();
+				modalinicial.close();
 				if (nomostrarinicial.checked) {localStorage.setItem('MOSTRAR_INICIAL', Version);document.getElementById("borrableinicial").style.display="none"};
 				//if (mail=="si") {EnviarMail()};
 			}, tiempo);
@@ -2589,25 +2630,27 @@
 		};
 
 		if (! navigator.userAgent.match(/Windows/i) && localStorage.getItem('MOSTRAR_CELULAR') !=="no") {
-			document.getElementById("modal_inicial").showModal()
+			//document.getElementById("modal_inicial").showModal()
+			modalinicial.showModal();
 		} else {
-			if (conexion=="no") {document.getElementById("Conectividad").style.display="inline"; document.getElementById("Apaisado").style.display="none";document.getElementById("modal_inicial").showModal();}
+			if (conexion=="no") {document.getElementById("Conectividad").style.display="inline"; document.getElementById("Apaisado").style.display="none";modalinicial.showModal()};//document.getElementById("modal_inicial").showModal();}
 		};
 
 		//Capturar evento sobre botones
-		const btncerrarmodalflash=document.querySelector("#btn-cerrar-modal-flash");
-		const btnindicacionesmodalflash=document.querySelector("#btn-indicaciones-modal-flash");
-		const cajadistancia = document.getElementById("distancia");
-		const btncerrarmodalinicial=document.querySelector("#btn-cerrar-modal-inicial");
-		const modalinicial=document.querySelector("#modal_inicial");
-		const nomostrarinicial = document.getElementById('nomostrarinicial');
-		const nomostrarcelular = document.getElementById('nomostrarcelular');
-		const nomostrarlonuevo = document.getElementById('nomostrarlonuevo');
+		//const btncerrarmodalflash=document.querySelector("#btn-cerrar-modal-flash");
+		//const btnindicacionesmodalflash=document.querySelector("#btn-indicaciones-modal-flash");
+		//const cajadistancia = document.getElementById("distancia");
+		//const btncerrarmodalinicial=document.querySelector("#btn-cerrar-modal-inicial");
+		//const modalinicial=document.querySelector("#modal_inicial");
+		//const nomostrarinicial = document.getElementById('nomostrarinicial');
+		//const nomostrarcelular = document.getElementById('nomostrarcelular');
+		//const nomostrarlonuevo = document.getElementById('nomostrarlonuevo');
 		
 		btncerrarmodalflash.addEventListener("click",()=>{
 			document.getElementById("btn-indicaciones-modal-flash").style.visibility='hidden';
 			document.getElementById("MiModalFlash").style.visibility='hidden';
-			document.getElementById("modalinicial").close();
+			//document.getElementById("modalinicial").close();
+			modalinicial.close();
 			if (nomostrarinicial.checked) {
 				try {
 					localStorage.setItem('MOSTRAR_INICIAL', Version);
@@ -2646,7 +2689,8 @@
 		nomostrarinicial.addEventListener("click",()=>{
 			document.getElementById("btn-indicaciones-modal-flash").style.visibility='hidden';
 			document.getElementById("MiModalFlash").style.visibility='hidden';
-			document.getElementById("modalinicial").close();
+			//document.getElementById("modalinicial").close();
+			modalinicial.close();
 			if (nomostrarinicial.checked) {
 				try {
 					localStorage.setItem('MOSTRAR_INICIAL', Version);
@@ -2988,7 +3032,6 @@
 			marcapuntosalida=L.marker(coord,{icon:L.icon({iconUrl: 'images/predicando.jpg',iconSize: [50, 55],iconAnchor: [16, 37],popupAnchor: [0, -28]}),title:""+fecha+" a las "+hora+" "+tiposalida+": "+puntosalida+". Territorio: "+territorioapredicar})
 					.bindPopup(""+fecha+" a las "+hora+" "+tiposalida+": "+puntosalida+". Territorio: "+territorioapredicar)
 					.openPopup().addTo(mapa);
-			alert("Activar opción de ruta..."+marcapuntosalida);
 			mapa.flyTo(coord,16);
 			puntomascercano=[];
 			let coordlat= Number(coordsalida[0]);
@@ -3075,6 +3118,8 @@
 		function ReportarPredicado() {
 			barralateral.close();
 			document.getElementById("ModalReportePredicado").style.visibility='visible';
+			document.getElementById("btn-cerrar-reporte").style.visibility='visible';
+			document.getElementById("btn-enviar-reporte").style.visibility='visible';
 		};
 		
 		<!--Función para cerrar el modal del reporte de lo predicado-->
@@ -3087,11 +3132,17 @@
 			document.getElementById("ModalReportePredicado").style.visibility='hidden';
 			document.getElementById("manzanaspredicadas").style.visibility='hidden';
 			document.getElementById("leyendamanzanaspredicadas").style.visibility='hidden';
+			document.getElementById("btn-cerrar-reporte").style.visibility="hidden";
+			document.getElementById("btn-enviar-reporte").style.visibility="hidden";
+			document.getElementById("btn-cerrar-reportenovisitar").style.visibility='hidden';
+			document.getElementById("btn-enviar-reportenovisitar").style.visibility='hidden';
 			clearTimeout(temporizadorpredicado);
 		};
 		
 		<!--Función para revisar y enviar el reporte de lo predicado-->
 		document.getElementById('btn-enviar-reporte').addEventListener('click', async () => {
+			document.getElementById("btn-cerrar-reporte").style.visibility="visible";
+			document.getElementById("btn-enviar-reporte").style.visibility="visible";
 			const enviando = document.getElementById('enviandoreporte');
 			document.getElementById("leyendamanzanaspredicadas").style.display = "none";
 			if (document.getElementById('nombrepredicado').value==="" || document.getElementById('territoriopredicado').value==="" || document.getElementById('fechapredicado').value===""
@@ -3104,7 +3155,9 @@
 				enviando.textContent = 'Por favor, revisá que falta algún dato...';
 			} else {
 				enviando.style.color = "black";
-				enviando.textContent = 'Enviando la información...';
+				enviando.textContent = 'Enviando...Por favor, esperá un momento.-';
+				document.getElementById("btn-cerrar-reporte").style.visibility="hidden";
+				document.getElementById("btn-enviar-reporte").style.visibility="hidden";
 				const fd = new FormData();
 				fd.append('fecha', document.getElementById('fechapredicado').value);
 				fd.append('nombre', document.getElementById('nombrepredicado').value);
@@ -3116,6 +3169,7 @@
 					const text = await res.text();
 					enviando.textContent = 'HTTP ' + res.status + '\\n' + text;
 					try {enviando.style.color = "green";enviando.textContent ="Información enviada. Muchas gracias....!!!";
+						document.getElementById("btn-cerrar-reporte").style.visibility="visible";
 						temporizadorpredicado=setTimeout(() => {
 							document.getElementById("leyendamanzanaspredicadas").style.display = "block";
 							document.getElementById("todopredicado").checked = false; document.getElementById("algopredicado").checked = false;
@@ -3128,6 +3182,8 @@
 				} catch (err) {
 					enviando.style.color = "red";
 					enviando.textContent = 'Hubo un error; por lo que no se pudo enviar la información. Por favor, intentalo nuevamente.-';
+					document.getElementById("btn-cerrar-reporte").style.visibility="visible";
+					document.getElementById("btn-enviar-reporte").style.visibility="visible";
 				};
 			};
 		});
@@ -3155,11 +3211,13 @@
 		function ReportarNoVisitar() {
 			barralateral.close();
 			document.getElementById("ModalReporteNoVisitar").style.visibility='visible';
+			document.getElementById("btn-cerrar-reportenovisitar").style.visibility='visible';
+			document.getElementById("btn-enviar-reportenovisitar").style.visibility='visible';
 		};
 		
 		<!--Función para cerrar el modal del reporte de NO VISITAR-->
 		function CerrarModalNoVisitar () {
-			document.getElementById("leyendadetallemotivonovisitar").style.display = "block"; document.getElementById("motivonovisitar").style.display = "block"; 
+			document.getElementById("leyendadetallemotivonovisitar").style.display = "block"; document.getElementById("motivonovisitar").style.display = "block";
 			document.getElementById("expresonovisitar").checked = false; document.getElementById("noexpresonovisitar").checked = false;
 			document.getElementById('nombrenovisitar').value="";document.getElementById('fechanovisitar').value="";
 			document.getElementById('territorionovisitar').value="";document.getElementById('detallemotivonovisitar').value="";document.getElementById('direccionnovisitar').value="";
@@ -3168,14 +3226,20 @@
 			document.getElementById("motivonovisitar").style.visibility='hidden';
 			document.getElementById("detallemotivonovisitar").style.visibility='hidden';
 			document.getElementById("leyendadetallemotivonovisitar").style.visibility='hidden';
+			document.getElementById("btn-cerrar-reportenovisitar").style.visibility='hidden';
+			document.getElementById("btn-enviar-reportenovisitar").style.visibility='hidden';
+			document.getElementById("btn-cerrar-reporte").style.visibility='hidden';
+			document.getElementById("btn-enviar-reporte").style.visibility='hidden';
 			clearTimeout(temporizadornovisitar);
 		};
 		
 		<!--Función para revisar y enviar el reporte de NO VISITAR-->
 		document.getElementById('btn-enviar-reportenovisitar').addEventListener('click', async () => {
+			document.getElementById("btn-cerrar-reporte").style.visibility="visible";
+			document.getElementById("btn-enviar-reporte").style.visibility="visible";
 			const enviando = document.getElementById('enviandoreportenovisitar');
-			document.getElementById("leyendadetallemotivonovisitar").style.display = "none";
-			document.getElementById("motivonovisitar").style.display = "none";
+			//document.getElementById("leyendadetallemotivonovisitar").style.display = "none";
+			//document.getElementById("motivonovisitar").style.display = "none";
 			if (document.getElementById('nombrenovisitar').value==="" || document.getElementById('territorionovisitar').value==="" || document.getElementById('fechanovisitar').value==="" || document.getElementById('direccionnovisitar').value===""
 			|| (!expresonovisitar.checked && !noexpresonovisitar.checked) || (noexpresonovisitar.checked && document.getElementById('detallemotivonovisitar').value==="")) {
 				if (document.getElementById('fechanovisitar').value==="") {document.getElementById("fechanovisitar").placeholder = "Por favor, ingresá alguna fecha aquí...";document.getElementById("fechanovisitar").focus()};
@@ -3187,7 +3251,11 @@
 				enviando.textContent = 'Por favor, revisá que falta algún dato...';
 			} else {
 				enviando.style.color = "black";
-				enviando.textContent = 'Enviando la información...';
+				enviando.textContent = 'Enviando...Por favor, esperá un momento.-';
+				document.getElementById("btn-cerrar-reportenovisitar").style.visibility="hidden";
+				document.getElementById("btn-enviar-reportenovisitar").style.visibility="hidden";
+				document.getElementById("leyendadetallemotivonovisitar").style.visibility = "hidden";
+				document.getElementById("motivonovisitar").style.display = "hidden";
 				const fd = new FormData();
 				fd.append('fecha', document.getElementById('fechanovisitar').value);
 				fd.append('direccion', document.getElementById('direccionnovisitar').value);
@@ -3200,18 +3268,21 @@
 					const text = await res.text();
 					enviando.textContent = 'HTTP ' + res.status + '\\n' + text;
 					try {enviando.style.color = "green";enviando.textContent ="Información enviada. Muchas gracias....!!!";
+						document.getElementById("btn-cerrar-reportenovisitar").style.visibility="visible";
 						temporizadornovisitar=setTimeout(() => {
 							document.getElementById("leyendadetallemotivonovisitar").style.display = "block"; document.getElementById("motivonovisitar").style.display = "block"; 
 							document.getElementById("expresonovisitar").checked = false; document.getElementById("noexpresonovisitar").checked = false;
 							document.getElementById('nombrenovisitar').value="";document.getElementById('fechanovisitar').value="";
 							document.getElementById('territorionovisitar').value="";document.getElementById('detallemotivonovisitar').value="";document.getElementById('direccionnovisitar').value="";
-							enviando.textContent ="";CerrarModalNoVisitar()
+							enviando.textContent ="";CerrarModalNoVisitar();
 							}
 						, 5000)}
 					catch(e){};
 				} catch (err) {
 					enviando.style.color = "red";
 					enviando.textContent = 'Hubo un error; por lo que no se pudo enviar la información. Por favor, intentalo nuevamente.-';
+					document.getElementById("btn-cerrar-reportenovisitar").style.visibility="visible";
+					document.getElementById("btn-enviar-reportenovisitar").style.visibility="visible";
 				};
 			};
 		});
@@ -3397,8 +3468,7 @@
 		VerificarConexion();
 		VerificarVersion();
 		VerificarNoVolverAMostrar();
-		if (dispositivo==="movil") {mapa.style.height = "80%"};
-		//if (dispositivo=="pc") {dispositivo="pc"};
+		//if (dispositivo==="movil") {mapa.style.height = "80%"};
 		if (dispositivo==="") {dispositivo="desconocido"};
 		window.addEventListener("load", async () => {
 			const fd = new FormData();
@@ -3415,6 +3485,7 @@
 					//+ '\n' + res.status 
 					//+ '\n' + text 
 					//+ '\n' + data;
+					//alert("Enviado correctamente.-");
 				} catch(e) {}
 			} catch (err) {
 				//enviando.textContent = 'Hubo un error; por lo que no se pudo enviar la información. Por favor, intentalo nuevamente.-';
