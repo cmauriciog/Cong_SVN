@@ -166,8 +166,8 @@
 			top: 50%;
 			left: 50%;
 			transform: translate(-50%, -50%);
-			width: 90vw;
-			max-width: 600px;
+			width: 95vw;
+			max-width: 700px;
 			max-height: 90vh;
 			background-color: yellow;
 			border: 2px solid black;
@@ -182,6 +182,7 @@
 			color: white;
 			padding: 12px;
 			font-weight: bold;
+			text-align: center;
 			flex-shrink: 0;
 		}
 		.modalflash-cuerpo {
@@ -192,7 +193,7 @@
 
 		@media (max-width: 600px) {
 			.modalflash {
-			width: 80vw;
+			width: 90vw;
 			height: 80vh;
 			overflow-y: auto;
 			}
@@ -726,7 +727,7 @@
 		<div class="modalflash-cuerpo" id="cuerpomodalpredicado">
 			<strong>Estos registros ayudan a predicar a conciencia nuestro territorio</strong>
 			<br><br>
-			<label>Fecha: <input id="fechapredicado" type="date" style="width:70%;"></label><br>
+			<label>Fecha: <input id="fechapredicado" type="date" style="width:200px;"></label><br>
 			<label>Tu nombre: <input id="nombrepredicado" style="width:60%;"></label><br>
 			<label>Número del territorio: <input id="territoriopredicado" style="width:50%;"></label><br>
 			<label>¿Se predicó TODO el territorio?  
@@ -752,7 +753,7 @@
 		<div class="modalflash-cuerpo" id="cuerpomodalnovisitar"><strong>Informar de una casa donde han pedido que no los volvamos a visitar, ayuda a resguardar la seguridad de nuestros hermanos y también puede ser una manera indirecta de dar testimonio.-</strong>
 			<br><br>
 			<label>Tu nombre: <input id="nombrenovisitar" style="width:70%;"></label><br>
-			<label>Fecha: <input id="fechanovisitar" type="date" style="width:70%;"></label><br>
+			<label>Fecha: <input id="fechanovisitar" type="date" style="width:200px;"></label><br>
 			<label>Dirección: <input id="direccionnovisitar" style="width:70%;"></label><br>
 			<label>Número del territorio: <input id="territorionovisitar" style="width:20%;"></label><br>
 			<label>La persona, ¿pidió expresamente que no la visitemos más?  <input type="checkbox" id="expresonovisitar">SI&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type="checkbox" id="noexpresonovisitar">NO</label><br><br>
@@ -3134,8 +3135,8 @@
 			document.getElementById("leyendamanzanaspredicadas").style.visibility='hidden';
 			document.getElementById("btn-cerrar-reporte").style.visibility="hidden";
 			document.getElementById("btn-enviar-reporte").style.visibility="hidden";
-			document.getElementById("btn-cerrar-reportenovisitar").style.visibility='hidden';
-			document.getElementById("btn-enviar-reportenovisitar").style.visibility='hidden';
+			//document.getElementById("btn-cerrar-reportenovisitar").style.visibility='hidden';
+			//document.getElementById("btn-enviar-reportenovisitar").style.visibility='hidden';
 			clearTimeout(temporizadorpredicado);
 		};
 		
@@ -3228,8 +3229,8 @@
 			document.getElementById("leyendadetallemotivonovisitar").style.visibility='hidden';
 			document.getElementById("btn-cerrar-reportenovisitar").style.visibility='hidden';
 			document.getElementById("btn-enviar-reportenovisitar").style.visibility='hidden';
-			document.getElementById("btn-cerrar-reporte").style.visibility='hidden';
-			document.getElementById("btn-enviar-reporte").style.visibility='hidden';
+			//document.getElementById("btn-cerrar-reporte").style.visibility='hidden';
+			//document.getElementById("btn-enviar-reporte").style.visibility='hidden';
 			clearTimeout(temporizadornovisitar);
 		};
 		
