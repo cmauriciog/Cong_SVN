@@ -2820,6 +2820,7 @@
 		// ==== 5) Abrir/Cerrar modal ====
 		function AbrirModalCalendario(id) {
 			barralateral.close();
+			document.getElementById("BorrarFecha").style.display="none";
 			document.getElementById("ModalCalendario").classList.add("active");
 			document.getElementById(id).style.display = "block";
 			document.getElementById("botonnorte").style.display="none";
