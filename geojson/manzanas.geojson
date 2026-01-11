@@ -5,7 +5,7 @@ var manzanas={
 "features": [
 { "type": "Feature", "properties": { "id": null, "Territorio": 12, "Manzana": "A" }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -68.779183637786346, -32.922589731627866 ] ] } },
 { "type": "Feature", "properties": { "id": null, "Territorio": 12, "Manzana": "B" }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -68.779437159196988, -32.923359968599449 ] ] } },
-var manzanas={ "type": "Feature", "properties": { "id": null, "Territorio": 12, "Manzana": "C" }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -68.780115386994154, -32.924332093110145 ] ] } },
+{ "type": "Feature", "properties": { "id": null, "Territorio": 12, "Manzana": "C" }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -68.780115386994154, -32.924332093110145 ] ] } },
 { "type": "Feature", "properties": { "id": null, "Territorio": 1, "Manzana": "A" }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -68.764248403997172, -32.922836710365885 ] ] } },
 { "type": "Feature", "properties": { "id": null, "Territorio": 1, "Manzana": "D" }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -68.766168412473291, -32.933820010357749 ] ] } },
 { "type": "Feature", "properties": { "id": null, "Territorio": 1, "Manzana": "B" }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -68.766151773744298, -32.927470962146899 ] ] } },
