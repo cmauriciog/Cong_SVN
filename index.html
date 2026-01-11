@@ -76,16 +76,24 @@
         }
 		.popups.leaflet-popup-tip,
 		.popups.leaflet-popup-content-wrapper {
-		background-color: #3182bd;
+			background-color: #3182bd;
 		}
 		.popups.leaflet-popup-tip,
 		.popups.leaflet-popup-content-wrapper {
-		background-color: #3182bd;
+			background-color: #3182bd;
 		}
 		a{
-		text-align: center;
-		display: inline;
-		width: 100%;
+			text-align: center;
+			display: inline;
+			width: 100%;
+		}
+		/*Configuración del área del mapa*/
+		#mapa {
+			width:100%;
+			height:87%;
+			border: 0.5cm solid red;
+			padding: 0px;
+			margin: 0px;
 		}
 		.botonnorte {
 			position: absolute;
@@ -492,6 +500,29 @@
 			margin: 0 !important;
 		}
 		
+		/*Configuración adicional de la Barra Lateral para insertar Iconos Locales*/
+		.sidebar-tabs1 > ul > li > a img {
+			width: 32px !important;    /* tamaño ideal */
+			height: 32px !important;
+			object-fit: contain !important;
+			display: block !important;
+			padding: 0 !important;
+			margin: 0 auto !important;
+		}
+		#barralateral img {
+			width: 40px;
+			height: auto;
+			vertical-align: middle;
+			margin-right: 2px;
+		}
+		
+		/*Configuración de la Barra Lateral*/
+		#barralateral {
+			position: absolute;
+			z-index: 550;
+			max-width: 80%;
+		}
+		
 		/*Formatea un elemento para que sus párrafos se alinien a la izquierda, el siguiente a la derecha y los próximos al centro*/
 		.contenedoralineado {
 			display: flex;                 /* Activa Flexbox */
@@ -539,151 +570,138 @@
 </header>
 <header>
 	<div id="texto_ayuda" class="contenedoralineado">
-		<p style="font-size:12px; color:blue;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/flecha_izquierda.png" width="20" height="20"></img>Para Ayuda, tocá ☰ </p>
+		<!--<p style="font-size:12px; color:blue;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/flecha_izquierda.png" width="20" height="20"></img>Para Ayuda, tocá ☰ </p>-->
 		<p id="vermiubicacion"><a style="font-size:12px; color:blue;" href="javascript:CentrarMiUbicacion()"><img src="images/posicion.png" width="20" height="20"></img>Ver mi ubicación</a></p>
 	</div>
 </header>
 <body>
-	<div id="barralateral" class="sidebar collapsed">
-        <div class="sidebar-tabs">
-            <ul role="tablist">
-                <li><a href="#home" role="tab"><i class="fa fa-bars" style="color: #3f08f2;"></i></a></li>
-				<li><a href="#mapita" role="tab"><i class="fa fa-map-location-dot" style="color: #3f08f2;"></i></a></li>
-				<li><a id="casas_hnos" href="#familias" role="tab"><i class="fa-solid fa-house" style="color: #3f08f2;"></i></a></li>
-				<li><a href="#configuracion" role="tab"><i class="fa-solid fa-screwdriver-wrench" style="color: #3f08f2;"></i></a></li>
-				<li><a href="#informes" role="tab"><i class="fa-solid fa-pen-to-square" style="color: #3f08f2;"></i></a></li>
-				<li><a href="#ayuda" role="tab"><i class="fa-solid fa-circle-info" style="color: #3f08f2;"></i></a></li>
-				<li><a href="#logueo" role="tab"><i class="fa fa-user" style="color: #3f08f2;"></i></a></li>
-            </ul>
-        </div>
-
-        <div class="sidebar-content">
-            <div class="sidebar-pane" id="home">
-                <h1 class="sidebar-header">
-                    BARRA DE OPCIONES
-                    <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
-                </h1>
-				<br></br>
-				<p style="color:blue"><strong>¿Cómo funciona cada herramienta de esta barra?</strong></p>
-				<br></br>
-				<p class="lorem"><i class="fa fa-map-location-dot" style="color: #3f08f2;"></i>Te ayudará a encontrar un territorio</p>
-				<br></br>
-                <p class="lorem"><i class="fa-solid fa-house" style="color: #3f08f2;"></i>Te ayudará a encontrar la casa de un publicador</br>(En caso que estés registrado como usuario)</p>
-				<br></br>
-				<p class="lorem"><i class="fa-solid fa-screwdriver-wrench" style="color: #3f08f2;"></i>Te permitirá acceder a las herramientas de configuración disponibles</p>
-				<br></br>
-				<p class="lorem"><i class="fa-solid fa-pen-to-square" style="color: #3f08f2;"></i>Consultá las salidas de cada día del mes, Informá lo que se predicó o si encontraste un nuevo NO VISITAR</p>
-				<br></br>
-				<p class="lorem"><i class="fa-solid fa-circle-info" style="color: #3f08f2;"></i>Te dará detalles sobre cómo usar cada herramienta</p>
-				<br></br>
-				<p class="lorem"><i class="fa fa-user" style="color: #3f08f2;"></i>Sección para usuarios registrados</p>
-				<br></br>
-				<br></br>
-				<br></br>
-				<br></br>
-				<br></br>
-				<p class="lorem"><i class="fa-solid fa-circle-exclamation" style="color: #3f08f2;"></i>¿Encontraste algún problema o tenés alguna sugerencia para mejorar este sitio?</p>
-				<p class="lorem">Por favor, comunicate con alguno de los ancianos.-</p>
-            </div>
-            <div class="sidebar-pane" id="mapita">
-                <h1 class="sidebar-header">Buscar el territorio...<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
-				<br></br>
-				<p id="titulobuscarterritorio" class="lorem">Escribí o seleccioná el territorio...</p>
-				<select id="selector_territorios" name="CasasHnos" data-placeholder="- Seleccioná o escribí el territorio que deseás ubicar -"
-					class="form-control chosenCasas" value="<%= typeof Casas != 'undefined' ? Casas : '' %>" onchange="TerritorioAbuscar(value,'territorio')">
-					<option value=""></option>
-				</select>
-				<br></br>
-				<p id="parrafoterritorio" style="color:blue">Escribí el número del territorio que deseás ubicar o bien elegilo desde el menú desplegable y te centrará el mapa sobre él, mostrándote su información, tal como nombre de los barrios que abarca y lista de casas "NO VISITAR".</p>
-            </div>
-			<div class="sidebar-pane" id="familias">				
-				<h1 class="sidebar-header">Buscar la casa...<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
-				<br></br>
-				<p id="titulobuscarflia" class="lorem">Escribí o seleccioná una familia...</p>
-				<select id="selector_casas" name="CasasHnos" data-placeholder="- Seleccioná o escribí la familia o hermano que deseás ubicar -"
-					class="form-control chosenCasas" value="<%= typeof Casas != 'undefined' ? Casas : '' %>" onchange="CasaAbuscar(value)">
-					<option value=""></option>
-				</select>
-				<br></br>
-				<p id="parrafofamilia" style="color:blue">Escribí algún dato que conozcás del publicador o familia que deseás ubicar (nombre y/o apellido) o bien elegilo desde el menú desplegable y te centrará el mapa sobre su casa, mostrándote información, tal como nombres de los integrantes de la familia, privilegios de servicio, dirección postal, teléfono y foto del frente de la casa para que podás identificarla al llegar.</p>
-				<br></br>
-				<p>
-					<input id="mostrarflias" type="submit" style="background-color:#acf89f" value="Ver todas las familias" onclick="VerTodasFlias();"></input>
-					<input id="ocultarflias" type="submit" style="background-color:#f48d8d" value="Quitar familias del mapa" onclick="QuitarTodasFlias();"></input>
-				</p>
-            </div>
-			<div class="sidebar-pane" id="configuracion">
-                <h1 class="sidebar-header">Sección de configuración<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
-				<br></br>
-				<p id="alternarcapas"><a href="#" onclick="AlternarCapas(); return false;" style="color:blue;"><i class="fa-solid fa-map" style="color: #3f08f2;"></i>  Cambiar vista del mapa de fondo.</a> (Si estás viendo el mapa callejero, pasarás a ver el satelital y a la inversa).</p>
-				<br></br>
-				<p id="miubicacion"><a href="#" onclick="CentrarMiUbicacion(); return false;" style="color:blue;"><i class="fa-solid fa-crosshairs" style="color: #3f08f2;"></i>  Mi ubicación</a> (En caso que tengás el GPS activado, centrará el mapa sobre tu ubicación actual).</p>
-				<br></br>
-				<p id="volveralterritorio"><a href="#" onclick="CentrarEnTerritorio(); return false;" style="color:blue;"><i class="fa-solid fa-earth-americas"></i>  Volver al territorio</a> (Centrar el mapa en el territorio de la congregación).</p>
-				<br></br>
-				<p id="volveraempezar"><a href="#" onclick="location.reload(); return false;" style="color:blue;"><i class="fa-solid fa-rotate"></i>  Volver a empezar</a> (Limpiar el mapa para volver a trabajar en él).</p>
-				<br></br>
-				<p id="restablecernomostrar"><a href="#" onclick="RestablecerNoMostrar(); return false;" style="color:blue;"><i class="fa-solid fa-message" style="color: #3f08f2;"></i>  Volver a mostrar mensajes informativos.</a> (Restablecer los mensajes informativos que puedas haber cancelado).</p>
-				<br></br>
-            </div>
-			<div class="sidebar-pane" id="informes">
-                <h1 class="sidebar-header">Sección de informes<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
-				<br></br>
-				<p id="calendariosalidas"><a href="#" onclick="AbrirModalCalendario('modal1'); return false;" style="color:blue;"><i class="fa-solid fa-calendar-days" style="color: #3f08f2;"></i>  Mostrar el calendario.</a> (Consultá las salidas para este mes).</p>
-				<br></br>
-				<p><a href="#" onclick="ReportarPredicado(); return false;" style="color:blue;"><i class="fa-solid fa-pen-to-square" style="color: #3f08f2;"></i>  Informar lo que se predicó.</a> (Si dirigiste una salida, por favor, informá lo que se abarcó).</p>
-				<br></br>
-				<p><a href="#" onclick="ReportarNoVisitar(); return false;" style="color:blue;"><i class="fa-solid fa-pen-to-square" style="color: #3f08f2;"></i>  Alguien pidió que no lo volvamos a visitar.</a> (Avisá para que se agregue a la lista de los NO VISITAR).</p>
-            </div>
-			<div class="sidebar-pane" id="ayuda">
-                <h1 class="sidebar-header">Sección de ayuda<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
-				<br></br>
-				<p class="lorem"><i class="fa fa-map-location-dot" style="color: #3f08f2;"></i>Te ayudará a encontrar un territorio</p>
-				<br></br>
-				<p>Escribe el número del territorio que deseás ubicar o bien elegilo desde el menú desplegable y te centrará el mapa sobre él, mostrándote su información, tal como nombre de los barrios que abarca y lista de casas "NO VISITAR".</p>
-				<br></br>
-				<div id="ayuda_usuario">
-					<p class="lorem"><i class="fa-solid fa-house" style="color: #3f08f2;"></i>Te ayudará a encontrar la casa de un publicador</br>(En caso que estés registrado como usuario o seas el viajante)</p>
-					<br></br>
-					<p>Escribe algún dato que conozcas del publicador o familia que deseás ubicar (nombre y/o apellido) o bien elegilo desde el menú desplegable y te centrará el mapa sobre su casa, mostrándote información, tal como nombres de los integrantes de la familia, privilegios de servicio, dirección postal, teléfono y foto del frente de la casa para que puedan identificarla al llegar.</p>
-					<br></br>
-				</div>
-				<p class="lorem"><i class="fa-solid fa-screwdriver-wrench" style="color: #3f08f2;"></i>Te permitirá acceder a las herramientas de configuración disponibles</p>
-				<br></br>
-				<p>Podrás cambiar el mapa de fondo, alternando entre el de sólo calles y el satelital (con casas). Recargar la aplicación (ideal para volver a empezar). También podrás pedir que se vuelvan a mostrar los mensajes informativos si que los cancelaste anteriormente.</p>
-				<br></br>
-				<p class="lorem"><i class="fa-solid fa-pen-to-square" style="color: #3f08f2;"></i>Consultá las salidas de cada día del mes, Informá lo que se predicó o si encontraste un nuevo NO VISITAR</p>
-				<br></br>
-				<p class="lorem"><i class="fa fa-user" style="color: #3f08f2;"></i>Sección para usuarios registrados</p>
-				<br></br>
-				<br></br>
-				<br></br>
-				<br></br>
-				<br></br>
-				<p class="lorem"><i class="fa-solid fa-circle-exclamation" style="color: #3f08f2;"></i>¿Encontraste algún problema o tenés alguna sugerencia para mejorar este sitio?</p>
-				<p class="lorem">Por favor, comunicate con alguno de los ancianos.-</p>
-            </div>
-			<div class="sidebar-pane" id="logueo">
-                <div id="log_no">
-					<h1 class="sidebar-header">Sección de logueo<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
-					<br></br>
-					<p class="lorem">Usuario:</p>
-					<input type="text" id="username" name="username" value="">
-					<p class="lorem">Contraseña:</p>
-					<input type="password" id="password" name="password" value="">
-					<input type="submit" value="Mostrar/Ocultar" onclick="Contrasenia();">
-					<br><br>
-					<input type="submit" style="background-color:#acf89f" value="Ingresar" onclick="Loguearse();">
-				</div>
-				<div id="log_si">
-					<br></br>
-					<input type="submit" style="background-color:#f48d8d" value="Cerrar sesión" onclick="CerrarSesion();"></input>
-				</div>
-            </div>
-        </div>
-    </div>
-	
 	<div id="mapa" style="width:100%;height:90%;">
+		<div id="barralateral" class="sidebar collapsed">
+			<div class="sidebar-tabs">
+				<ul role="tablist">
+					<li><a href="#home" role="tab"><i class="fa fa-bars" style="color: #3f08f2;"></i></a></li>
+					<li><a href="#mapita" role="tab"><img src="images/Mapear.png"></img></a></li>
+					<li><a id="casas_hnos" href="#familias" role="tab"><img src="images/Home.jpg"></img></a></li>
+					<li><a href="#configuracion" role="tab"><img src="images/Herramientas.png"></img></a></li>
+					<li><a href="#informes" role="tab"><img src="images/Informacion.png"></img></a></li>
+					<li><a href="#ayuda" role="tab"><img src="images/Ayuda.jpg"></img></a></li>
+					<li><a href="#logueo" role="tab"><img src="images/Usuario.png"></img></a></li>
+				</ul>
+			</div>
+			<div class="sidebar-content">
+				<div class="sidebar-pane" id="home">
+					<h1 class="sidebar-header">
+						BARRA DE OPCIONES
+						<span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
+					</h1>
+					<br></br>
+					<p style="color:blue"><strong>¿Cómo funciona cada herramienta de esta barra?</strong></p>
+					<p class="lorem"><img src="images/Mapear.png"></img>Te ayudará a encontrar un territorio</p>
+					<p class="lorem"><img src="images/Home.jpg"></img>Te ayudará a encontrar la casa de un publicador</br>(En caso que estés registrado como usuario)</p>
+					<p class="lorem"><img src="images/Herramientas.png"></img>Te permitirá acceder a las herramientas de configuración disponibles</p>
+					<p class="lorem"><img src="images/Informacion.png"></img>Consultá las salidas de cada día del mes, Informá lo que se predicó o si encontraste un nuevo NO VISITAR</p>
+					<p class="lorem"><img src="images/Ayuda.jpg"></img>Te dará detalles sobre cómo usar cada herramienta</p>
+					<p class="lorem"><img src="images/Usuario.png"></img>Sección para usuarios registrados</p>
+					<p class="lorem"><i class="fa-solid fa-circle-exclamation" style="color: #3f08f2;"></i>¿Encontraste algún problema o tenés alguna sugerencia para mejorar este sitio?</p>
+					<p class="lorem">Por favor, comunicate con alguno de los ancianos.-</p>
+				</div>
+				<div class="sidebar-pane" id="mapita">
+					<h1 class="sidebar-header">Buscar el territorio...<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+					<br></br>
+					<p id="titulobuscarterritorio" class="lorem">Escribí o seleccioná el territorio...</p>
+					<select id="selector_territorios" name="CasasHnos" data-placeholder="- Seleccioná o escribí el territorio que deseás ubicar -"
+						class="form-control chosenCasas" value="<%= typeof Casas != 'undefined' ? Casas : '' %>" onchange="TerritorioAbuscar(value,'territorio')">
+						<option value=""></option>
+					</select>
+					<br></br>
+					<p id="parrafoterritorio" style="color:blue">Escribí el número del territorio que deseás ubicar o bien elegilo desde el menú desplegable y te centrará el mapa sobre él, mostrándote su información, tal como nombre de los barrios que abarca y lista de casas "NO VISITAR".</p>
+				</div>
+				<div class="sidebar-pane" id="familias">				
+					<h1 class="sidebar-header">Buscar la casa...<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+					<br></br>
+					<p id="titulobuscarflia" class="lorem">Escribí o seleccioná una familia...</p>
+					<select id="selector_casas" name="CasasHnos" data-placeholder="- Seleccioná o escribí la familia o hermano que deseás ubicar -"
+						class="form-control chosenCasas" value="<%= typeof Casas != 'undefined' ? Casas : '' %>" onchange="CasaAbuscar(value)">
+						<option value=""></option>
+					</select>
+					<br></br>
+					<p id="parrafofamilia" style="color:blue">Escribí algún dato que conozcás del publicador o familia que deseás ubicar (nombre y/o apellido) o bien elegilo desde el menú desplegable y te centrará el mapa sobre su casa, mostrándote información, tal como nombres de los integrantes de la familia, privilegios de servicio, dirección postal, teléfono y foto del frente de la casa para que podás identificarla al llegar.</p>
+					<br></br>
+					<p>
+						<input id="mostrarflias" type="submit" style="background-color:#acf89f" value="Ver todas las familias" onclick="VerTodasFlias();"></input>
+						<input id="ocultarflias" type="submit" style="background-color:#f48d8d" value="Quitar familias del mapa" onclick="QuitarTodasFlias();"></input>
+					</p>
+				</div>
+				<div class="sidebar-pane" id="configuracion">
+					<h1 class="sidebar-header">Sección de configuración<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+					<br></br>
+					<p id="alternarcapas"><a href="#" onclick="AlternarCapas(); return false;" style="color:blue;"><i class="fa-solid fa-map" style="color: #3f08f2;"></i>  Cambiar vista del mapa de fondo.</a> (Si estás viendo el mapa callejero, pasarás a ver el satelital y a la inversa).</p>
+					<br></br>
+					<p id="miubicacion"><a href="#" onclick="CentrarMiUbicacion(); return false;" style="color:blue;"><i class="fa-solid fa-crosshairs" style="color: #3f08f2;"></i>  Mi ubicación</a> (En caso que tengás el GPS activado, centrará el mapa sobre tu ubicación actual).</p>
+					<br></br>
+					<p id="volveralterritorio"><a href="#" onclick="CentrarEnTerritorio(); return false;" style="color:blue;"><i class="fa-solid fa-earth-americas"></i>  Volver al territorio</a> (Centrar el mapa en el territorio de la congregación).</p>
+					<br></br>
+					<p id="volveraempezar"><a href="#" onclick="location.reload(); return false;" style="color:blue;"><i class="fa-solid fa-rotate"></i>  Volver a empezar</a> (Limpiar el mapa para volver a trabajar en él).</p>
+					<br></br>
+					<p id="restablecernomostrar"><a href="#" onclick="RestablecerNoMostrar(); return false;" style="color:blue;"><i class="fa-solid fa-message" style="color: #3f08f2;"></i>  Volver a mostrar mensajes informativos.</a> (Restablecer los mensajes informativos que puedas haber cancelado).</p>
+					<br></br>
+				</div>
+				<div class="sidebar-pane" id="informes">
+					<h1 class="sidebar-header">Sección de informes<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+					<br></br>
+					<p id="calendariosalidas"><a href="#" onclick="AbrirModalCalendario('modal1'); return false;" style="color:blue;"><i class="fa-solid fa-calendar-days" style="color: #3f08f2;"></i>  Mostrar el calendario.</a> (Consultá las salidas para este mes).</p>
+					<br></br>
+					<p><a href="#" onclick="ReportarPredicado(); return false;" style="color:blue;"><i class="fa-solid fa-pen-to-square" style="color: #3f08f2;"></i>  Informar lo que se predicó.</a> (Si dirigiste una salida, por favor, informá lo que se abarcó).</p>
+					<br></br>
+					<p><a href="#" onclick="ReportarNoVisitar(); return false;" style="color:blue;"><i class="fa-solid fa-pen-to-square" style="color: #3f08f2;"></i>  Alguien pidió que no lo volvamos a visitar.</a> (Avisá para que se agregue a la lista de los NO VISITAR).</p>
+				</div>
+				<div class="sidebar-pane" id="ayuda">
+					<h1 class="sidebar-header">Sección de ayuda<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+					<br></br>
+					<p class="lorem"><i class="fa fa-map-location-dot" style="color: #3f08f2;"></i>Te ayudará a encontrar un territorio</p>
+					<br></br>
+					<p>Escribe el número del territorio que deseás ubicar o bien elegilo desde el menú desplegable y te centrará el mapa sobre él, mostrándote su información, tal como nombre de los barrios que abarca y lista de casas "NO VISITAR".</p>
+					<br></br>
+					<div id="ayuda_usuario">
+						<p class="lorem"><i class="fa-solid fa-house" style="color: #3f08f2;"></i>Te ayudará a encontrar la casa de un publicador</br>(En caso que estés registrado como usuario o seas el viajante)</p>
+						<br></br>
+						<p>Escribe algún dato que conozcas del publicador o familia que deseás ubicar (nombre y/o apellido) o bien elegilo desde el menú desplegable y te centrará el mapa sobre su casa, mostrándote información, tal como nombres de los integrantes de la familia, privilegios de servicio, dirección postal, teléfono y foto del frente de la casa para que puedan identificarla al llegar.</p>
+						<br></br>
+					</div>
+					<p class="lorem"><i class="fa-solid fa-screwdriver-wrench" style="color: #3f08f2;"></i>Te permitirá acceder a las herramientas de configuración disponibles</p>
+					<br></br>
+					<p>Podrás cambiar el mapa de fondo, alternando entre el de sólo calles y el satelital (con casas). Recargar la aplicación (ideal para volver a empezar). También podrás pedir que se vuelvan a mostrar los mensajes informativos si que los cancelaste anteriormente.</p>
+					<br></br>
+					<p class="lorem"><i class="fa-solid fa-pen-to-square" style="color: #3f08f2;"></i>Consultá las salidas de cada día del mes, Informá lo que se predicó o si encontraste un nuevo NO VISITAR</p>
+					<br></br>
+					<p class="lorem"><i class="fa fa-user" style="color: #3f08f2;"></i>Sección para usuarios registrados</p>
+					<br></br>
+					<br></br>
+					<br></br>
+					<br></br>
+					<br></br>
+					<p class="lorem"><i class="fa-solid fa-circle-exclamation" style="color: #3f08f2;"></i>¿Encontraste algún problema o tenés alguna sugerencia para mejorar este sitio?</p>
+					<p class="lorem">Por favor, comunicate con alguno de los ancianos.-</p>
+				</div>
+				<div class="sidebar-pane" id="logueo">
+					<div id="log_no">
+						<h1 class="sidebar-header">Sección de logueo<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+						<br></br>
+						<p class="lorem">Usuario:</p>
+						<input type="text" id="username" name="username" value="">
+						<p class="lorem">Contraseña:</p>
+						<input type="password" id="password" name="password" value="">
+						<input type="submit" value="Mostrar/Ocultar" onclick="Contrasenia();">
+						<br><br>
+						<input type="submit" style="background-color:#acf89f" value="Ingresar" onclick="Loguearse();">
+					</div>
+					<div id="log_si">
+						<br></br>
+						<input type="submit" style="background-color:#f48d8d" value="Cerrar sesión" onclick="CerrarSesion();"></input>
+					</div>
+				</div>
+			</div>
+		</div>
 		<div id="distancia" style="transition: opacity 1s;">Buscando ubicacion...</div>
 		<button class="botoncentrado" id="botoncentrado" onclick="CentrarMiUbicacion()" title="Centrar en mi ubicación real">
 			<img src="./images/posicion.png" alt="Centrar en Mi Ubicación">
@@ -801,7 +819,10 @@
 
 	<!-- la guía/modal con flecha (se posiciona con JS) -->
 	<div id="cartelnuevo" class="guia" role="dialog" aria-modal="true" style="display:none">
-		<p style="color:green";>Las herramientas que estaban en la pantalla,</p>
+		<p style="color:green";>Esta versión, ya muestra los territorios</p>
+		<p style="color:green";>actualizados en enero 2026.</p>
+		<p style="color:green";>Por otra parte, recordá que</p>
+		<p style="color:green";>las herramientas que estaban en la pantalla,</p>
 		<p style="color:green";>ahora están ordenadas dentro de esta barra.</p>
 		<p style="color:green";>Así, tendrás más espacio para ver mejor el mapa.</p>
 		<br></br>
@@ -833,14 +854,14 @@
 		</div>
 	</dialog>
 	<script>
-		var Version = "1"; //Cambiar este valor para volver a mostrar el modal de presentacion cada vez que haya una actualizacion importante
+		var Version = "2"; //Cambiar este valor para volver a mostrar el modal de presentacion cada vez que haya una actualizacion importante
 		<!--Mapas o capas bases-->
 		var osm=L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-			attribution: 'Teselas <a href="https://www.openstreetmap.org/" target="blanck">OSM</a> &copy | Versión: '+Version,
+			attribution: 'Teselas <a href="https://www.openstreetmap.org/" target="blanck">OSM</a> &copy|Versión: '+Version,
 			minZoom: 1
 		});
 		var googlesatelite=L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
-			attribution: 'Teselas <a href="https://www.google.com.ar/maps/@-21.5405995,-63.9542602,11544855m/data=!3m1!1e3?entry=ttu" target="blanck">Google Satelital</a> &copy | Versión: '+Version,
+			attribution: 'Teselas <a href="https://www.google.com.ar/maps/@-21.5405995,-63.9542602,11544855m/data=!3m1!1e3?entry=ttu" target="blanck">Google Satelital</a> &copy|Versión: '+Version,
 		});
 		<!--Establecer el área para el mapa y definir cuál será la capa base por defecto-->
 		var mapa = L.map('mapa', {editable:true,
@@ -1812,16 +1833,6 @@
 		} else {
 			if (conexion=="no") {document.getElementById("Conectividad").style.display="inline"; document.getElementById("Apaisado").style.display="none";modalinicial.showModal()};//document.getElementById("modal_inicial").showModal();}
 		};
-
-		//Capturar evento sobre botones
-		//const btncerrarmodalflash=document.querySelector("#btn-cerrar-modal-flash");
-		//const btnindicacionesmodalflash=document.querySelector("#btn-indicaciones-modal-flash");
-		//const cajadistancia = document.getElementById("distancia");
-		//const btncerrarmodalinicial=document.querySelector("#btn-cerrar-modal-inicial");
-		//const modalinicial=document.querySelector("#modal_inicial");
-		//const nomostrarinicial = document.getElementById('nomostrarinicial');
-		//const nomostrarcelular = document.getElementById('nomostrarcelular');
-		//const nomostrarlonuevo = document.getElementById('nomostrarlonuevo');
 		
 		btncerrarmodalflash.addEventListener("click",()=>{
 			document.getElementById("btn-indicaciones-modal-flash").style.visibility='hidden';
@@ -2509,8 +2520,8 @@
 		const elementonovedoso = document.getElementById('barralateral');
 		const novedaden="barralateral";//Cambiar si fuera otro elemento el que contenga la novedad
 		// Fechas de inicio y fin para resaltar o remarcar una novedad (pueden incluir hora si querés)
-		const inicio = new Date("2025-11-01"); //yyyy-mm-dd
-		const fin = new Date("2025-12-30"); //yyyy-mm-dd
+		const inicio = new Date("2026-01-10"); //yyyy-mm-dd
+		const fin = new Date("2026-02-10"); //yyyy-mm-dd
 		const hoy = new Date();
 		const cartelnuevo = document.getElementById('cartelnuevo');
 		if (hoy >= inicio && hoy <= fin && Version !==localStorage.getItem('MOSTRAR_NUEVO')) {
