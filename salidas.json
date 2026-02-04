@@ -1,4 +1,4 @@
-[
+var salidas=[
   {
     "DiaSemana": "Domingo",
     "Dia": 1,
@@ -881,4 +881,4 @@
     "ConductorN": "",
     "TerritorioN": ""
   }
-]
+];
