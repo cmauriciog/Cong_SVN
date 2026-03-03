@@ -433,6 +433,50 @@
 			text-shadow: 0 0 2px black;
 		}
 		
+		/*Boton para desplegar detalles de rutas sugeridas*/
+		#BotonDetallesRuta {
+			position: fixed;
+			top: 28%;
+			right: 3%;
+			z-index: 999;
+			background: #fff;
+			color: white;
+			border: 1px solid #777;
+			border-radius: 6px;
+			cursor: pointer;
+			font-weight: bold;
+			box-shadow: 0 2px 4px rgba(0,0,0,.3);
+			animation: pulsobotonlimpiar 2s infinite ease-in-out;
+		}
+		@keyframes pulsobotonlimpiar {
+			0% {
+				background-color: #001a33;
+				transform: translateX(-50%) scale(1);
+				box-shadow: 0 0 10px rgba(0,255,255,0.5);
+			}
+			50% {
+				background-color: #004c99; /* azul más claro */
+				transform: translateX(-50%) scale(1.12);
+				box-shadow: 0 0 26px rgba(0,255,255,1);
+			}
+			100% {
+				background-color: #001a33;
+				transform: translateX(-50%) scale(1);
+				box-shadow: 0 0 10px rgba(0,255,255,0.5);
+			}
+		}
+		
+		#PanelRutas {
+			position:fixed;
+			top: 35%;
+			right: 0;
+			z-index:1050;
+			display:none;           /* ← CLAVE */
+			background:white;
+			border-radius:6px;
+			box-shadow:0 2px 6px rgba(0,0,0,.35);
+		}
+		
 		/*Bloque para resaltar lo NUEVO*/
 		/* Clase resaltado con animación */
 		.resaltarlonovedoso {
@@ -703,6 +747,8 @@
 			</div>
 		</div>
 		<div id="distancia" style="transition: opacity 1s;">Buscando ubicacion...</div>
+		<button id="BotonDetallesRuta">Detalles Ruta</button>
+		<div id="PanelRutas"></div>
 		<button class="botoncentrado" id="botoncentrado" onclick="CentrarMiUbicacion()" title="Centrar en mi ubicación real">
 			<img src="./images/posicion.png" alt="Centrar en Mi Ubicación">
 		</button>
@@ -949,6 +995,8 @@
 		const nomostrarinicial = document.getElementById('nomostrarinicial');
 		const nomostrarcelular = document.getElementById('nomostrarcelular');
 		const nomostrarlonuevo = document.getElementById('nomostrarlonuevo');
+		const botondetallesruta =document.getElementById("BotonDetallesRuta");
+		const panelrutas=document.getElementById("PanelRutas");
 		
 		// Crear grupo de puntos
 		var grupomanzanas = L.geoJSON(manzanas, {
@@ -1360,17 +1408,15 @@
 				nombrefoto=(feature.properties.Flia).split(" ");
 				nombrefoto.forEach(nombre => nom_foto=nom_foto+nombre+"_");
 				nombrefoto = nom_foto.slice(0, nom_foto.length - 1);
-				<!--Establecer qué familias tienen fotos del frente de su casa y cuáles no para distinguir qué imagen mostrar-->
-				if (nombrefoto=="Andrada_Liliana" || nombrefoto=="Argüello" || nombrefoto=="Astudillo_Elio-Videla_Alejandro" || nombrefoto=="Astudillo_Jonatan" || nombrefoto=="Battaglia" || nombrefoto=="Biscontin_Irma" || nombrefoto=="Biscontin_Ruben"
-				|| nombrefoto=="Bringas" || nombrefoto=="Bustos_Ethel" || nombrefoto=="Cabañez_Carlos" || nombrefoto=="Calderon-Andrada" || nombrefoto=="Candia" || nombrefoto=="Castillo" || nombrefoto=="Cinco-Castillo"
-				|| nombrefoto=="Del_Balzo" || nombrefoto=="Ferranti-Ricalde" || nombrefoto=="Figueroa" || nombrefoto=="Galdames" || nombrefoto=="Garcia_Cristian" || nombrefoto=="Garcia_Gonzalo" || nombrefoto=="Garcia_Roberto"
-				|| nombrefoto=="Godoy" || nombrefoto=="Gualpa" || nombrefoto=="Huallpa" || nombrefoto=="Leites" || nombrefoto=="Manresa" || nombrefoto=="Miron_Daniel" || nombrefoto=="Miron_Gustavo" || nombrefoto=="Muñoz"
-				|| nombrefoto=="Nuñez_Alejandro" || nombrefoto=="Nuñez_Estela" || nombrefoto=="Ortiz_Elias" || nombrefoto=="Ortiz_Hector" || nombrefoto=="Ortiz_Jose" || nombrefoto=="Quiroga_Jose"
-				|| nombrefoto=="Quiroga-Ramirez" || nombrefoto=="Reyes" || nombrefoto=="Rossi" || nombrefoto=="Sarmiento" || nombrefoto=="Snieg" || nombrefoto=="Sosa_Noelia" || nombrefoto=="Sosa_Tamara"
-				|| nombrefoto=="Vera_Debora" || nombrefoto=="Vera_Natalia") {var foto='./images/'+nombrefoto+".jpg";
-				} else {
-					var foto='./images/'+'Casa.jpg';
-				};
+				<!--Establecer qué familias tienen fotos del frente de su casa y cuáles no, para distinguir qué imagen mostrar-->
+				if (nombrefoto=="Andrada_Liliana" || nombrefoto=="Argüello" || nombrefoto=="Astudillo_Elio" || nombrefoto=="Astudillo_Jonatan" || nombrefoto=="Battaglia" || nombrefoto=="Biscontin_Irma"
+				|| nombrefoto=="Biscontin_Ruben" || nombrefoto=="Bringas" || nombrefoto=="Bustos_Ethel" || nombrefoto=="Cabañez_Carlos" || nombrefoto=="Calderon-Andrada"
+				|| nombrefoto=="Candia" || nombrefoto=="Castillo" || nombrefoto=="Cinco-Castillo" || nombrefoto=="Del_Balzo" || nombrefoto=="Ferranti-Ricalde" || nombrefoto=="Figueroa" || nombrefoto=="Galdames"
+				|| nombrefoto=="Garcia_Cristian" || nombrefoto=="Garcia_Gonzalo" || nombrefoto=="Garcia_Roberto" || nombrefoto=="Godoy" || nombrefoto=="Gualpa" || nombrefoto=="Huallpa" || nombrefoto=="Leites"
+				|| nombrefoto=="Manresa" || nombrefoto=="Miron_Daniel" || nombrefoto=="Miron_Gustavo" || nombrefoto=="Muñoz" || nombrefoto=="Nuñez_Alejandro" || nombrefoto=="Nuñez_Estela" || nombrefoto=="Ortiz_Elias"
+				|| nombrefoto=="Ortiz_Hector" || nombrefoto=="Ortiz_Jose" || nombrefoto=="Quiroga_Jose" || nombrefoto=="Quiroga-Ramirez" || nombrefoto=="Reyes" || nombrefoto=="Rodriguez_Marta" || nombrefoto=="Rodriguez_Matias"
+				|| nombrefoto=="Rossi" || nombrefoto=="Sarmiento" || nombrefoto=="Snieg" || nombrefoto=="Sosa_Noelia" || nombrefoto=="Sosa_Tamara" || nombrefoto=="Tumbarello_Debora" || nombrefoto=="Vera_Natalia")
+				{var foto='./images/'+nombrefoto+".jpg";} else {var foto='./images/'+'Casa.jpg';};
 				if (feature.properties.Integrante !=null) {var integrantes=feature.properties.Integrante} else {var integrantes="Sin datos"};
 				if (feature.properties.Privilegio !=null) {var privilegios=feature.properties.Privilegio} else {var privilegios="Sin datos"};
 				if (feature.properties.Direccion !=null) {var direccion=feature.properties.Direccion} else {var direccion="Sin datos"};
@@ -1446,6 +1492,7 @@
 					'Debido a: '+msg1+'.-</span>';
 					tiempomodalflash=5000;
 					ModalFlash(tiempomodalflash);
+					botondetallesruta.style.display="none";
 				},
 				{
 					enableHighAccuracy: true,
@@ -1497,6 +1544,7 @@
 			document.getElementById("vermiubicacion").style.visibility='visible';
 			distancia=DistanciaEnTiempoReal();
 			const dentro = ChequearPredio(coordenadas_ubicacion_real);//{lat:"-32.92738990461459", lng:"-68.77720752661189"});//coordenadas_ubicacion_real);
+			if (distancia>1100) {botondetallesruta.style.display="block"};
 			if (!dentro || dentro==null) {
 				dentropredio=""} else {dentropredio="si"};
 			//if (dentropredio=="si") {alert("Estás dentro del teritorio")};
@@ -1727,6 +1775,9 @@
 						});
 					}
 				}).addTo(mapa);
+				panelrutas.replaceChildren(ruta.getContainer());
+				botondetallesruta.style.display = "block";
+				panelrutas.style.display = "block";
 				//Centrar el mapa para que se vean ubicación en tiempo real y EEA ó Sector/Persona buscado **SOLO la primera vez**
 				if (actualizarruta=="si") {const centrar = L.latLngBounds(coordenadas_ubicacion_real, puntomascercano);mapa.fitBounds(centrar, {padding: [50, 50]});};
 				//const osrmUrl = `https://router.project-osrm.org/route/v1/driving/${coordenadas_ubicacion_real.lng},${coordenadas_ubicacion_real.lat};${puntomascercano.lng},${puntomascercano.lat}?overview=full&geometries=geojson`;
@@ -1772,6 +1823,7 @@
 						});
 					}
 					}).addTo(mapa);
+					panelrutas.replaceChildren(ruta.getContainer());
 					//const osrmUrl = `https://router.project-osrm.org/route/v1/driving/${coordenadas_ubicacion_real.lng},${coordenadas_ubicacion_real.lat};${puntomascercano.lng},${puntomascercano.lat}?overview=full&geometries=geojson`;
 					//Solicito la ruta y la dibujo con animación
 					//fetch(osrmUrl)
@@ -1922,6 +1974,15 @@
 				}
 			}
 		});
+		
+		// === BOTÓN MOSTRAR / OCULTAR DETALLES RUTAS===
+		let abierto = true;
+		botondetallesruta.onclick = () => {
+			abierto = !abierto;
+			panelrutas.style.display = abierto ? "block" : "none";
+			botondetallesruta.textContent = abierto ? "Detalles Ruta ▾" : "Detalles Ruta ▸";
+			mapa.invalidateSize();
+		};
 		
 		//Bloque para el Calendario
 		//const borrarfecha = document.getElementById('BorrarFecha');
@@ -2654,6 +2715,10 @@
 		document.getElementById("leyendadetallemotivonovisitar").style.visibility='hidden';
 		document.getElementById("botoncentrado").style.visibility='hidden';
 		document.getElementById("MiModalFlash").style.visibility='hidden';
+		const contenedorzoom = document.querySelector('.leaflet-top.leaflet-right');
+		contenedorzoom.style.setProperty('top', '10px', 'important');
+		contenedorzoom.style.setProperty('right', '10px', 'important');
+		botondetallesruta.style.display="none";
 		VerificarConexion();
 		VerificarVersion();
 		VerificarNoVolverAMostrar();
