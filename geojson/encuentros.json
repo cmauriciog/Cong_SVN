@@ -79,4 +79,8 @@ var puntosencuentro=[
 		"Lugar": "Tapon Moyano y Rio Deseado",
 		"Coordenadas": ("-32.92505894090046, -68.77195228946371"),
 	},
+	{
+		"Lugar": "Los Ceibos y Boulevard",
+		"Coordenadas": ("-32.92677659147279, -68.76892717882548"),
+	},
 ];
