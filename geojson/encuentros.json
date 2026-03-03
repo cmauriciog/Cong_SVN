@@ -83,4 +83,8 @@ var puntosencuentro=[
 		"Lugar": "Los Ceibos y Boulevard",
 		"Coordenadas": ("-32.92677659147279, -68.76892717882548"),
 	},
+	{
+		"Lugar": "Tapon Moyano y Rio Salado",
+		"Coordenadas": ("-32.92506485342432, -68.77193714252715"),
+	},
 ];
