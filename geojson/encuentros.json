@@ -52,6 +52,10 @@ var puntosencuentro=[
 		"Coordenadas": ("-32.92640105700312, -68.78554342407905"),
 	},
 	{
+		"Lugar": "Rossi",
+		"Coordenadas": ("-32.914096146181066, -68.77709343062381"),
+	},
+	{
 		"Lugar": "Tapon Moyano y Boulevard",
 		"Coordenadas": ("-32.92558694526941, -68.77226588727734"),
 	},
