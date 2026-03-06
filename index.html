@@ -136,8 +136,8 @@
 		
 		.botoncentrado {
 			position: absolute;
-			top: 130px;
-			right: 80px;
+			top: 70px;
+			right: 10px;
 			background: none;
 			border: none;
 			cursor: pointer;
@@ -951,14 +951,15 @@
 		var lugar="";
 		var dentropredio="";
 		var nada=L.layerGroup();
+		var grupoNumeros = L.layerGroup().addTo(mapa);
 		var barrio=null;
 		var no_visitar=null;
 		var poligono="";
 		var capa_infoterritorios={};
 		var capa_coloresterritorios={};
 		var capa_numerosterritorios={};
-		var capa_territoriofiltrado={};
-		var capa_territoriofiltradonumero={};
+		var capa_territoriofiltrado=null;
+		var capa_territoriofiltradonumero=null;
 		var puntomascercano=L.latLng[-32.9280586817747, -68.77360525273423];
 		var numeroterritorio="";
 		var capa_popups=null;
@@ -997,6 +998,7 @@
 		const nomostrarlonuevo = document.getElementById('nomostrarlonuevo');
 		const botondetallesruta =document.getElementById("BotonDetallesRuta");
 		const panelrutas=document.getElementById("PanelRutas");
+		const botoncentrado=document.getElementById("botoncentrado");
 		
 		// Crear grupo de puntos
 		var grupomanzanas = L.geoJSON(manzanas, {
@@ -1166,23 +1168,41 @@
 			};
 		};
 		
+		//function NumeroTerritorio(feature, layer) {
+		//	if (feature.properties && feature.properties.Numero) {
+		//		if (feature.properties.Barrio !==null) {
+		//			var barrio=feature.properties.Barrio}
+		//		else {
+		//			var barrio="Sin información"
+		//		};
+		//		if (feature.properties.No_Visitar !==null) {
+		//			var novisitar=feature.properties.No_Visitar}
+		//		else {
+		//			var novisitar="No hay casas 'NO VISITAR' en este territorio"
+		//		};
+		//		var centroide=layer.getBounds().getCenter();
+		//		var coord=[];
+		//		coord.push(centroide.lat,centroide.lng);
+		//		numeroterritorio=L.marker(coord,{icon:L.icon({iconUrl: 'images/'+feature.properties.Numero+'.jpg',iconSize: [50, 55],iconAnchor: [16, 37],popupAnchor: [0, -28]}),title:""+feature.properties.Numero})
+		//			.bindPopup("<strong>Territorio Nº "+feature.properties.Numero+"</strong>"+"<br>Barrio: "+barrio+"<br><br><strong>NO VISITAR:</strong><br>"+novisitar).addTo(mapa);
+		//	};
+		//};
 		function NumeroTerritorio(feature, layer) {
 			if (feature.properties && feature.properties.Numero) {
-				if (feature.properties.Barrio !==null) {
-					var barrio=feature.properties.Barrio}
-				else {
-					var barrio="Sin información"
-				};
-				if (feature.properties.No_Visitar !==null) {
-					var novisitar=feature.properties.No_Visitar}
-				else {
-					var novisitar="No hay casas 'NO VISITAR' en este territorio"
-				};
-				var centroide=layer.getBounds().getCenter();
-				var coord=[];
-				coord.push(centroide.lat,centroide.lng);
-				numeroterritorio=L.marker(coord,{icon:L.icon({iconUrl: 'images/'+feature.properties.Numero+'.jpg',iconSize: [50, 55],iconAnchor: [16, 37],popupAnchor: [0, -28]}),title:""+feature.properties.Numero})
-					.bindPopup("<strong>Territorio Nº "+feature.properties.Numero+"</strong>"+"<br>Barrio: "+barrio+"<br><br><strong>NO VISITAR:</strong><br>"+novisitar).addTo(mapa);
+				let barrio = feature.properties.Barrio ?? "Sin información";
+				let novisitar = feature.properties.No_Visitar ?? "No hay casas 'NO VISITAR' en este territorio";
+				let centroide = layer.getBounds().getCenter();
+				let marcador = L.marker([centroide.lat, centroide.lng],{
+					icon:L.icon({
+						iconUrl:'images/'+feature.properties.Numero+'.jpg',
+						iconSize:[50,55],
+						iconAnchor:[16,37],
+						popupAnchor:[0,-28]
+					}),
+					title:feature.properties.Numero
+				})
+				.bindPopup("<strong>Territorio Nº "+feature.properties.Numero+"</strong><br>Barrio: "+barrio+"<br><br><strong>NO VISITAR:</strong><br>"+novisitar);
+				grupoNumeros.addLayer(marcador);
 			};
 		};
 		
@@ -1503,6 +1523,7 @@
 		};
 		
 		function activar_seguimiento() {
+			botoncentrado.style.display='block';
 			sondeo_posicion=0;
 			barralateral.close();
 			document.getElementById("gps").src="./images/slide_on.jpg";
@@ -1711,7 +1732,8 @@
 			document.getElementById("miubicacion").style.visibility='hidden';
 			//document.getElementById("gpson").style.visibility='hidden';
 			//document.getElementById("gpsoff").style.visibility='visible';
-			document.getElementById("botoncentrado").style.visibility='hidden';
+			//document.getElementById("botoncentrado").style.visibility='hidden';
+			botoncentrado.style.display='none';
 			document.getElementById("activargps").style.visibility='visible';
 			cajadistancia.style.visibility="hidden";
 			//document.getElementById("dondestoy").style.visibility='hidden';
@@ -1727,6 +1749,7 @@
 
 		<!--Función para Trazar Ruta Sugerida con OSRM-->
 		function TrazarRuta() {
+			cajadistancia.style.visibility="visible";
 			VerificarConexion();
 			if (conexion==="si") {
 				VerificarGPS();
@@ -1775,6 +1798,28 @@
 						});
 					}
 				}).addTo(mapa);
+				
+				
+				
+				ruta.on('routesfound', function (e) {
+						let infoRutas = "";
+						e.routes.forEach((route, index) => {
+							const distanciaKm = (route.summary.totalDistance / 1000).toFixed(2);
+							const tiempoSeg = route.summary.totalTime;
+							const horas = Math.floor(tiempoSeg / 3600);
+							const minutos = Math.round((tiempoSeg % 3600) / 60);
+							const tiempoFormateado =
+								horas > 0 ? `${horas} h ${minutos} min` : `${minutos} min`;
+							infoRutas += `<br>Ruta ${index === 0 ? 'Recomendada (Rojo)' : 'Alternativa (Azul)'}:
+										  Distancia: ${distanciaKm} km,
+										  Tiempo estimado: ${tiempoFormateado}.`;
+						});
+						cajadistancia.innerHTML = msg + infoRutas;
+					});
+				//panelrutas.replaceChildren(ruta.getContainer());
+				
+				
+				
 				panelrutas.replaceChildren(ruta.getContainer());
 				botondetallesruta.style.display = "block";
 				panelrutas.style.display = "block";
@@ -1823,7 +1868,33 @@
 						});
 					}
 					}).addTo(mapa);
+					
+					
+					ruta.on('routesfound', function (e) {
+						let infoRutas = "";
+						e.routes.forEach((route, index) => {
+							const distanciaKm = (route.summary.totalDistance / 1000).toFixed(2);
+							const tiempoSeg = route.summary.totalTime;
+							const horas = Math.floor(tiempoSeg / 3600);
+							const minutos = Math.round((tiempoSeg % 3600) / 60);
+							const tiempoFormateado =
+								horas > 0 ? `${horas} h ${minutos} min` : `${minutos} min`;
+							infoRutas += `<br>Ruta ${index === 0 ? 'Recomendada (Rojo)' : 'Alternativa (Azul)'}:
+										  Distancia: ${distanciaKm} km,
+										  Tiempo estimado: ${tiempoFormateado}.`;
+						});
+						cajadistancia.innerHTML = msg + infoRutas;
+					});
+					//panelrutas.replaceChildren(ruta.getContainer());
+					
+					
+					
 					panelrutas.replaceChildren(ruta.getContainer());
+					botondetallesruta.style.display = "block";
+					panelrutas.style.display = "block";
+					
+					
+					//panelrutas.replaceChildren(ruta.getContainer());
 					//const osrmUrl = `https://router.project-osrm.org/route/v1/driving/${coordenadas_ubicacion_real.lng},${coordenadas_ubicacion_real.lat};${puntomascercano.lng},${puntomascercano.lat}?overview=full&geometries=geojson`;
 					//Solicito la ruta y la dibujo con animación
 					//fetch(osrmUrl)
@@ -1841,7 +1912,7 @@
 					//		tiempomodalflash=5000;
 					//		ModalFlash(tiempomodalflash);
 					//	});
-				},300000);
+				},120000);
 			};
 		};
 	
@@ -2306,7 +2377,6 @@
 					cartografiar="salida";
 					FiltrarVariosTerritorios(territorioapredicar);
 					if (capa_infoterritorios) {capa_infoterritorios.addTo(mapa)};
-					//capa_territoriofiltradonumero=L.geoJSON(territorios,{filter:FiltrarVariosTerritoriosNumero, onEachFeature: NumeroTerritorio}).addTo(mapa);
 					if (seguimiento==="si") {
 						titulomodalflash.innerText="TRAZAR RUTA";
 						cuerpomodalflash.innerHTML = '<span style="color:green"><br><b>¿Necesitás ayuda para llegar?.</b><br><br><span style="color:black">Puedo trazarte una ruta '+
@@ -2320,6 +2390,7 @@
 		};
 		
 		function FiltrarVariosTerritorios(num_terr) {
+			if (numeroterritorio) {mapa.removeLayer(numeroterritorio)};
 			const idSet = AnalizarCadenaVariosTerritorios(num_terr);
 			capa_territoriofiltrado = L.geoJSON(territorios, {
 				filter: f => ConjuntoCoincidencias(f, idSet),
@@ -2328,7 +2399,7 @@
 					layer.bindPopup(`Numero: ${f.properties.Numero}<br>`);
 				}
 			}).addTo(mapa);
-			if (capa_territoriofiltradonumero) {mapa.removeLayer(capa_territoriofiltradonumero)};
+			if (grupoNumeros) {grupoNumeros.clearLayers()};
 			capa_territoriofiltradonumero = L.geoJSON(territorios, {
 				filter: f => ConjuntoCoincidencias(f, idSet),
 				onEachFeature: NumeroTerritorio
@@ -2357,6 +2428,7 @@
 			});
 			return result;
 		};
+		
 		const defaultStyle = {fillColor: "#020259",	weight: 4, opacity: 1, color: "#46fafa", dashArray: '3', fillOpacity: 0.3};
 		const highlightStyle = {color: '#020259', weight: 2, fillOpacity: 0.35};
 		function ConjuntoCoincidencias(feature, idSet, propName = 'Numero') {
@@ -2704,7 +2776,8 @@
 		document.getElementById("miubicacion").style.visibility='hidden';
 		document.getElementById("btn-indicaciones-modal-flash").style.visibility='hidden';
 		document.getElementById("distancia").style.visibility='hidden';
-		document.getElementById("botoncentrado").style.visibility='hidden';
+		//document.getElementById("botoncentrado").style.visibility='hidden';
+		botoncentrado.style.display='none';
 		document.getElementById("botonnorte").style.visibility='hidden';
 		document.getElementById("ModalReportePredicado").style.visibility='hidden';
 		document.getElementById("manzanaspredicadas").style.visibility='hidden';
@@ -2713,7 +2786,7 @@
 		document.getElementById("motivonovisitar").style.visibility='hidden';
 		document.getElementById("detallemotivonovisitar").style.visibility='hidden';
 		document.getElementById("leyendadetallemotivonovisitar").style.visibility='hidden';
-		document.getElementById("botoncentrado").style.visibility='hidden';
+		//document.getElementById("botoncentrado").style.visibility='hidden';
 		document.getElementById("MiModalFlash").style.visibility='hidden';
 		const contenedorzoom = document.querySelector('.leaflet-top.leaflet-right');
 		contenedorzoom.style.setProperty('top', '10px', 'important');
