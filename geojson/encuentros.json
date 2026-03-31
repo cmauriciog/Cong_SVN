@@ -91,4 +91,8 @@ var puntosencuentro=[
 		"Lugar": "Tapon Moyano y Rio Salado",
 		"Coordenadas": ("-32.92506485342432, -68.77193714252715"),
 	},
+	{
+		"Lugar": "9 de Julio y Everest",
+		"Coordenadas": ("-32.92744539825397, -68.78087747488912"),
+	},
 ];
