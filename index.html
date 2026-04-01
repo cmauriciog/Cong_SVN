@@ -2456,9 +2456,8 @@
 			});
 			return result;
 		};
-		
-		const defaultStyle = {fillColor: "#020259",	weight: 4, opacity: 1, color: "#46fafa", dashArray: '3', fillOpacity: 0.3};
-		const highlightStyle = {color: '#020259', weight: 2, fillOpacity: 0.35};
+		const defaultStyle = {fillColor: "blue",	weight: 4, opacity: 1, color: "blue", dashArray: '3', fillOpacity: 0.3};
+		const highlightStyle = {fillColor: '#020259', weight: 4, opacity: 1, color: '#46fafa', dashArray: '3', fillOpacity: 0.3};
 		function ConjuntoCoincidencias(feature, idSet, propName = 'Numero') {
 			if (!feature || !feature.properties) return false;
 			return idSet.has(feature.properties[propName]);
