@@ -36,11 +36,11 @@
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
 	integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
 	crossorigin=""/>
-	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css"/>
+	<!--<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css"/>-->
 	<!--Repositorio Valhalla-->
-	<script src="https://unpkg.com/@mapbox/polyline"></script>
+	<!--<script src="https://unpkg.com/@mapbox/polyline"></script>-->
 	<!-- Repositorios en línea y locales -->
-	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+	<!--<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>-->
 	<link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css"/>
 	<link rel="stylesheet" href="libs/leaflet-measure-path.css"/>
 	<link rel="stylesheet" href="./css/leaflet-sidebar.css"/>
@@ -51,7 +51,7 @@
 	<script src="libs/measure.js"></script>
 	<script src="./js/leaflet-sidebar.js"></script>
 	<script src="https://kit.fontawesome.com/68fa6cffda.js" crossorigin="anonymous"></script>
-	<script src="js/jquery-3.4.1.min.js" ></script>
+	<!--<script src="js/jquery-3.4.1.min.js" ></script>-->
 	<script src="js/chosen.jquery.js" type="text/javascript"></script>
 	<!-- Leaflet Routing Machine -->
 	<link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
@@ -179,21 +179,36 @@
 		
 		/*Modal Flash*/
 		.modalflash {
+			/*position: fixed;*/
+			/*top: 50%;*/
+			/*left: 50%;*/
+			/*transform: translate(-50%, -50%);*/
+			/*width: 95vw;*/
+			/*max-width: 700px;*/
+			/*max-height: 93vh;*/
+			/*background-color: yellow;*/
+			/*border: 2px solid black;*/
+			/*border-radius: 10px;*/
+			/*display: flex;*/
+			/*flex-direction: column;*/
+			/*overflow-y: auto;*/
+			/*z-index: 99999;   /* MUY IMPORTANTE */*/
 			position: fixed;
 			top: 50%;
 			left: 50%;
 			transform: translate(-50%, -50%);
 			width: 95vw;
 			max-width: 700px;
-			height: auto;
-			max-height: 90vh;
+			/* 🔥 CLAVE */
+			height: auto;          /* se ajusta al contenido */
+			max-height: 93vh;      /* límite máximo */
 			background-color: yellow;
 			border: 2px solid black;
 			border-radius: 10px;
 			display: flex;
 			flex-direction: column;
-			overflow: hidden;
-			z-index: 99999;   /* MUY IMPORTANTE */
+			overflow: hidden;      /* evita espacio raro */
+			z-index: 9999999;
 		}
 		.modalflash-cabecera {
 			background: red;
@@ -204,9 +219,13 @@
 			flex-shrink: 0;
 		}
 		.modalflash-cuerpo {
-			padding: 15px;
-			flex: 1;                /* OCUPA TODA LA ALTURA RESTANTE */
-			overflow-y: auto;       /* SCROLL SI SE LLENA */
+			/*padding: 10px;*/
+			/*flex: 1;                /* OCUPA TODA LA ALTURA RESTANTE */*/
+			/*overflow-y: auto;       /* SCROLL SI SE LLENA */*/
+			padding: 10px;
+			/* 🔥 IMPORTANTE */
+			flex: 0;              /* NO expandirse */
+			overflow-y: auto;
 		}
 		.modalflash-botones {
 			display: flex;              /* CLAVE */
@@ -256,9 +275,10 @@
 
 		@media (max-width: 600px) {
 			.modalflash {
-			width: 90vw;
-			height: 80vh;
-			overflow-y: auto;
+				width: 83vw;
+				height: auto;        /* ✅ */
+				max-height: 75vh;    /* ✅ límite, no fijo */
+				overflow-y: auto;
 			}
 		}
 		
@@ -819,83 +839,6 @@
 		</button>
 	</div>
 	
-	<div class="modalflash ocultar" id="MiModalFlash" style="font-size:14px;">
-		<div class="modalflash-cabecera" id="titulomodalflash">¡¡¡ BIENVENIDO AL MAPA WEB DE LA CONGREGACION SUR VILLA NUEVA...!!!</div>
-		<p class="modalflash-cuerpo" id="cuerpomodalflash"><img src="./images/presentacion.jpg" style="display: block; margin: auto; height:80px" id="imagenmodalflash"/><br><strong>Si sos un publicador, este mapa en línea te permitirá:</strong>
-			<br>Ubicar un territorio con la opción de hacerlo a partir de tu ubicación en tiempo real.
-			<br>
-			<br>Es decir, si vos se lo autorizás, te trazará una ruta con las indicaciones necesarias para llegar...!!!. Te incluirá una distancia y demora estimadas y hasta te avisará con voz cuando estés cerca y cuando hayás llegado...!!!
-			<br>
-			<br>Podrás consultar las salidas del mes en curso y si dirigiste alguna salida, podrás enviarle los detalles de lo que se abarcó al hermano encargado de los territorios.
-			<br>Además, si alguien pidió que no lo visitemos más, podrás avisar para que se registre.
-			<br>
-			<br><br><strong>Por otra parte, si sos el viajante, además podrás:</strong>
-			<br>Localizar las casas y los puntos donde puedas tener tus arreglos para almuerzos, pastoreos y actividad.
-			<br><br><strong>En la barra lateral podrás encontrar secciones con las herramientas disponibles y un apartado de ayuda para orientarte a encontrarlas y saber su función.-</strong>
-			<br>
-			<div style="text-align: center">
-				<label id="borrableinicial">
-					<input id="nomostrarinicial" type="checkbox" style="width:16px; height:16px;"/>
-					No volver a mostrar
-				</label>
-				<div class="modalflash-botones" id="botonesModalFlash">
-					<button id="btn-indicaciones-modal-flash" onclick="TrazarRuta()">Sí</button>
-					<button id="btn-cerrar-modal-flash">Cerrar</button>
-				</div>
-			</div>
-			<div class="modalflash-contador">
-				<span style="font-weight: bold; color:red; text-align: center;">Me cierro en: <span id="contador"> </span> segundos</span>
-			</div>
-		</p>
-	</div>
-	
-	<!--Modal para reportar lo que se predicó en una salida-->
-	<div class="modalflash ocultar" id="ModalReportePredicado" style="font-size:15px;">
-		<div class="modalflash-cabecera" id="titulomodalpredicado">¡¡¡ MUCHAS GRACIAS POR TOMARTE ESTE TIEMPITO...!!!</div>
-		<div class="modalflash-cuerpo" id="cuerpomodalpredicado">
-			<strong>Estos registros ayudan a predicar a conciencia nuestro territorio</strong>
-			<br><br>
-			<label>Fecha: <input id="fechapredicado" type="date" style="width:200px;"></label><br>
-			<label>Tu nombre: <input id="nombrepredicado" style="width:60%;"></label><br>
-			<label>Número del territorio: <input id="territoriopredicado" style="width:50%;"></label><br>
-			<label>¿Se predicó TODO el territorio?  
-				<input type="checkbox" id="todopredicado">SI&nbsp;&nbsp;&nbsp;
-				<input type="checkbox" id="algopredicado">NO
-			</label>
-			<br><br>
-			<label id="manzanaspredicadas">Lo que se abarcó: <input id="abarcadopredicado" placeholder="Letras de las manzanas predicadas" style="width:60%;"></label>
-			<br><br>
-			<label id="leyendamanzanaspredicadas">Para identificar las manzanas hacé el máximo zoom posible sobre el territorio y las verás identificadas con letras.-</label>
-			<br><br>
-			<pre id="enviandoreporte" style="font-family: 'Arial'; font-weight: bold;"></pre>
-			<div style="text-align: center">
-				<button id="btn-cerrar-reporte" onclick="CerrarModalReporte()" style="height:35px; width:30%; background-color:red; border-color:white; color:white;">Cerrar</button>
-				<button id="btn-enviar-reporte" style="height:35px; width:30%; background-color:green; border-color:white; color:white;">Enviar</button>
-			</div>
-		</div>
-	</div>
-	
-	<!--Modal para reportar una nueva casa NO VISITAR-->
-	<div class="modalflash ocultar" id="ModalReporteNoVisitar" style="font-size:15px;">
-		<div class="modalflash-cabecera" id="titulomodalnovisitar">¡¡¡ MUCHAS GRACIAS POR TOMARTE ESTE TIEMPITO...!!!</div>
-		<div class="modalflash-cuerpo" id="cuerpomodalnovisitar"><strong>Informar de una casa donde han pedido que no los volvamos a visitar, ayuda a resguardar la seguridad de nuestros hermanos y también puede ser una manera indirecta de dar testimonio.-</strong>
-			<br><br>
-			<label>Tu nombre: <input id="nombrenovisitar" style="width:70%;"></label><br>
-			<label>Fecha: <input id="fechanovisitar" type="date" style="width:200px;"></label><br>
-			<label>Dirección: <input id="direccionnovisitar" style="width:70%;"></label><br>
-			<label>Número del territorio: <input id="territorionovisitar" style="width:20%;"></label><br>
-			<label>La persona, ¿pidió expresamente que no la visitemos más?  <input type="checkbox" id="expresonovisitar">SI&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type="checkbox" id="noexpresonovisitar">NO</label><br><br>
-			<label id="motivonovisitar">Si la persona no dijo "NO QUIERO QUE ME VUELVAN A VISITAR", ¿Por qué considerás que no deberíamos volver?. ¿Qué te dijo y cómo actuó?  <input id="detallemotivonovisitar" placeholder="Indicá en detalles lo que te dijo e hizo la persona..." style="width:80%;"></label>
-			<label id="leyendadetallemotivonovisitar">Por favor, describí lo más claramente posible lo que te dijeron para evaluar si añadimos la casa a la lista de NO VISITAR.-</label>
-			<br>
-			<pre id="enviandoreportenovisitar" style="font-family: 'Arial'; font-weight: bold;"></pre>
-			<div style="text-align: center">
-				<button id="btn-cerrar-reportenovisitar" style="height:35px; width:30%; background-color:red;border-color:white;color:white;" onclick="CerrarModalNoVisitar()">Cerrar</button>
-				<button id="btn-enviar-reportenovisitar" style="height:35px; width:30%; background-color:green;border-color:white;color:white;">Enviar</button>
-			</div>
-		</div>
-	</div>
-	
 	<!--Bloque para el Calendario-->
     <!-- Modal Calendario -->
 	<div id="ModalCalendario" class="capaoscura">
@@ -942,6 +885,84 @@
 	</div>
 	
 </body>
+	<!--Ventana Modal Flash-->
+	<dialog class="modalflash ocultar" id="MiModalFlash" style="font-size:14px;">
+		<div class="modalflash-cabecera" id="titulomodalflash">¡¡¡ BIENVENIDO AL MAPA WEB DE LA CONGREGACION SUR VILLA NUEVA...!!!</div>
+		<p class="modalflash-cuerpo" id="cuerpomodalflash"><img src="./images/presentacion.jpg" style="display: block; margin: auto; height:80px" id="imagenmodalflash"/><br><strong>Si sos un publicador, este mapa en línea te permitirá:</strong>
+			<br>Ubicar un territorio con la opción de hacerlo a partir de tu ubicación en tiempo real.
+			<br>
+			<br>Es decir, si vos se lo autorizás, te trazará una ruta con las indicaciones necesarias para llegar...!!!. Te incluirá una distancia y demora estimadas y hasta te avisará con voz cuando estés cerca y cuando hayás llegado...!!!
+			<br>
+			<br>Podrás consultar las salidas del mes en curso y si dirigiste alguna salida, podrás enviarle los detalles de lo que se abarcó al hermano encargado de los territorios.
+			<br>Además, si alguien pidió que no lo visitemos más, podrás avisar para que se registre.
+			<br>
+			<br><br><strong>Por otra parte, si sos el viajante, además podrás:</strong>
+			<br>Localizar las casas y los puntos donde puedas tener tus arreglos para almuerzos, pastoreos y actividad.
+			<br><br><strong>En la barra lateral podrás encontrar secciones con las herramientas disponibles y un apartado de ayuda para orientarte a encontrarlas y saber su función.-</strong>
+			<br>
+			<div style="text-align: center">
+				<label id="borrableinicial">
+					<input id="nomostrarinicial" type="checkbox" style="width:16px; height:16px;"/>
+					No volver a mostrar
+				</label>
+				<div class="modalflash-botones" id="botonesModalFlash">
+					<button id="btn-indicaciones-modal-flash" onclick="TrazarRuta()">Sí</button>
+					<button id="btn-cerrar-modal-flash">Cerrar</button>
+				</div>
+			</div>
+			<div class="modalflash-contador">
+				<span style="font-weight: bold; color:red; text-align: center;">Me cierro en: <span id="contador"> </span> segundos</span>
+			</div>
+		</p>
+	</dialog>
+	
+	<!--Modal para reportar lo que se predicó en una salida-->
+	<dialog class="modalflash ocultar" id="ModalReportePredicado" style="font-size:15px;">
+		<div class="modalflash-cabecera" id="titulomodalpredicado">¡¡¡ MUCHAS GRACIAS POR TOMARTE ESTE TIEMPITO...!!!</div>
+		<div class="modalflash-cuerpo" id="cuerpomodalpredicado">
+			<strong>Estos registros ayudan a predicar a conciencia nuestro territorio</strong>
+			<br><br>
+			<label>Fecha: <input id="fechapredicado" type="date" style="width:200px;"></label><br>
+			<label>Tu nombre: <input id="nombrepredicado" style="width:60%;"></label><br>
+			<label>Número del territorio: <input id="territoriopredicado" style="width:50%;"></label><br>
+			<label>¿Se predicó TODO el territorio?  
+				<input type="checkbox" id="todopredicado">SI&nbsp;&nbsp;&nbsp;
+				<input type="checkbox" id="algopredicado">NO
+			</label>
+			<br><br>
+			<label id="manzanaspredicadas">Lo que se abarcó: <input id="abarcadopredicado" placeholder="Letras de las manzanas predicadas" style="width:60%;"></label>
+			<br><br>
+			<label id="leyendamanzanaspredicadas">Para identificar las manzanas hacé el máximo zoom posible sobre el territorio y las verás identificadas con letras.-</label>
+			<br><br>
+			<pre id="enviandoreporte" style="font-family: 'Arial'; font-weight: bold;"></pre>
+			<div style="text-align: center">
+				<button id="btn-cerrar-reporte" onclick="CerrarModalReporte()" style="height:35px; width:30%; background-color:red; border-color:white; color:white;">Cerrar</button>
+				<button id="btn-enviar-reporte" style="height:35px; width:30%; background-color:green; border-color:white; color:white;">Enviar</button>
+			</div>
+		</div>
+	</dialog>
+	
+	<!--Modal para reportar una nueva casa NO VISITAR-->
+	<dialog class="modalflash ocultar" id="ModalReporteNoVisitar" style="font-size:15px;">
+		<div class="modalflash-cabecera" id="titulomodalnovisitar">¡¡¡ MUCHAS GRACIAS POR TOMARTE ESTE TIEMPITO...!!!</div>
+		<div class="modalflash-cuerpo" id="cuerpomodalnovisitar"><strong>Informar de una casa donde han pedido que no los volvamos a visitar, ayuda a resguardar la seguridad de nuestros hermanos y también puede ser una manera indirecta de dar testimonio.-</strong>
+			<br><br>
+			<label>Tu nombre: <input id="nombrenovisitar" style="width:70%;"></label><br>
+			<label>Fecha: <input id="fechanovisitar" type="date" style="width:200px;"></label><br>
+			<label>Dirección: <input id="direccionnovisitar" style="width:70%;"></label><br>
+			<label>Número del territorio: <input id="territorionovisitar" style="width:20%;"></label><br>
+			<label>La persona, ¿pidió expresamente que no la visitemos más?  <input type="checkbox" id="expresonovisitar">SI&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type="checkbox" id="noexpresonovisitar">NO</label><br><br>
+			<label id="motivonovisitar">Si la persona no dijo "NO QUIERO QUE ME VUELVAN A VISITAR", ¿Por qué considerás que no deberíamos volver?. ¿Qué te dijo y cómo actuó?  <input id="detallemotivonovisitar" placeholder="Indicá en detalles lo que te dijo e hizo la persona..." style="width:80%;"></label>
+			<label id="leyendadetallemotivonovisitar">Por favor, describí lo más claramente posible lo que te dijeron para evaluar si añadimos la casa a la lista de NO VISITAR.-</label>
+			<br>
+			<pre id="enviandoreportenovisitar" style="font-family: 'Arial'; font-weight: bold;"></pre>
+			<div style="text-align: center">
+				<button id="btn-cerrar-reportenovisitar" style="height:35px; width:30%; background-color:red;border-color:white;color:white;" onclick="CerrarModalNoVisitar()">Cerrar</button>
+				<button id="btn-enviar-reportenovisitar" style="height:35px; width:30%; background-color:green;border-color:white;color:white;">Enviar</button>
+			</div>
+		</div>
+	</dialog>
+	
 	<!--Ventana modal inicial-->
 	<dialog id="modal_inicial" style="text-align: center; background-color:yellow; font-size:13px;">
 		<div id="Apaisado">
