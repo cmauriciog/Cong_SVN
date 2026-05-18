@@ -58,6 +58,10 @@
 	<script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.min.js"></script>
 	<!--- para acceder a Google-Drive-->
 	<script src="permisogoogledrive.txt" type="text/javascript"></script>
+	<!--Accesos para GraphHopper-->
+	<link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css"/>
+	<script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+	<script src="https://unpkg.com/lrm-graphhopper/dist/lrm-graphhopper.min.js"></script>
 	<!-- Añado un pluging de minimapa -->
 	<!--<script src="https://cdn.jsdelivr.net/gh/maneoverland/leaflet.WorldMiniMap@1.0.0/dist/Control.WorldMiniMap.js" integrity="sha512-PFw8St3qenU1/dmwCfiYYN/bRcqY1p3+sBATR+rZ6622eyXOk/8izVtlmm/k8qW7KbRIJsku838WCV5LMs6FCg==" crossorigin=""></script>-->
 	
@@ -1572,7 +1576,7 @@
 			ModalFlash(tiempomodalflash);
 			senialgps="no";
 		};
-		if (!dispositivo==="pc") {navigator.geolocation.getCurrentPosition(
+		if (dispositivo !=="pc") {navigator.geolocation.getCurrentPosition(
 			<!--GPS Perfecto-->
 			(pos) => {
 				senialgps="si";
@@ -1612,6 +1616,7 @@
 		VerificarConexion();
 		if (conexion==="si") {
 			VerificarGPS();
+			if (senialgps !== "si") return;
 			if (dispositivo==="movil") {
 				if (seguimiento==="no") {
 					titulomodalflash.innerText="TRAZAR RUTA";
@@ -1649,13 +1654,19 @@
 
 	// Evento al encontrar la ubicación
 	function ActualizarUbicacion(e) {
+		if(navigator.vibrate){navigator.vibrate([2000,80,200])};
 		if (coordenadas_ubicacion_real) {
 			mapa.removeLayer(marca_ubicacion_real);
+			//LA PROXIMA LINEA ES PARA MANIPULAR LA UBICACION
+			//marca_ubicacion_real = L.marker(coordenadas_ubicacion_real,{icon:icono_posicion}).addTo(mapa)
 			marca_ubicacion_real = L.marker(e.latlng,{icon:icono_posicion}).addTo(mapa)
 				.bindPopup("Vas por aquí");
 			coordenadas_ubicacion_real=e.latlng;
 		};
 		if (!coordenadas_ubicacion_real) {
+			//LAS DOS PROXIMAS LINEAS SON PARA MANIPULAR LA UBICACION
+			//coordenadas_ubicacion_real=L.latLng(-33.196691901572414, -68.44088744239326);
+			//marca_ubicacion_real = L.marker(coordenadas_ubicacion_real,{icon:icono_posicion}).addTo(mapa)
 			marca_ubicacion_real = L.marker(e.latlng,{icon:icono_posicion}).addTo(mapa)
 				.bindPopup("Estás por aquí")
 				.openPopup();
@@ -1861,7 +1872,8 @@
 	};
 
 	<!--Función para Trazar Ruta Sugerida con OSRM-->
-	function TrazarRuta() {
+	<!--ESTO FUNCIONA DE PRIMERA.....!!!!!-->
+	function TrazarRuta777() {
 		cajadistancia.classList.remove("ocultar");
 		VerificarConexion();
 		if (conexion !== "si") return;
@@ -1976,6 +1988,176 @@
 			mapa.fitBounds(bounds, { padding: [50, 50] });
 			actualizarruta = "no";
 		};
+	};
+	
+	function TrazarRuta() {
+		cajadistancia.classList.remove("ocultar");
+		VerificarConexion();
+		if (conexion !== "si") return;
+		VerificarGPS();
+		avisollegada = "si";
+		btnindicacionesmodalflash.classList.add("ocultar");
+		mimodalflash.classList.add("ocultar");
+		distancia = DistanciaEnTiempoReal();
+		cajadistancia.style.color="#155724";
+		// cerca del destino no traza
+		if (distancia <= 2200 && lugar) {
+			if (ruta){
+				mapa.removeLayer(ruta);
+				ruta=null;
+			}
+			clearInterval(temporizadorruta);
+			temporizadorruta=null;
+			ActualizarUbicacion();
+			return;
+		}
+		if (calculandoRuta) return;
+		calculandoRuta=true;
+		let recalcular=false;
+		if (!ultimaUbicacion){
+			recalcular=true;
+		}else{
+			let dif=mapa.distance(
+				ultimaUbicacion,
+				coordenadas_ubicacion_real
+			);
+			if (dif>30) recalcular=true;
+		}
+		if(!recalcular){
+			calculandoRuta=false;
+			return;
+		}
+		ultimaUbicacion=coordenadas_ubicacion_real;
+		ultimoDestino=puntomascercano;
+		// ---------- GRAPHHOPPER ----------
+		let destinoLat = Array.isArray(puntomascercano)
+			? puntomascercano[0]
+			: puntomascercano.lat;
+		let destinoLng = Array.isArray(puntomascercano)
+			? puntomascercano[1]
+			: puntomascercano.lng;
+		let url=
+		"https://graphhopper.com/api/1/route?"
+		+"point="+coordenadas_ubicacion_real.lat+","+coordenadas_ubicacion_real.lng
+		+"&point="+destinoLat+","+destinoLng
+		+"&vehicle=car"
+		+"&locale=es"
+		+"&points_encoded=false"
+		+"&instructions=true"
+		//+"&key="+apikeygraphhopper;//TU_API_KEY";
+		+"&key="+encodeURIComponent(apikeygraphhopper);
+		fetch(url)
+		.then(r=>r.json())
+		.then(data=>{
+			calculandoRuta=false;
+			if(
+				!data.paths ||
+				!data.paths.length
+			){
+				throw "Sin ruta";
+			}
+			let path=data.paths[0];
+			// borrar ruta anterior
+			if(ruta){
+				mapa.removeLayer(ruta);
+			}
+			// dibujar ruta roja
+			ruta=L.polyline(
+				path.points.coordinates.map(
+					p=>[p[1],p[0]]
+				),
+				{
+					color:"#ff0000",
+					weight:7,
+					opacity:0.9
+				}
+			).addTo(mapa);
+			// distancia
+			let txtDistancia;
+			if(path.distance<1000){
+				txtDistancia=
+				path.distance.toLocaleString(
+					'es-AR',
+					{maximumFractionDigits:0}
+				)+" m";
+			}
+			else{
+				txtDistancia=
+				(path.distance/1000).toLocaleString(
+					'es-AR',
+					{
+						minimumFractionDigits:2,
+						maximumFractionDigits:2
+					}
+				)+" km";
+			}
+			// tiempo
+			let tiempoSeg=Math.round(
+				path.time/1000
+			);
+			let horas=Math.floor(
+				tiempoSeg/3600
+			);
+			let minutos=Math.round(
+				(tiempoSeg%3600)/60
+			);
+			let tiempoFormateado=
+				horas>0
+				? horas+" horas "+minutos+" min."
+				: minutos+" min.";
+			cajadistancia.innerHTML=
+			"Ruta recomendada (en rojo):<br>"+
+			"Distancia: "+txtDistancia+
+			"<br>Tiempo estimado: "+
+			tiempoFormateado;
+			// instrucciones
+			if(path.instructions){
+				panelrutas.innerHTML="";
+				path.instructions.forEach((paso,i)=>{
+					let div=document.createElement("div");
+					div.innerHTML=
+					(i+1)+". "+
+					paso.text+
+					" ("+
+					Math.round(
+						paso.distance
+					)+" m)";
+					panelrutas.appendChild(div);
+				});
+				botondetallesruta.classList.remove("ocultar");
+			}
+			if(actualizarruta==="si"){
+				const bounds=L.latLngBounds(
+					coordenadas_ubicacion_real,
+					puntomascercano
+				);
+				mapa.fitBounds(
+					bounds,
+					{
+						padding:[50,50]
+					}
+				);
+				actualizarruta="no";
+			}
+		})
+		.catch(err=>{
+			calculandoRuta=false;
+			console.error(err);
+			cajadistancia.innerHTML=
+			"⚠️ No puede trazar la ruta ... "+
+			"<img src='images/todomal.jpg' width='20' style='vertical-align:middle;'>";
+		});
+		// temporizador móvil
+		if(
+			dispositivo==="movil"
+			&& !temporizadorruta
+		){
+			temporizadorruta=setInterval(()=>{
+				if(!calculandoRuta){
+					TrazarRuta();
+				}
+			},60000);
+		}
 	};
 
 	//Bloque Modal Flash
@@ -2110,7 +2292,7 @@
 	});
 	
 	// === BOTÓN MOSTRAR / OCULTAR DETALLES RUTAS===
-	let abierto = true;
+	let abierto = false;
 	botondetallesruta.onclick = () => {
 		abierto = !abierto;
 		panelrutas.style.display = abierto ? "block" : "none";
@@ -2814,16 +2996,15 @@
 		document.getElementById("restablecernomostrar").style.visibility="hidden";
 	};
 	
-	
-	
-	
-	
-	
-	
-	
+	//Función No Volver a mostrar sugerencia para girar el celular
+	function VerificarNoVolverAMostrar(){
+		if (Version !== (localStorage.getItem('MOSTRAR_INICIAL')|| null)) {ModalFlash(tiempomodalflash);document.getElementById("restablecernomostrar").style.visibility="hidden"} else {borrableinicial.classList.add("ocultar");borrablelonuevo.classList.add("ocultar");document.getElementById("restablecernomostrar").style.visibility="visible"};
+		if (localStorage.getItem('MOSTRAR_CELULAR') !=="no" && dispositivo !=="pc") {modalinicial.showModal();document.getElementById("restablecernomostrar").style.visibility="hidden"} else {borrablecelular.classList.add("ocultar");document.getElementById("restablecernomostrar").style.visibility="visible"};
+		if (Version !== (localStorage.getItem('MOSTRAR_NUEVO') || null)) {document.getElementById("flecharoja").style.visibility='visible';abrirguia()} else {document.getElementById("flecharoja").style.visibility='hidden'};
+		if (dispositivo=="movil") {document.getElementById("flecharoja").style.visibility='hidden'};
+	};
 	
 	//######BORRAR.....!!!!
-	
 	function formatearFecha(fechaStr) {
 	  let fecha = new Date(fechaStr);
 	  if (isNaN(fecha)) return "No disponible";
@@ -2845,19 +3026,9 @@
 		alert("Error al obtener la fecha"+error(e));
 	  }
 	}
-
 	// Ejecutar al cargar
 	//mostrarFechaActualizacion();
-		
 	//HASTA ACA...
-	
-	//Función No Volver a mostrar sugerencia para girar el celular
-	function VerificarNoVolverAMostrar(){
-		if (Version !== (localStorage.getItem('MOSTRAR_INICIAL')|| null)) {ModalFlash(tiempomodalflash);document.getElementById("restablecernomostrar").style.visibility="hidden"} else {borrableinicial.classList.add("ocultar");borrablelonuevo.classList.add("ocultar");document.getElementById("restablecernomostrar").style.visibility="visible"};
-		if (localStorage.getItem('MOSTRAR_CELULAR') !=="no" && dispositivo !=="pc") {modalinicial.showModal();document.getElementById("restablecernomostrar").style.visibility="hidden"} else {borrablecelular.classList.add("ocultar");document.getElementById("restablecernomostrar").style.visibility="visible"};
-		if (Version !== (localStorage.getItem('MOSTRAR_NUEVO') || null)) {document.getElementById("flecharoja").style.visibility='visible';abrirguia()} else {document.getElementById("flecharoja").style.visibility='hidden'};
-		if (dispositivo=="movil") {document.getElementById("flecharoja").style.visibility='hidden'};
-	};
 	
 	//Activar/Desactivar/Mostrar/Ocultar/Ejecutar lo que corresponda al iniciar
 	document.getElementById("vermiubicacion").style.visibility='hidden';
