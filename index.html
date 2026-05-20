@@ -995,7 +995,7 @@
 </body>
 <script>
 	var Version = "2"; //Cambiar este valor para volver a mostrar el modal de presentacion cada vez que haya una actualizacion importante
-	<!--Mapas o capas bases-->
+	//Mapas o capas bases
 	var osm=L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 		attribution: 'Teselas <a href="https://www.openstreetmap.org/" target="blanck">OSM</a> &copy|Versión: '+Version,
 		minZoom: 1
@@ -1003,7 +1003,7 @@
 	var googlesatelite=L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
 		attribution: 'Teselas <a href="https://www.google.com.ar/maps/@-21.5405995,-63.9542602,11544855m/data=!3m1!1e3?entry=ttu" target="blanck">Google Satelital</a> &copy|Versión: '+Version,
 	});
-	<!--Establecer el área para el mapa y definir cuál será la capa base por defecto-->
+	//Establecer el área para el mapa y definir cuál será la capa base por defecto
 	var mapa = L.map('mapa', {editable:true,
 		center: ["-32.9280586817747", "-68.77360525273423"],
 		zoom: 15,
@@ -1011,8 +1011,8 @@
 		zoomControl:false
 	});
 	const zoomControl = L.control.zoom({ position: 'topright' }).addTo(mapa);
-	<!--Añadir el mini-mapa al lienzo-->
-	<!--var worldMiniMap = L.control.worldMiniMap({position: 'bottomright', style: {opacity: 0.9, borderRadius: '0px', backgroundColor: 'lightblue'}}).addTo(mapa);-->
+	//Añadir el mini-mapa al lienzo
+	//var worldMiniMap = L.control.worldMiniMap({position: 'bottomright', style: {opacity: 0.9, borderRadius: '0px', backgroundColor: 'lightblue'}}).addTo(mapa);
 	$('.chosenCasas').chosen({no_results_text: "No se encuentran familias ni publicadores de nombre...",allow_single_deselect: true});
 	$(".chosenCasas").chosen().on("chosen:showing_dropdown", function(event) {  
 		$(".chosenCasas").trigger('chosen:updated');                                                                           
@@ -1133,7 +1133,7 @@
 		}
 	});
 
-	<!--Añadir la barra lateral-->
+	//Añadir la barra lateral
 	var barralateral = L.control.sidebar('barralateral').addTo(mapa);
 	
 	const iconosterritorios= L.icon({
@@ -1187,7 +1187,7 @@
 		barralateral.close();
 	};
 	
-	<!--Función Mostrar/Habilitar u Ocultar/Deshabilitar elementos según la versión de trabajo-->
+	//Función Mostrar/Habilitar u Ocultar/Deshabilitar elementos según la versión de trabajo
 	function VerificarVersion() {
 		if (version=="publica") {
 			document.getElementById("casas_hnos").style.display='none';
@@ -1203,7 +1203,7 @@
 		};
 	};
 	
-	<!--Función para mapear todas las familias-->
+	//Función para mapear todas las familias
 	function VerTodasFlias() {
 		barralateral.close();
 		if (capa_casas) {mapa.removeLayer(capa_casas)};
@@ -1213,7 +1213,7 @@
 		document.getElementById("mostrarflias").style.display="none";
 	};
 	
-	<!--Función para mapear todas las familias-->
+	//Función para mapear todas las familias
 	function QuitarTodasFlias() {
 		capa_casas.remove();
 		capa_casas={};
@@ -1227,7 +1227,7 @@
 		document.getElementById("ocultarflias").style.display="none";
 	};
 	
-	<!--Función armado de los Popups de las casas-->
+	//Función armado de los Popups de las casas
 	function Popups_Casas(feature, layer) {
 		if (feature.properties && feature.properties.Flia) {
 			layer.bindPopup(feature.properties.Flia);
@@ -1321,7 +1321,7 @@
 	listacasas.sort();
 	ArmarListaCasas(listacasas);
 	
-	<!--Función para armar el listado de casas y asignarlo al listbox correspondiente-->
+	//Función para armar el listado de casas y asignarlo al listbox correspondiente
 	function ArmarListaCasas(listacasas) {
 		var select = document.getElementById('selector_casas');
 		var i;
@@ -1334,7 +1334,7 @@
 		};
 	};
 	
-	<!--Función para armar el listado de territorios y asignarlo al listbox correspondiente-->
+	//Función para armar el listado de territorios y asignarlo al listbox correspondiente
 	function ArmarListaTerritorios() {
 		var select = document.getElementById('selector_territorios');
 		var i;
@@ -1347,7 +1347,7 @@
 		};
 	};
 	
-	<!--Función buscar casa elegida-->
+	//Función buscar casa elegida
 	function CasaAbuscar(valor) {
 		barralateral.close();
 		familia=valor;
@@ -1379,7 +1379,7 @@
 		};
 	};
 	
-	<!--Función buscar territorio elegido-->
+	//Función buscar territorio elegido
 	function TerritorioAbuscar(numeroterritoriobuscado,tipo) {
 		valor=Number(numeroterritoriobuscado);
 		barralateral.close();
@@ -1447,13 +1447,13 @@
 		'black'
 	};
 
-	<!--Funcion para colorear perímetro cultivos/edificios-->
+	//Funcion para colorear perímetro cultivos/edificios
 	function ColorPerimetro(d) {
 		return d < 100? 'white':
 			'black'
 	};
 
-	<!--Funcion para llamar subfunciones de coloreo perímetros y áreas-->
+	//Funcion para llamar subfunciones de coloreo perímetros y áreas
 	function PersonalizarPerimetro(feature) {
 		return {
 			fillColor: ColorFondo(feature.properties.Numero),
@@ -1509,12 +1509,12 @@
 			var formatoPopup = {
 				'maxWidth': '600',
 				'className' : 'popups'};
-			<!--Establecer la foto del frente de la casa-->
+			//Establecer la foto del frente de la casa
 			var nom_foto="";
 			nombrefoto=(feature.properties.Flia).split(" ");
 			nombrefoto.forEach(nombre => nom_foto=nom_foto+nombre+"_");
 			nombrefoto = nom_foto.slice(0, nom_foto.length - 1);
-			<!--Establecer qué familias tienen fotos del frente de su casa y cuáles no, para distinguir qué imagen mostrar-->
+			//Establecer qué familias tienen fotos del frente de su casa y cuáles no, para distinguir qué imagen mostrar
 			if (nombrefoto=="Andrada_Liliana" || nombrefoto=="Argüello" || nombrefoto=="Astudillo_Elio" || nombrefoto=="Astudillo_Jonatan" || nombrefoto=="Battaglia" || nombrefoto=="Biscontin_Irma"
 			|| nombrefoto=="Biscontin_Ruben" || nombrefoto=="Bringas" || nombrefoto=="Bustos_Ethel" || nombrefoto=="Cabañez_Carlos" || nombrefoto=="Calderon-Andrada"
 			|| nombrefoto=="Candia" || nombrefoto=="Castillo" || nombrefoto=="Cinco-Castillo" || nombrefoto=="Del_Balzo" || nombrefoto=="Ferranti-Ricalde" || nombrefoto=="Figueroa" || nombrefoto=="Galdames"
@@ -1541,7 +1541,7 @@
 		};
 	};
 	
-	<!--Verificar Sistema Operativo-->
+	//Verificar Sistema Operativo
 	function VerificarDispositivo() {
 		const ancho = window.screen.width;
 		const alto = window.screen.height;
@@ -1553,7 +1553,7 @@
 	
 	VerificarDispositivo();
 	
-	<!--Funcion para verificar estado de conectividad-->
+	//Funcion para verificar estado de conectividad
 	function VerificarConexion() {
 		const online = navigator.onLine;
 		online ? conexion="si" : conexion="no";
@@ -1565,9 +1565,9 @@
 		};
 	};
 
-	<!--Función para verificar GPS-->
+	//Función para verificar GPS
 	function VerificarGPS() {
-		<!--Sin GPS-->
+		//Sin GPS
 		if (!navigator.geolocation) {
 			titulomodalflash.innerText="SIN GPS";
 			cuerpomodalflash.innerHTML = '<span style="color:red"><br><b>Oho...!!!.</b><br><br><span style="color:black">Parece que tu navegador o dispositivo no funciona con GPS...!!!.-<br>'+
@@ -1575,16 +1575,17 @@
 			tiempomodalflash=5000;
 			ModalFlash(tiempomodalflash);
 			senialgps="no";
+			return;
 		};
 		if (dispositivo !=="pc") {navigator.geolocation.getCurrentPosition(
-			<!--GPS Perfecto-->
+			//GPS Perfecto
 			(pos) => {
 				senialgps="si";
 				const lat = pos.coords.latitude.toFixed(6);
 				const lon = pos.coords.longitude.toFixed(6);
 				const accuracy = pos.coords.accuracy;
 			},
-			<!--Algún problema con el GPS-->
+			//Algún problema con el GPS
 			(error) => {
 				senialgps="no";
 				msg="❌ No se pudo acceder al GPS";
@@ -1834,19 +1835,19 @@
 		ModalFlash(tiempomodalflash);
 	};
 
-	<!--Función para Centrar en Mi Ubicación Actual-->
+	//Función para Centrar en Mi Ubicación Actual
 	function CentrarMiUbicacion() {
 		barralateral.close();
 		mapa.setView(coordenadas_ubicacion_real, 17);
 	};
 	
-	<!--Función para Centrar dentro del Territorio-->
+	//Función para Centrar dentro del Territorio
 	function CentrarEnTerritorio() {
 		barralateral.close();
 		mapa.flyTo([-32.9280586817747, -68.77360525273423], 15);
 	};
 
-	<!--Función para detener el seguimiento en tiempo real-->
+	//Función para detener el seguimiento en tiempo real
 	function desactivar_seguimiento() {
 		barralateral.close();
 		seguimiento="no";
@@ -1870,8 +1871,8 @@
 		mapa.flyTo([-32.9280586817747, -68.77360525273423],15);
 	};
 
-	<!--Función para Trazar Ruta Sugerida con OSRM-->
-	<!--ESTO FUNCIONA DE PRIMERA.....!!!!!-->
+	//Función para Trazar Ruta Sugerida con OSRM
+	//ESTO FUNCIONA DE PRIMERA.....!!!!!
 	function TrazarRuta777() {
 		cajadistancia.classList.remove("ocultar");
 		VerificarConexion();
@@ -2676,7 +2677,7 @@
 		return idSet.has(feature.properties[propName]);
 	};
 	
-	<!--Función para enviar reporte de lo que se abarcó en cada salida-->
+	//Función para enviar reporte de lo que se abarcó en cada salida
 	function ReportarPredicado() {
 		barralateral.close();
 		document.getElementById("ModalReportePredicado").classList.remove("ocultar");
@@ -2684,7 +2685,7 @@
 		document.getElementById("btn-enviar-reporte").style.visibility='visible';
 	};
 	
-	<!--Función para cerrar el modal del reporte de lo predicado-->
+	//Función para cerrar el modal del reporte de lo predicado
 	function CerrarModalReporte () {
 		document.getElementById("leyendamanzanaspredicadas").style.display = "block";
 		document.getElementById("todopredicado").checked = false; document.getElementById("algopredicado").checked = false;
@@ -2699,7 +2700,7 @@
 		clearTimeout(temporizadorpredicado);
 	};
 	
-	<!--Función para revisar y enviar el reporte de lo predicado-->
+	//Función para revisar y enviar el reporte de lo predicado
 	document.getElementById('btn-enviar-reporte').addEventListener('click', async () => {
 		document.getElementById("btn-cerrar-reporte").style.visibility="visible";
 		document.getElementById("btn-enviar-reporte").style.visibility="visible";
@@ -2748,7 +2749,7 @@
 		};
 	});
 	
-	<!--Función para revisar si se predicó total o parcialmente el territorio en una salida-->
+	//Función para revisar si se predicó total o parcialmente el territorio en una salida
 	var todopred=document.getElementById("todopredicado");
 	var partepred=document.getElementById("algopredicado");
 	todopred.addEventListener('change', () => {
@@ -2767,7 +2768,7 @@
 		};
 	});
 	
-	<!--Función para enviar reporte de una nueva casa NO VISITAR-->
+	//Función para enviar reporte de una nueva casa NO VISITAR
 	function ReportarNoVisitar() {
 		barralateral.close();
 		document.getElementById("ModalReporteNoVisitar").classList.remove("ocultar");
@@ -2775,7 +2776,7 @@
 		document.getElementById("btn-enviar-reportenovisitar").style.visibility='visible';
 	};
 	
-	<!--Función para cerrar el modal del reporte de NO VISITAR-->
+	//Función para cerrar el modal del reporte de NO VISITAR
 	function CerrarModalNoVisitar () {
 		document.getElementById("leyendadetallemotivonovisitar").style.display = "block"; document.getElementById("motivonovisitar").style.display = "block";
 		document.getElementById("expresonovisitar").checked = false; document.getElementById("noexpresonovisitar").checked = false;
@@ -2791,7 +2792,7 @@
 		clearTimeout(temporizadornovisitar);
 	};
 	
-	<!--Función para revisar y enviar el reporte de NO VISITAR-->
+	//Función para revisar y enviar el reporte de NO VISITAR
 	document.getElementById('btn-enviar-reportenovisitar').addEventListener('click', async () => {
 		document.getElementById("btn-cerrar-reporte").style.visibility="visible";
 		document.getElementById("btn-enviar-reporte").style.visibility="visible";
@@ -2843,7 +2844,7 @@
 		};
 	});
 	
-	<!--Función para revisar si la persona dijo expresamente que NO LA VOLVIERAMOS A VISITAR-->
+	//Función para revisar si la persona dijo expresamente que NO LA VOLVIERAMOS A VISITAR
 	var expresonovisitar=document.getElementById("expresonovisitar");
 	var noexpresonovisitar=document.getElementById("noexpresonovisitar");
 	expresonovisitar.addEventListener('change', () => {
