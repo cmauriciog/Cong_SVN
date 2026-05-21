@@ -1088,6 +1088,7 @@
 	var ultimaUbicacion = null;
 	var ultimoDestino = null;
 	var recalcular = false;
+	var vibracionInicial = false;
 	//var capa_territoriofiltradonumero=null;
 	//var dentropredio="";
 	
@@ -1654,7 +1655,11 @@
 
 	// Evento al encontrar la ubicación
 	function ActualizarUbicacion(e) {
-		//if(navigator.vibrate){navigator.vibrate([200,80,200])};
+		// Vibrar SOLO la primera vez
+		if (!vibracionInicial && navigator.vibrate) {
+			navigator.vibrate([200,80,200]);
+			vibracionInicial = true;
+		};
 		if (coordenadas_ubicacion_real) {
 			mapa.removeLayer(marca_ubicacion_real);
 			//LA PROXIMA LINEA ES PARA MANIPULAR LA UBICACION
@@ -1753,6 +1758,7 @@
 			}
 		};
 		if (distancia <= 10 && dispositivo=="movil" && !yaLlegue) {
+			if (navigator.vibrate) {navigator.vibrate([200,80,200])};
 			yaLlegue = true;
 			avisollegada = "no";
 			cajadistancia.innerHTML = "¡Has llegado a tu destino!.<br>"+alertavoz;
