@@ -691,7 +691,6 @@
 <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
 	<a style="font-size:15px; color:#22d3ee; display=inline-block"><strong>MAPA DE TERRITORIOS DE LA CONGREGACION SUR VILLA NUEVA (Nº 6379)</strong></a>
 	<div id="ubicacion">
-		<!--<div id="activargps" class="colorful-div">¿Necesitás indicaciones para llegar? Activá aquí...</div>-->
 		<div id="activargps" class="colorful-div" onclick="activar_seguimiento()">
 			¿Necesitás indicaciones para llegar? Activá...
 			<img src="images/flecha_izquierda.png" class="img-color-animada" alt="">
@@ -1569,7 +1568,7 @@
 	//Función para verificar GPS
 	function VerificarGPS() {
 		//Sin GPS
-		if (!navigator.geolocation) {
+		if (!navigator.geolocation && !marca_ubicacion_real) {
 			titulomodalflash.innerText="SIN GPS";
 			cuerpomodalflash.innerHTML = '<span style="color:red"><br><b>Oho...!!!.</b><br><br><span style="color:black">Parece que tu navegador o dispositivo no funciona con GPS...!!!.-<br>'+
 			'Por lo tanto, no podrás ver tu ubicación en tiempo real.</span>';
@@ -1657,7 +1656,7 @@
 	function ActualizarUbicacion(e) {
 		// Vibrar SOLO la primera vez
 		if (!vibracionInicial && navigator.vibrate) {
-			navigator.vibrate([200,80,200]);
+			navigator.vibrate([1000,500,1000,500,2000]);
 			vibracionInicial = true;
 		};
 		if (coordenadas_ubicacion_real) {
