@@ -1088,8 +1088,6 @@
 	var ultimoDestino = null;
 	var recalcular = false;
 	var vibracionInicial = false;
-	//var capa_territoriofiltradonumero=null;
-	//var dentropredio="";
 	
 	//Capturar evento sobre botones
 	const btncerrarmodalflash=document.querySelector("#btn-cerrar-modal-flash");
@@ -2033,7 +2031,7 @@
 			return;
 		}
 		ultimaUbicacion=coordenadas_ubicacion_real;
-		ultimoDestino=puntomascercano;
+		ultimoDestino=puntomascercano
 		// ---------- GRAPHHOPPER ----------
 		let destinoLat = Array.isArray(puntomascercano)
 			? puntomascercano[0]
@@ -2281,9 +2279,9 @@
 	});
 	
 	nomostrarlonuevo.addEventListener("click",()=>{
-		cartelnuevo.classList.remove('show');
+		cartelnuevo.classList.add('ocultar');
 		// después de la transición, ocultamos
-		setTimeout(()=> cartelnuevo.style.display = 'none', 160);
+		setTimeout(()=> cartelnuevo.classList.add('ocultar'), 160);
 		document.getElementById("flecharoja").style.visibility='hidden';
 		if (nomostrarlonuevo.checked) {
 			try {
@@ -2907,18 +2905,18 @@
 	
 	//Bloque para LO NUEVO
 	function abrirguia(){
-		cartelnuevo.style.display = 'block';
+		cartelnuevo.classList.remove('ocultar');
 		// posicionar la guía apuntando al botón
 		if (dispositivo !=="movil") {document.getElementById("flecharoja").style.visibility='visible'};
 		posicionguia();
 		// animación de aparición
-		requestAnimationFrame(()=> cartelnuevo.classList.add('show'));
+		requestAnimationFrame(()=> cartelnuevo.classList.remove('ocultar'));
 	};
 
 	function cerrarguia(){
-		cartelnuevo.classList.remove('show');
+		cartelnuevo.classList.add('ocultar');
 		// después de la transición, ocultamos
-		setTimeout(()=> cartelnuevo.style.display = 'none', 160);
+		setTimeout(()=> cartelnuevo.classList.add('ocultar'), 160);
 		document.getElementById("flecharoja").style.visibility='hidden';
 		if (nomostrarlonuevo.checked) {
 			try {
@@ -3003,7 +3001,7 @@
 	
 	//Función No Volver a mostrar sugerencia para girar el celular
 	function VerificarNoVolverAMostrar(){
-		cartelnuevo.classList.remove('show');
+		cartelnuevo.classList.add('ocultar');
 		if (Version !== (localStorage.getItem('MOSTRAR_INICIAL')|| null)) {ModalFlash(tiempomodalflash);document.getElementById("restablecernomostrar").style.visibility="hidden"} else {borrableinicial.classList.add("ocultar");borrablelonuevo.classList.add("ocultar");document.getElementById("restablecernomostrar").style.visibility="visible"};
 		if (localStorage.getItem('MOSTRAR_CELULAR') !=="no" && dispositivo !=="pc") {modalinicial.showModal();document.getElementById("restablecernomostrar").style.visibility="hidden"} else {borrablecelular.classList.add("ocultar");document.getElementById("restablecernomostrar").style.visibility="visible"};
 		if (Version !== (localStorage.getItem('MOSTRAR_NUEVO') || null)) {document.getElementById("flecharoja").style.visibility='visible';abrirguia()} else {document.getElementById("flecharoja").style.visibility='hidden'};
