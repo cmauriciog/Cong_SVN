@@ -84,7 +84,7 @@ var puntosencuentro=[
 		"Coordenadas": ("-32.92505894090046, -68.77195228946371"),
 	},
 	{
-		"Lugar": "Los Ceibos y Boulevard",
+		"Lugar": "Plaza Bº INKA",
 		"Coordenadas": ("-32.92677659147279, -68.76892717882548"),
 	},
 	{
@@ -98,5 +98,8 @@ var puntosencuentro=[
 	{
 		"Lugar": "Gualpa",
 		"Coordenadas": ("-32.931724927340646, -68.7757537825449"),
+	},
+	{	"Lugar": "Bringas",
+	"Coordenadas": ("-32.924978780975735, -68.78056455124023"),
 	},
 ];
